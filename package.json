@@ -1,0 +1,15 @@
+{
+  "name": "anime.io",
+  "version": "0.0.0",
+  "description": "This is underconstruction",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "L-lawliet07",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
