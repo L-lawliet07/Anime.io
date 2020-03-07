@@ -1,11 +1,13 @@
 const express = require('express');
 
+const homeController = require('../controllers/homeController');
+
 const router = express.Router();
 
 router
-    .route('/home')
-    .get(getCrew)
-    .post(createCrew); // Creating a new crew
+    .route('/')
+    .get(homeController.getCrew)
+    .post(homeController.createCrew); // Creating a new crew
 
 
 ////////////////////////////////////
@@ -16,10 +18,10 @@ router
 
 router
     .route('/home/Shinobis')
-    .get(getAllShinobi)
+    .get(homeController.getAllShinobi)
 
 router
     .route('/home/Shinobis/:id')
-    .get(getShinobi);
+    .get(homeController.getShinobi);
 
 module.exports = router;
