@@ -17,8 +17,10 @@ mongoose.connect(DB, {
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true
-}).then(connection => {
-    console.log('DB connection is successfull');
+}).then(connection => console.log('DB connection is successfull'));
+
+const crewSchema = new mongoose.Schema({
+
 });
 
 const port = process.env.PORT || 3000;
