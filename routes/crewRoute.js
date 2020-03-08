@@ -14,10 +14,18 @@ const crewController = require('../controllers/crewController');
 const router = express.Router();
 
 router
-    .post('/', crewController.createCrew);
+    .route('/')
+    .get(crewController.homePage)
+    .post(crewController.createCrew);
 
 router
-    .get('/:crewName', crewController.chatRoom);
+    .route('/:id')
+    .get(crewController.getCrew)
+    .patch(crewController.updateCrew)
+    .delete(crewController.deleteCrew);
+
+router
+    .get('/:crewName/chat', crewController.chatRoom);
 ///////////////////////////////////////////////////////////
 
 
