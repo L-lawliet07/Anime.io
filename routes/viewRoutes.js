@@ -4,13 +4,26 @@
 
 const express = require('express');
 
+/*
+    viewController to controller view Routes
+*/
 const viewController = require('./../controllers/viewController');
 
+
+///////////////////////////////////////////////////////////
+// routes for view routes
 const router = express.Router();
 
+router
+    .get('/login', viewController.loginPage);
+router
+    .get('/', viewController.loginPage);
+router
+    .get('/signup', viewController.signupPage);
+///////////////////////////////////////////////////////////
 
-router.get('/login', viewController.loginPage);
-router.get('/', viewController.loginPage);
-router.get('/signup', viewController.signupPage);
 
+///////////////////////////////////////////////////////////
+// Exposing the router middleware
 module.exports = router;
+///////////////////////////////////////////////////////////

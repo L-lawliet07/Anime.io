@@ -5,20 +5,17 @@
 const express = require('express');
 
 /*
-    homeController to control home Routes
+    viewController to controller view Routes
 */
-const userController = require('./../controllers/userController');
+const crewController = require('./../controllers/crewController');
 
 
 ///////////////////////////////////////////////////////////
-// router for home routes
+// routes for view routes
 const router = express.Router();
 
 router
-    .get('/profile', userController.profilePage);
-router
-    .get('/setting', userController.settingPage)
-    .post('/setting', userController.settingPage);
+    .get('/:crewName', crewController.chatRoom);
 ///////////////////////////////////////////////////////////
 
 
