@@ -11,10 +11,10 @@ const morgan = require('morgan');
 
 ///////////////////////////////////////////////////////////
 // Routes
-const userRoutes = require('./routes/userRoutes');
-const homeRoutes = require('./routes/homeRoutes');
-const viewRoutes = require('./routes/viewRoutes');
-const crewRotues = require('./routes/crewRoutes');
+const userRoute = require('./routes/userRoute');
+const homeRoute = require('./routes/homeRoute');
+const viewRoute = require('./routes/viewRoute');
+const crewRoute = require('./routes/crewRoute');
 ///////////////////////////////////////////////////////////
 
 
@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 ///////////////////////////////////////////////////////////
-// middleware to set requestTime to request object
+// middleware to set requestTime in request object
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
     next();
@@ -53,17 +53,15 @@ app.use((req, res, next) => {
 ///////////////////////////////////////////////////////////
 
 
-
-/////////////////////////////////////
+///////////////////////////////////////////////////////////
 // Setting up Routes
-app.use('/', viewRoutes);
-app.use('/home', homeRoutes);
-app.use('/crew', crewRoutes);
-app.use('/user', userRoutes);
-/////////////////////////////////////
+app.use('/', viewRoute);
+app.use('/home', homeRoute);
+app.use('/crew', crewRoute);
+app.use('/user', userRoute);
+///////////////////////////////////////////////////////////
 
-
-/////////////////////////////////////
+///////////////////////////////////////////////////////////
 // Exposing express app to other modules 
 module.exports = app;
-/////////////////////////////////////
+///////////////////////////////////////////////////////////

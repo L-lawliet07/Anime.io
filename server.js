@@ -11,6 +11,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 ///////////////////////////////////////////////////////////
 
+
 ///////////////////////////////////////////////////////////
 // Importing express app
 const app = require('./app');
@@ -18,7 +19,7 @@ const app = require('./app');
 
 
 ///////////////////////////////////////////////////////////
-// Establishing a mongoose connection
+// Establishing a mongodb connection
 const DB = process.env.DB.replace(
     '<PASSWORD>',
     process.env.DB_PASSWORD
@@ -29,7 +30,9 @@ mongoose.connect(DB, {
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true
-}).then(connection => console.log('DB connection is successfull'));
+})
+    .then(connection => console.log('[Anime.io] : DB connection is successfull'))
+    .catch(err => console.log('[Anime.io] : Unable to connect to the database'));
 ///////////////////////////////////////////////////////////
 
 
@@ -38,6 +41,6 @@ mongoose.connect(DB, {
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-    console.log(`Application is running on port ${port}`);
+    console.log(`[Anime.io] : Application is running on port ${port}`);
 });
 ///////////////////////////////////////////////////////////

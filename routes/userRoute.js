@@ -7,7 +7,7 @@ const express = require('express');
 /*
     homeController to control home Routes
 */
-const userController = require('./../controllers/userController');
+const userController = require('../controllers/userController');
 
 
 ///////////////////////////////////////////////////////////

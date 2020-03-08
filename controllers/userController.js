@@ -5,7 +5,7 @@
 
 ///////////////////////////////////////////////////////////
 // This function will render login page
-exports.profilePage = function (req, res) {
+exports.profilePage = (req, res) => {
     res
         .status(404)
         .json({
@@ -17,7 +17,7 @@ exports.profilePage = function (req, res) {
 
 ///////////////////////////////////////////////////////////
 // This function will render signup page
-exports.settingPage = function (req, res) {
+exports.settingPage = (req, res) => {
     res
         .status(404)
         .json({

@@ -7,7 +7,7 @@ const express = require('express');
 /*
     viewController to controller view Routes
 */
-const crewController = require('./../controllers/crewController');
+const viewController = require('../controllers/viewController');
 
 
 ///////////////////////////////////////////////////////////
@@ -15,7 +15,11 @@ const crewController = require('./../controllers/crewController');
 const router = express.Router();
 
 router
-    .get('/:crewName', crewController.chatRoom);
+    .get('/login', viewController.loginPage);
+router
+    .get('/', viewController.loginPage);
+router
+    .get('/signup', viewController.signupPage);
 ///////////////////////////////////////////////////////////
 
 
