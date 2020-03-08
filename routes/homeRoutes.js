@@ -1,27 +1,29 @@
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+
 const express = require('express');
 
-const homeController = require('../controllers/homeController');
+/*
+    homeController to control home Routes
+*/
+const homeController = require('./../controllers/homeController');
 
+
+///////////////////////////////////////////////////////////
+// router for home routes
 const router = express.Router();
 
 router
-    .route('/')
-    .get(homeController.getCrew)
-    .post(homeController.createCrew); // Creating a new crew
-
-
-////////////////////////////////////
-// Updating Crew(group) details
-// router
-//     .route('/home/crews/:id')
-//     .put(updateCrew);
-
+    .get('/', homeController.homePage);
 router
-    .route('/home/Shinobis')
-    .get(homeController.getAllShinobi)
-
+    .get('/users', homeController.userPage);
 router
-    .route('/home/Shinobis/:id')
-    .get(homeController.getShinobi);
+    .post('/results', homeController.resultPage);
+///////////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////////
+// Exposing the router middleware
 module.exports = router;
+///////////////////////////////////////////////////////////
