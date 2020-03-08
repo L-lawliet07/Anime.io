@@ -2,15 +2,17 @@
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
 
+const Crew = require('./../models/crewModel');
 
 ///////////////////////////////////////////////////////////
 // This function will render home page of the application
-exports.homePage = (req, res) => {
+exports.homePage = async (req, res) => {
+
+    const data = await Crew.find({});
+    console.log(data);
     res
-        .status(404)
-        .json({
-            message: 'this route is under construction'
-        });
+        .status(200)
+        .json(data);
 };
 ///////////////////////////////////////////////////////////
 

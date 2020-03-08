@@ -1,6 +1,14 @@
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+
 const mongoose = require('mongoose');
 
+
+///////////////////////////////////////////////////////////
+// Creating a crew schema
 const crewSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: [true, 'Crew name is required'],
@@ -10,15 +18,18 @@ const crewSchema = new mongoose.Schema({
         type: String,
         default: 'default.png'
     },
-    members: [
-        // Iam thing of adding their object value
-    ],
-    message: [{
-        timestamp: { type: Date, default: Date.now },
-        sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-    }]
+    members: [String]
 });
+///////////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////////
+// Creating crew model
 const crew = mongoose.model('Crew', crewSchema);
+///////////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////////
+// exposing crew model
 module.exports = crew;
+///////////////////////////////////////////////////////////
