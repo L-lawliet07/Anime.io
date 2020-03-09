@@ -5,7 +5,7 @@
 const express = require('express');
 
 /*
-    viewController to controller view Routes
+    crewController to controller crew Routes
 */
 const crewController = require('../controllers/crewController');
 

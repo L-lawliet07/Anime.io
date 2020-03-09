@@ -9,7 +9,7 @@ const Crew = require('./../models/crewModel');
 // This function will render home page of the application
 exports.homePage = async (req, res) => {
 
-    const data = await Crew.find({});
+    const data = await Crew.find(req.query);
     res
         .status(200)
         .json(data);

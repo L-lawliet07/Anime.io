@@ -12,7 +12,8 @@ const crewSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Crew name is required'],
-        unique: true
+        unique: true,
+        trim: true
     },
     image: {
         type: String,

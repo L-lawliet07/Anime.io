@@ -3,7 +3,7 @@
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////// 
 // This function will render login page
 exports.profilePage = (req, res) => {
     res
@@ -18,6 +18,18 @@ exports.profilePage = (req, res) => {
 ///////////////////////////////////////////////////////////
 // This function will render signup page
 exports.settingPage = (req, res) => {
+    res
+        .status(404)
+        .json({
+            message: "This path is undercontruction"
+        });
+}
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// This function will render all user info
+exports.usersPage = (req, res) => {
     res
         .status(404)
         .json({
