@@ -31,8 +31,7 @@ mongoose.connect(DB, {
     useFindAndModify: false,
     useUnifiedTopology: true
 })
-    .then(connection => console.log('[Anime.io] : DB connection is successfull'))
-    .catch(err => console.log('[Anime.io] : Unable to connect to the database'));
+    .then(connection => console.log('[Anime.io] : DB connection is successfull'));
 ///////////////////////////////////////////////////////////
 
 
@@ -40,7 +39,19 @@ mongoose.connect(DB, {
 // Listening on specified port
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`[Anime.io] : Application is running on port ${port}`);
+});
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// handling unhandledRejection
+process.on('unhandledRejection', err => {
+    console.error(`[${err.name}] : ${err.message}`);
+
+    server.close(() => {
+        process.exit(1);
+    });
 });
 ///////////////////////////////////////////////////////////
