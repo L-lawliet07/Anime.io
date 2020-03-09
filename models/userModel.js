@@ -35,7 +35,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please provide a valid email'],
-        minlength: 8
+        minlength: 8,
+        select: false
     },
     passwordConfirm: {
         type: String,
@@ -53,6 +54,8 @@ const userSchema = new mongoose.Schema({
 ///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// this is presave middleware which will be envoked before saving the document
 userSchema.pre('save', async function (next) {
 
     //will only run this function when password is modified
@@ -66,7 +69,11 @@ userSchema.pre('save', async function (next) {
     console.log('inside');
     next();
 });
+///////////////////////////////////////////////////////////
 
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+}
 
 ///////////////////////////////////////////////////////////
 // Creating crew model
