@@ -57,6 +57,12 @@ app.use((req, res, next) => {
 app.use('/', viewRoute);
 app.use('/crew', crewRoute);
 app.use('/user', userRoute);
+app.all('*', (req, res) => {
+    res.status(404).json({
+        status: 'fail',
+        message: `cannot find the route ${req.originalUrl}`
+    })
+});
 ///////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////
