@@ -12,7 +12,6 @@ const morgan = require('morgan');
 ///////////////////////////////////////////////////////////
 // Routes
 const userRoute = require('./routes/userRoute');
-const homeRoute = require('./routes/homeRoute');
 const viewRoute = require('./routes/viewRoute');
 const crewRoute = require('./routes/crewRoute');
 ///////////////////////////////////////////////////////////
@@ -56,7 +55,6 @@ app.use((req, res, next) => {
 ///////////////////////////////////////////////////////////
 // Setting up Routes
 app.use('/', viewRoute);
-app.use('/home', homeRoute);
 app.use('/crew', crewRoute);
 app.use('/user', userRoute);
 ///////////////////////////////////////////////////////////
