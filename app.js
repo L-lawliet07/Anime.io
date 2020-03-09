@@ -2,12 +2,13 @@
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
 
+const globalErrorHandler = require('./controllers/errorController');
+
 const path = require('path');
 
 const express = require('express');
 
 const morgan = require('morgan');
-
 
 ///////////////////////////////////////////////////////////
 // Routes
@@ -57,13 +58,18 @@ app.use((req, res, next) => {
 app.use('/', viewRoute);
 app.use('/crew', crewRoute);
 app.use('/user', userRoute);
-app.all('*', (req, res) => {
-    res.status(404).json({
-        status: 'fail',
-        message: `cannot find the route ${req.originalUrl}`
-    })
+app.all('*', (req, res, next) => {
+    const err = new AppError(`cannot find the route ${req.originalUrl}`, 404);
+    next(err);
 });
 ///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// adding error handling middleware
+app.use(globalErrorHandler);
+///////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////
 // Exposing express app to other modules 

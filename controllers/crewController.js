@@ -1,27 +1,32 @@
-
 ///////////////////////////////////////////////////////////
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
+
+const AppError = require('./../utils/appError');
+
+const catchAsync = require('./../utils/catchAsync');
 
 const Crew = require('./../models/crewModel');
 
 ///////////////////////////////////////////////////////////
 // This function will render home page of the application
-exports.homePage = async (req, res) => {
+exports.homePage = catchAsync(
+    async (req, res) => {
 
-    const data = await Crew.find(req.query);
-    res
-        .status(200)
-        .json(data);
-};
+        const data = await Crew.find(req.query);
+        res
+            .status(200)
+            .json(data);
+    }
+);
 ///////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////
 // This function is to create new Crew
-exports.createCrew = async (req, res) => {
+exports.createCrew = catchAsync(
+    async (req, res) => {
 
-    try {
         const crewData = await Crew.create(req.body);
         res
             .status(201)
@@ -31,27 +36,24 @@ exports.createCrew = async (req, res) => {
                     crew: crewData
                 }
             });
-    } catch (err) {
-        res
-            .status(400)
-            .json({
-                status: 'fail',
-                error: err
-            });
     }
-}
+);
 ///////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////
 // This function will find crew by id and update it
-exports.updateCrew = async (req, res) => {
+exports.updateCrew = catchAsync(
 
-    try {
+    async (req, res) => {
+
         const crewData = await Crew.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true
         });
+        if (!crewData) {
+            return next(new AppError(`No crew Found with id ${req.params.id}`, 404));
+        }
         res
             .status(200)
             .json({
@@ -60,45 +62,39 @@ exports.updateCrew = async (req, res) => {
                     crew: crewData
                 }
             });
-    } catch (err) {
-        res
-            .status(400)
-            .json({
-                status: 'fail',
-                error: err
-            });
     }
-}
+);
 ///////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////
 // This function will find crew by id and delete it
-exports.deleteCrew = async (req, res) => {
+exports.deleteCrew = catchAsync(
+    async (req, res) => {
 
-    try {
-        await Crew.findByIdAndDelete(req.params.id);
+        const crewData = await Crew.findByIdAndDelete(req.params.id);
+        if (!crewData) {
+            return next(new AppError(`No crew Found with id ${req.params.id}`, 404));
+        }
         res
             .status(204)
             .json({
                 status: 'success',
             });
-    } catch (err) {
-        res
-            .status(400)
-            .json({
-                status: 'fail',
-                error: err
-            });
     }
-}
+);
 ///////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////
 // This function will find crew by id
-exports.getCrew = async (req, res) => {
+exports.getCrew = catchAsync(
+    async (req, res, next) => {
 
-    try {
         const crewData = await Crew.findById(req.params.id);
+        if (!crewData) {
+            return next(new AppError(`No crew Found with id ${req.params.id}`, 404));
+        }
         res
             .status(200)
             .json({
@@ -107,15 +103,8 @@ exports.getCrew = async (req, res) => {
                     crew: crewData
                 }
             });
-    } catch (err) {
-        res
-            .status(400)
-            .json({
-                status: 'fail',
-                error: err
-            });
     }
-}
+);
 ///////////////////////////////////////////////////////////
 
 
