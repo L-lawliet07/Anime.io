@@ -7,6 +7,17 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 ///////////////////////////////////////////////////////////
+// handling uncaughtException
+process.on('uncaughtException', err => {
+    console.error(`[${err.name}] : ${err.message}`);
+    server.close(() => {
+        process.exit(1);
+    });
+});
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
 // Attaching configuration file to current environment
 dotenv.config({ path: './config.env' });
 ///////////////////////////////////////////////////////////
