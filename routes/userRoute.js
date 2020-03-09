@@ -9,10 +9,13 @@ const express = require('express');
 */
 const userController = require('../controllers/userController');
 
+const authController = require('../controllers/authController');
 
 ///////////////////////////////////////////////////////////
 // router for home routes
 const router = express.Router();
+
+router.post('/signup', authController.signup);
 
 router
     .get('/profile', userController.profilePage);
