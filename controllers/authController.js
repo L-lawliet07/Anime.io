@@ -25,8 +25,20 @@ const signToken = id => {
 exports.signup = catchAsync(
 
     async (req, res, next) => {
+
+        /*
+         * create user
+         */
         const user = await User.create(req.body);
+
+        /*
+         * if data is stored in db then assign a token to this user
+         */
         const token = signToken(user._id);
+
+        /*
+         * sending back the 201 response with jwt token
+         */
         res
             .status(201)
             .json({
@@ -46,19 +58,26 @@ exports.signup = catchAsync(
 exports.login = catchAsync(
 
     async (req, res, next) => {
+
+        /*
+         * Check is email and password field exist
+         */
         const { email, password } = req.body;
-        // 1) if email and exist
         if (!email || !password) {
             return next(new AppError('Please provide email and password', 400));
         }
-        // 2) check if user exists && password is correct
-        const user = await User.findOne({ email }).select('+password');
 
+        /*
+         * Check if user exists and password is correct
+         */
+        const user = await User.findOne({ email }).select('+password');
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Incorrect email or password', 401));
         }
 
-        // 3) if everything ok, send token to client
+        /*
+         * If every thing okay send token to the client
+         */
         const token = signToken(user._id);
         res
             .status(200)
@@ -70,28 +89,48 @@ exports.login = catchAsync(
 );
 ///////////////////////////////////////////////////////////
 
+
 ///////////////////////////////////////////////////////////
-// 
+// Function to check if user have permission to pass this middleware
 exports.protect = catchAsync(
     async (req, res, next) => {
-        // 1) getting the token
+
+        /*
+         * getting the token and checking if token field exists
+         */
         let token;
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
         }
-        if (!token) return next(new AppError('You are not logged in', 401));
-        // 2) validate the token
+        if (!token)
+            return next(new AppError('You are not logged in', 401));
+
+        /*
+         * Validating the token
+         */
         const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-        // 3) check if user exist
+
+        /*
+         * Check is user exist
+         */
         const user = await User.findById(decoded.id);
         if (!user) {
             return next(new AppError('User no longer exist', 401));
         }
-        // 4) if user change password after the jwt was issued
+
+        /*
+         * if user change password after the jwt was issued
+         */
         if (user.changedPasswordAfter(decoded.iat)) {
             return next(new AppError('Password Changed! Please login again', 401));
         }
+
+        //Attaching user info to request object
         req.user = user;
+
+        /*
+         * if everything okay pass it to next middleware
+         */
         next();
     }
 );

@@ -82,27 +82,54 @@ const sendDevelopmentError = (err, res) => {
 ///////////////////////////////////////////////////////////
 // global Error handler
 module.exports = (err, req, res, next) => {
+
     err.statusCode = err.statusCode || 500;
+
     err.status = err.status || 'error';
+
+    /* **** If environment is development **** */
     if (process.env.NODE_ENV === 'development') {
         sendDevelopmentError(err, res);
-    } else if (process.env.NODE_ENV === 'production') {
+    }
+    /* **** If environment is production **** */
+    else if (process.env.NODE_ENV === 'production') {
         let error = { ...err };
+
+        /*
+         * Checking if there is CastError thrown by mongoose for invalid id
+         */
         if (error.name === 'CastError') {
             error = handleCastErrorDB(error)
         }
+
+        /*
+         * Checking if there is Duplicate Field error thrown by mongodb
+         */
         if (error.code === 11000) {
             error = handleDuplicateFieldDB(error);
         }
+
+        /*
+         * Checking if there is Validation error thrown by mongoose
+         */
         if (error.name === 'ValidationError') {
             error = handleValidationErrorDB(error)
         }
+
+        /*
+         * Checking if there is Json Web Token error 
+         */
         if (error.name === 'JsonWebTokenError') {
             error = handleJWTError();
         }
+
+        /*
+         * Checking if there is Json Web Token error 
+         */
         if (error.name === 'TokenExpiredError') {
             error = handleJWTExpiredError();
         }
+
         sendProductionError(error, res);
     }
 };
