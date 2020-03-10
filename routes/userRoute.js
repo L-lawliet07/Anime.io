@@ -27,7 +27,7 @@ router
 
 router
     .get('/setting', authController.protect, userController.settingPage)
-    .patch('/setting', authController.protect, userController.settingPage);
+    .patch('/setting', authController.protect, userController.updateMe);
 
 router
     .get('/users', authController.protect, userController.getAllUser);

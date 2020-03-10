@@ -26,6 +26,25 @@ exports.getAllUser = catchAsync(
 ///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// This function will update user data
+exports.updateMe = catchAsync(
+    async (req, res, next) => {
+        let user = req.user;
+        if (req.body.fullname) {
+            user = await User.findByIdAndUpdate(req.user.id, { fullname: req.body.fullname }, {
+                new: true
+            });
+        }
+        res.status(200).json({
+            status: 'success',
+            user
+        });
+    }
+);
+///////////////////////////////////////////////////////////
+
+
 /////////////////////////////////////////////////////////// 
 // This function will render login page
 exports.profilePage = (req, res) => {
