@@ -24,6 +24,31 @@ const signToken = id => {
 ///////////////////////////////////////////////////////////
 
 
+const createSendToken = (user, statusCode, res) => {
+
+    const token = signToken(user._id);
+
+    const cookie_option = {
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true
+    };
+
+    if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
+
+    res.cookie('jwt', token, cookie_option);
+    user.password = undefined;
+    res.status(statusCode).json({
+        status: 'success',
+        token,
+        data: {
+            user
+        }
+    });
+}
+
+
 ///////////////////////////////////////////////////////////
 // signup
 exports.signup = catchAsync(
@@ -36,22 +61,9 @@ exports.signup = catchAsync(
         const user = await User.create(req.body);
 
         /*
-         * if data is stored in db then assign a token to this user
+         * signing token and sending back the 201 response with jwt token
          */
-        const token = signToken(user._id);
-
-        /*
-         * sending back the 201 response with jwt token
-         */
-        res
-            .status(201)
-            .json({
-                status: 'success',
-                token,
-                data: {
-                    user
-                }
-            });
+        createSendToken(user, 201, res)
     }
 );
 ///////////////////////////////////////////////////////////
@@ -82,13 +94,7 @@ exports.login = catchAsync(
         /*
          * If every thing okay send token to the client
          */
-        const token = signToken(user._id);
-        res
-            .status(200)
-            .json({
-                status: 'success',
-                token
-            });
+        createSendToken(user, 200, res)
     }
 );
 ///////////////////////////////////////////////////////////
@@ -250,17 +256,7 @@ exports.resetPassword = catchAsync(
         user.passwordResetExpires = undefined;
         await user.save();
 
-        /*
-         * update change password at property
-         */
-
-        const token = signToken(user._id);
-        res
-            .status(200)
-            .json({
-                status: 'success',
-                token
-            });
+        createSendToken(user, 200, res);
     }
 );
 ///////////////////////////////////////////////////////////

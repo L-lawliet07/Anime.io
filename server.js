@@ -38,7 +38,9 @@ const DB = process.env.DB.replace(
 
 mongoose.connect(DB, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    // useCreateIndex: true
 })
     .then(connection => console.log('[Anime.io] : DB connection is successfull'));
 ///////////////////////////////////////////////////////////
