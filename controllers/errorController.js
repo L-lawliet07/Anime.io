@@ -32,6 +32,21 @@ const handleValidationErrorDB = (err) => {
 
 
 ///////////////////////////////////////////////////////////
+// handling JWT Error
+const handleJWTError = () => {
+    return new AppError(`Invalid token please login`, 401);
+}
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// handling JWT Expired Error
+const handleJWTExpiredError = () => {
+    return new AppError(`Token expired`, 401);
+}
+///////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////
 // This function will send production error 
 const sendProductionError = (err, res) => {
 
@@ -80,7 +95,13 @@ module.exports = (err, req, res, next) => {
             error = handleDuplicateFieldDB(error);
         }
         if (error.name === 'ValidationError') {
-            error = handleValidationErrorDB()
+            error = handleValidationErrorDB(error)
+        }
+        if (error.name === 'JsonWebTokenError') {
+            error = handleJWTError();
+        }
+        if (error.name === 'TokenExpiredError') {
+            error = handleJWTExpiredError();
         }
         sendProductionError(error, res);
     }

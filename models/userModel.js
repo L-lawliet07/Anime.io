@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema({
             message: "Passwords are not same"
         }
     },
+    passwordChangedAt: Date,
     friends: [String]
 });
 ///////////////////////////////////////////////////////////
@@ -66,14 +67,26 @@ userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 12);
     //setting it to undefined so that it will no store in database
     this.passwordConfirm = undefined;
-    console.log('inside');
     next();
 });
 ///////////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////////
+// user method that will be available in all the instances
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
 }
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+    if (this.passwordChangedAt) {
+        const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10)
+        return JWTTimestamp < changedTimestamp;
+    }
+    return false;
+}
+///////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////
 // Creating crew model

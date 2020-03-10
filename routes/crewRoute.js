@@ -7,7 +7,9 @@ const express = require('express');
 /*
     crewController to controller crew Routes
 */
-const crewController = require('../controllers/crewController');
+const crewController = require('./../controllers/crewController');
+
+const authController = require('./../controllers/authController');
 
 ///////////////////////////////////////////////////////////
 // routes for view routes
@@ -15,17 +17,17 @@ const router = express.Router();
 
 router
     .route('/')
-    .get(crewController.homePage)
-    .post(crewController.createCrew);
+    .get(authController.protect, crewController.homePage)
+    .post(authController.protect, crewController.createCrew);
 
 router
     .route('/:id')
-    .get(crewController.getCrew)
-    .patch(crewController.updateCrew)
-    .delete(crewController.deleteCrew);
+    .get(authController.protect, crewController.getCrew)
+    .patch(authController.protect, crewController.updateCrew)
+    .delete(authController.protect, crewController.deleteCrew);
 
 router
-    .get('/:crewName/chat', crewController.chatRoom);
+    .get('/:crewName/chat', authController.protect, crewController.chatRoom);
 ///////////////////////////////////////////////////////////
 
 
