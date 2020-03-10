@@ -27,6 +27,13 @@ const app = express();
 
 
 ///////////////////////////////////////////////////////////
+// setting up view engine and view path
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
 // Running morgan for only development
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
