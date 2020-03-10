@@ -18,13 +18,13 @@ const router = express.Router();
 router
     .route('/')
     .get(authController.protect, crewController.homePage)
-    .post(authController.protect, crewController.createCrew);
+    .post(authController.protect, authController.adminSection, crewController.createCrew);
 
 router
     .route('/:id')
     .get(authController.protect, crewController.getCrew)
     .patch(authController.protect, crewController.updateCrew)
-    .delete(authController.protect, crewController.deleteCrew);
+    .delete(authController.protect, authController.adminSection, crewController.deleteCrew);
 
 router
     .get('/:crewName/chat', authController.protect, crewController.chatRoom);

@@ -135,3 +135,17 @@ exports.protect = catchAsync(
     }
 );
 ///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// Checking if user is admin or not
+exports.adminSection = (req, res, next) => {
+    /*
+     * Check if it is admin
+     */
+    if (false) {
+        next(new AppError('You do not have permission to perform this action', 403));
+    }
+    next();
+}
+///////////////////////////////////////////////////////////

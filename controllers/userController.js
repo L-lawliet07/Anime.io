@@ -8,7 +8,7 @@ const catchAsync = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
 
 /////////////////////////////////////////////////////////// 
-// This function will render login page
+// This function will all use information
 exports.getAllUser = catchAsync(
     async (req, res) => {
         const users = await User.find();
@@ -23,8 +23,8 @@ exports.getAllUser = catchAsync(
             });
     }
 );
-
 ///////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////// 
 // This function will render login page

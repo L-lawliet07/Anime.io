@@ -5,8 +5,8 @@
 const express = require('express');
 
 /*
-    userController to control user Routes
-*/
+ * userController to control user Routes
+ */
 const userController = require('../controllers/userController');
 
 const authController = require('../controllers/authController');
@@ -20,14 +20,14 @@ router.post('/login', authController.login);
 
 
 router
-    .get('/profile', userController.profilePage);
+    .get('/profile', authController.protect, userController.profilePage);
 
 router
-    .get('/setting', userController.settingPage)
-    .patch('/setting', userController.settingPage);
+    .get('/setting', authController.protect, userController.settingPage)
+    .patch('/setting', authController.protect, userController.settingPage);
 
 router
-    .get('/users', userController.getAllUser);
+    .get('/users', authController.protect, userController.getAllUser);
 ///////////////////////////////////////////////////////////
 
 
