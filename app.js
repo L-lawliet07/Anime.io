@@ -4,6 +4,8 @@
 
 const globalErrorHandler = require('./controllers/errorController');
 
+const AppError = require('./utils/appError');
+
 const path = require('path');
 
 const express = require('express');

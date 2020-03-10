@@ -8,12 +8,12 @@ const dotenv = require('dotenv');
 
 ///////////////////////////////////////////////////////////
 // handling uncaughtException
-process.on('uncaughtException', err => {
-    console.error(`[${err.name}] : ${err.message}`);
-    server.close(() => {
-        process.exit(1);
-    });
-});
+// process.on('uncaughtException', err => {
+//     console.error(`[${err.name}] : ${err.message}`);
+//     server.close(() => {
+//         process.exit(1);
+//     });
+// });
 ///////////////////////////////////////////////////////////
 
 
@@ -38,8 +38,6 @@ const DB = process.env.DB.replace(
 
 mongoose.connect(DB, {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
     useUnifiedTopology: true
 })
     .then(connection => console.log('[Anime.io] : DB connection is successfull'));

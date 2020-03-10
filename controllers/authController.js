@@ -6,9 +6,13 @@ const AppError = require('./../utils/appError');
 
 const jwt = require('jsonwebtoken');
 
+const crypto = require('crypto');
+
 const User = require('./../models/userModel');
 
 const catchAsync = require('./../utils/catchAsync');
+
+const sendEmail = require('./../utils/email');
 
 const { promisify } = require('util');
 
@@ -148,4 +152,115 @@ exports.adminSection = (req, res, next) => {
     }
     next();
 }
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// this will function will 
+exports.forgotPassword = catchAsync(
+    async (req, res, next) => {
+
+        /*
+         * Check if mail is provided
+         */
+        const { email } = req.body;
+        if (!email) {
+            return next(new AppError('Please provide email id', 401));
+        }
+
+        /*
+         * Check if email exist in databases
+         */
+        const user = await User.findOne({ email });
+        if (!user) {
+            return next(new AppError('Email is not registered', 401));
+        }
+
+        /*
+         * generate the random reset token 
+         */
+
+        const resetToken = user.createPasswordResetToken();
+        await user.save({ validateBeforeSave: false });
+        /*
+         * send this token to the user 
+         */
+        // creating the reset url
+        const resetURL = `${req.protocol}://${req.get('host')}/user/resetPassword/${resetToken}`;
+        // creating message text
+        const message = `Click here to recover password ${resetURL}`;
+
+        try {
+            // sending mail
+            await sendEmail({
+                email: user.email,
+                subject: 'Password Recovery link below will be valid for 10 min',
+                message
+            });
+            // now sending the response
+            res.status(200).json({
+                status: 'success',
+                message: 'token send to email'
+            });
+        } catch (err) {
+
+            // if some error occurs setting below value to undefined
+            user.passwordResetToken = undefined;
+            user.passwordResetExpires = undefined;
+            // we are saving the changes
+            await user.save({ validateBeforeSave: false });
+
+            return next(new AppError('Could not send email try again later', 500));
+        }
+    }
+);
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// this will function will 
+exports.resetPassword = catchAsync(
+    async (req, res, next) => {
+        /*
+         * find user based on the token provided
+         */
+        const hashedToken = crypto
+            .createHash('sha256')
+            .update(req.params.token)
+            .digest('hex');
+
+        const user = await User.findOne({
+            passwordResetToken: hashedToken,
+            passwordResetExpires: { $gt: Date.now() }
+        });
+
+        /*
+         * checking if use exists or not
+         */
+        if (!user) {
+            return next(new AppError('Token is invalid or has expored', 400));
+        }
+
+        /*
+         * upating the password
+         */
+        user.password = req.body.password;
+        user.passwordConfirm = req.body.passwordConfirm;
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+        await user.save();
+
+        /*
+         * update change password at property
+         */
+
+        const token = signToken(user._id);
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                token
+            });
+    }
+);
 ///////////////////////////////////////////////////////////
