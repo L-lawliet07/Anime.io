@@ -13,10 +13,14 @@ const Crew = require('./../models/crewModel');
 exports.homePage = catchAsync(
     async (req, res) => {
 
-        const data = await Crew.find(req.query);
+        const crews = await Crew.find(req.query);
         res
             .status(200)
-            .json(data);
+            .render('./home', {
+                title: 'Anime.io | home',
+                crews,
+                username: req.user.username
+            });
     }
 );
 ///////////////////////////////////////////////////////////

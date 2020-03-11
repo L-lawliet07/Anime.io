@@ -44,22 +44,28 @@
             <div class="form-wrap">
                 <h1>Sign Up</h1>
                 <p>It's Infinite <span class="emphasis">Tsukuyomi<span></p>
-                <form>
+                <form id="signup-form">
                     <div class="form-group">
                         <label for="fullname">Full Name</label>
-                        <input type="text" name="fullname" id="fullname" placeholder="Abcd Bisht" />
+                        <input type="text" name="fullname" id="fullname" placeholder="Abcd Bisht" / required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="lawliet" / required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" name="email" id="email" placeholder='you@example.com' />
+                        <input type="email" name="email" id="email" placeholder='you@example.com' / required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" />
+                        <input type="password" name="password" id="password" placeholder="••••••••" / minlength="8"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="passwordConfirm">Confirm Password</label>
-                        <input type="password" name="paswordConfirm" id="password2" placeholder="••••••••" />
+                        <input type="password" name="paswordConfirm" id="passwordConfirm" placeholder="••••••••" /
+                            minlength="8" required>
                     </div>
                     <button type="submit" class="btn">Sign Up</button>
                 </form>
@@ -87,6 +93,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+    <script src="./js/login.js"></script>
 </body>
 
 </html>

@@ -100,3 +100,21 @@ footer {
 footer a {
     color: #49c1a2;
 }
+
+/* Alert */
+
+.alert {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    width: 100%;
+    color: rgb(248, 249, 250);
+}
+
+.alert-error {
+    background-color: #eb4d4b;
+}
+
+.alert-success {
+    background-color: #37a08e;
+}
