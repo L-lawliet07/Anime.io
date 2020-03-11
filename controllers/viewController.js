@@ -19,9 +19,9 @@ exports.loginPage = function (req, res) {
 // This function will render signup page
 exports.signupPage = function (req, res) {
     res
-        .status(404)
-        .json({
-            message: "This path is undercontruction"
-        });
+        .status(200)
+        .render('./signup', {
+            title: 'Anime.io | signup'
+        })
 }
 ///////////////////////////////////////////////////////////
