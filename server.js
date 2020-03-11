@@ -40,7 +40,7 @@ mongoose.connect(DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    // useCreateIndex: true
+    // useCreateIndex: true  
 })
     .then(connection => console.log('[Anime.io] : DB connection is successfull'));
 ///////////////////////////////////////////////////////////

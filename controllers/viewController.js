@@ -7,9 +7,9 @@
 // This function will render login page
 exports.loginPage = function (req, res) {
     res
-        .status(404)
-        .json({
-            message: "This path is underconstruction"
+        .status(200)
+        .render('./login', {
+            title: 'Anime.io | login'
         });
 }
 ///////////////////////////////////////////////////////////

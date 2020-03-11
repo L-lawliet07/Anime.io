@@ -24,10 +24,18 @@ const signToken = id => {
 ///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// function that will create and send jwt token 
 const createSendToken = (user, statusCode, res) => {
 
+    /*
+     * creating token
+     */
     const token = signToken(user._id);
 
+    /*
+     * setting up cookie options
+     */
     const cookie_option = {
         expires: new Date(
             Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
@@ -35,18 +43,26 @@ const createSendToken = (user, statusCode, res) => {
         httpOnly: true
     };
 
+    /*
+     * setting secure cookie option only in production
+     */
     if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
-
+    //setting cookie
     res.cookie('jwt', token, cookie_option);
+    //not sending passsword to the user
     user.password = undefined;
-    res.status(statusCode).json({
-        status: 'success',
-        token,
-        data: {
-            user
-        }
-    });
+    //sending the json response
+    res
+        .status(statusCode)
+        .json({
+            status: 'success',
+            token,
+            data: {
+                user
+            }
+        });
 }
+///////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////
@@ -101,6 +117,27 @@ exports.login = catchAsync(
 
 
 ///////////////////////////////////////////////////////////
+// logOut
+exports.logout = (req, res, next) => {
+
+    /*
+     * setting cookie to some other value and 10 sec expiredate
+     */
+    res.cookie('jwt', 'loggedout', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    });
+    /*
+     * sending success respose back
+     */
+    res
+        .status(200)
+        .json({ status: 'success' });
+};
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
 // Function to check if user have permission to pass this middleware
 exports.protect = catchAsync(
     async (req, res, next) => {
@@ -109,8 +146,13 @@ exports.protect = catchAsync(
          * getting the token and checking if token field exists
          */
         let token;
+        // Checking authorization headers
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
+        }
+        // Checking jwt cookie
+        else if (req.cookies.jwt) {
+            token = req.cookies.jwt;
         }
         if (!token)
             return next(new AppError('You are not logged in', 401));
@@ -257,6 +299,44 @@ exports.resetPassword = catchAsync(
         await user.save();
 
         createSendToken(user, 200, res);
+    }
+);
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// Function to check if user have permission to pass this middleware
+exports.isLoggedin = catchAsync(
+    async (req, res, next) => {
+        if (req.cookies.jwt) {
+
+            try {
+
+                /*
+                * Validating the token
+                */
+                const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
+                /*
+                  * Check is user exist
+                  */
+                const user = await User.findById(decoded.id);
+                if (!user)
+                    return next();
+                /*
+                 * if user change password after the jwt was issued
+                 */
+                if (user.changedPasswordAfter(decoded.iat)) {
+                    return next();
+                }
+                //Attaching user info to request object
+                req.user = user;
+                res.redirect('/crew');
+            } catch (err) {
+                return next();
+            }
+        } else {
+            next();
+        }
     }
 );
 ///////////////////////////////////////////////////////////

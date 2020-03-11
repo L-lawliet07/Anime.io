@@ -12,6 +12,8 @@ const express = require('express');
 
 const morgan = require('morgan');
 
+const cookieParser = require('cookie-parser');
+
 ///////////////////////////////////////////////////////////
 // Routes
 const userRoute = require('./routes/userRoute');
@@ -44,6 +46,7 @@ if (process.env.NODE_ENV === 'development') {
 ///////////////////////////////////////////////////////////
 // For parsing json request body
 app.use(express.json());
+app.use(cookieParser());
 ///////////////////////////////////////////////////////////
 
 

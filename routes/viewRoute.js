@@ -9,17 +9,18 @@ const express = require('express');
 */
 const viewController = require('../controllers/viewController');
 
+const authController = require('./../controllers/authController');
 
 ///////////////////////////////////////////////////////////
 // routes for view routes
 const router = express.Router();
 
 router
-    .get('/login', viewController.loginPage);
+    .get('/login', authController.isLoggedin, viewController.loginPage);
 router
-    .get('/', viewController.loginPage);
+    .get('/', authController.isLoggedin, viewController.loginPage);
 router
-    .get('/signup', viewController.signupPage);
+    .get('/signup', authController.isLoggedin, viewController.signupPage);
 ///////////////////////////////////////////////////////////
 
 
