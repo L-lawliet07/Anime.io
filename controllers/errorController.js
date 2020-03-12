@@ -94,7 +94,7 @@ module.exports = (err, req, res, next) => {
     /* **** If environment is production **** */
     else if (process.env.NODE_ENV === 'production') {
         let error = { ...err };
-
+        error.message = err.message;
         /*
          * Checking if there is CastError thrown by mongoose for invalid id
          */
