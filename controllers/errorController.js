@@ -15,7 +15,7 @@ const handleCastErrorDB = (err) => {
 ///////////////////////////////////////////////////////////
 // handling duplicate field error produced by mongodb
 const handleDuplicateFieldDB = (err) => {
-    return new AppError(`Duplicate Field value `, 400)
+    return new AppError(`${Object.keys(err.keyValue)[0]} already in use`, 400)
 }
 ///////////////////////////////////////////////////////////
 

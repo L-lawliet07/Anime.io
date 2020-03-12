@@ -46,7 +46,7 @@ const createSendToken = (user, statusCode, res) => {
     /*
      * setting secure cookie option only in production
      */
-    if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
+    // if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
     //setting cookie
     res.cookie('jwt', token, cookie_option);
     //not sending passsword to the user
@@ -75,7 +75,6 @@ exports.signup = catchAsync(
          * create user
          */
         const user = await User.create(req.body);
-
         /*
          * signing token and sending back the 201 response with jwt token
          */
@@ -155,7 +154,7 @@ exports.protect = catchAsync(
             token = req.cookies.jwt;
         }
         if (!token)
-            return next(new AppError('You are not logged in', 401));
+            return next(new AppError('Please login first', 401));
 
         /*
          * Validating the token
