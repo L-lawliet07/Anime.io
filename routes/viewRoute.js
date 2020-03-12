@@ -21,6 +21,10 @@ router
     .get('/', authController.isLoggedin, viewController.loginPage);
 router
     .get('/signup', authController.isLoggedin, viewController.signupPage);
+router
+    .get('/forgotpassword', authController.isLoggedin, viewController.forgotPasswordPage);
+router
+    .get('/resetpassword/:token', authController.isLoggedin, viewController.resetPasswordPage);
 ///////////////////////////////////////////////////////////
 
 

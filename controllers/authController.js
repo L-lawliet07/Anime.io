@@ -212,7 +212,7 @@ exports.forgotPassword = catchAsync(
          */
         const { email } = req.body;
         if (!email) {
-            return next(new AppError('Please provide email id', 401));
+            return next(new AppError('Email is required', 401));
         }
 
         /*
@@ -220,7 +220,7 @@ exports.forgotPassword = catchAsync(
          */
         const user = await User.findOne({ email });
         if (!user) {
-            return next(new AppError('Email is not registered', 401));
+            return next(new AppError('Email is not yet registered', 400));
         }
 
         /*
@@ -233,7 +233,7 @@ exports.forgotPassword = catchAsync(
          * send this token to the user 
          */
         // creating the reset url
-        const resetURL = `${req.protocol}://${req.get('host')}/user/resetPassword/${resetToken}`;
+        const resetURL = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
         // creating message text
         const message = `Click here to recover password ${resetURL}`;
 
@@ -247,7 +247,7 @@ exports.forgotPassword = catchAsync(
             // now sending the response
             res.status(200).json({
                 status: 'success',
-                message: 'token send to email'
+                message: 'Token Sent'
             });
         } catch (err) {
 
@@ -257,7 +257,7 @@ exports.forgotPassword = catchAsync(
             // we are saving the changes
             await user.save({ validateBeforeSave: false });
 
-            return next(new AppError('Could not send email try again later', 500));
+            return next(new AppError('Unable to send mail', 500));
         }
     }
 );
@@ -268,14 +268,22 @@ exports.forgotPassword = catchAsync(
 // this will function will 
 exports.resetPassword = catchAsync(
     async (req, res, next) => {
+
+        /*
+         * checking token cookie
+         */
+        const token = req.cookies.resetToken;
+        if (!token) {
+            return next(new AppError('Token is invalid or has expored'), 400);
+        }
+        const hashedToken = crypto
+            .createHash('sha256')
+            .update(token)
+            .digest('hex');
+
         /*
          * find user based on the token provided
          */
-        const hashedToken = crypto
-            .createHash('sha256')
-            .update(req.params.token)
-            .digest('hex');
-
         const user = await User.findOne({
             passwordResetToken: hashedToken,
             passwordResetExpires: { $gt: Date.now() }
@@ -297,6 +305,13 @@ exports.resetPassword = catchAsync(
         user.passwordResetExpires = undefined;
         await user.save();
 
+        /*
+         * changing reset token
+         */
+        res.cookie('resetToken', 'tokenExpired', {
+            expires: new Date(Date.now() + 10 * 1000),
+            httpOnly: true
+        });
         createSendToken(user, 200, res);
     }
 );
