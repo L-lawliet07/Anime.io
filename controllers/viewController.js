@@ -41,6 +41,9 @@ exports.forgotPasswordPage = function (req, res) {
 // This functin will render password reset page
 exports.resetPasswordPage = function (req, res) {
 
+    /*
+     * setting up reset cookie option
+     */
     const cookie_option = {
         expires: new Date(
             Date.now() + 10 * 60 * 1000
