@@ -115,10 +115,13 @@ exports.getCrew = catchAsync(
 ///////////////////////////////////////////////////////////
 // This function will render crewChatRoom page
 exports.chatRoom = (req, res) => {
+    const crew = req.params.crewName
     res
-        .status(404)
-        .json({
-            message: "This path is underconstruction"
+        .status(200)
+        .render('groupchat', {
+            title: `Anime.io | ${crew}`,
+            crew,
+            username: req.user.username
         });
 }
 ///////////////////////////////////////////////////////////

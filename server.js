@@ -6,6 +6,10 @@ const mongoose = require('mongoose');
 
 const dotenv = require('dotenv');
 
+const http = require('http');
+
+const Users = require('./utils/users');
+
 ///////////////////////////////////////////////////////////
 // handling uncaughtException
 // process.on('uncaughtException', err => {
@@ -28,6 +32,8 @@ dotenv.config({ path: './config.env' });
 const app = require('./app');
 ///////////////////////////////////////////////////////////
 
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 
 ///////////////////////////////////////////////////////////
 // Establishing a mongodb connection
@@ -50,11 +56,12 @@ mongoose.connect(DB, {
 // Listening on specified port
 const port = process.env.PORT || 3000;
 
-const server = app.listen(port, () => {
+server.listen(port, () => {
     console.log(`[Anime.io] : Application is running on port ${port}`);
 });
 ///////////////////////////////////////////////////////////
 
+require('./socket/groupchat')(io, Users);
 
 ///////////////////////////////////////////////////////////
 // handling unhandledRejection

@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start:dev": "nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js"
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "L-lawliet07",
   "license": "ISC",
@@ -19,6 +20,10 @@
     "mongoose": "^5.9.3",
     "morgan": "^1.9.1",
     "nodemailer": "^6.4.4",
+    "socket.io": "^2.3.0",
     "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
   }
 }

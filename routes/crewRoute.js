@@ -4,9 +4,6 @@
 
 const express = require('express');
 
-/*
-    crewController to controller crew Routes
-*/
 const crewController = require('./../controllers/crewController');
 
 const authController = require('./../controllers/authController');
@@ -27,7 +24,7 @@ router
     .delete(authController.protect, authController.adminSection, crewController.deleteCrew);
 
 router
-    .get('/:crewName/chat', authController.protect, crewController.chatRoom);
+    .get('/chat/:crewName', authController.protect, crewController.chatRoom);
 ///////////////////////////////////////////////////////////
 
 
