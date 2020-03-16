@@ -2,10 +2,15 @@
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
 
+const CrewMessage = require('./../models/crewMessage');
+
+const catchAsync = require('./../utils/catchAsync');
+
+const Users = require('./../utils/users');
 
 ///////////////////////////////////////////////////////////
 // This function will provide socket functionaity for server
-module.exports = (io, Users) => {
+module.exports = (io) => {
 
     /*
      * users object will contain function and data related to group chat users
@@ -33,15 +38,21 @@ module.exports = (io, Users) => {
         /*
          * listening for createMessage event
          */
-        socket.on('createMessage', (message, callback) => {
+        socket.on('createMessage', catchAsync(async (message, callback) => {
 
-            io.to(message.crew).emit('message', {
-                text: message.text,
+            const user = await CrewMessage.create({
+                sender: message.username,
                 crew: message.crew,
-                username: message.username
+                body: message.text
+            });
+            io.to(message.crew).emit('message', {
+                text: user.body,
+                crew: user.crew,
+                username: user.sender,
+                createdAt: user.createdAt.toString()
             });
             callback()
-        });
+        }));
 
         /*
          * listening for user disconnect event
@@ -53,7 +64,7 @@ module.exports = (io, Users) => {
                 io.to(user.crew).emit('roomData', users.getUserList(user.crew));
                 console.log(`${user.username} left ${user.crew} group`);
             }
-        })
+        });
     });
 }
 ///////////////////////////////////////////////////////////

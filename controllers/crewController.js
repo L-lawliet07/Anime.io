@@ -8,6 +8,8 @@ const catchAsync = require('./../utils/catchAsync');
 
 const Crew = require('./../models/crewModel');
 
+const CrewMessage = require('./../models/crewMessage');
+
 ///////////////////////////////////////////////////////////
 // This function will render home page of the application
 exports.homePage = catchAsync(
@@ -114,14 +116,22 @@ exports.getCrew = catchAsync(
 
 ///////////////////////////////////////////////////////////
 // This function will render crewChatRoom page
-exports.chatRoom = (req, res) => {
-    const crew = req.params.crewName
-    res
-        .status(200)
-        .render('groupchat', {
-            title: `Anime.io | ${crew}`,
-            crew,
-            username: req.user.username
-        });
-}
+exports.chatRoom = catchAsync(
+    async (req, res) => {
+        const crew = req.params.crewName
+        const old_message = await CrewMessage.aggregate([
+            { $match: { crew } },
+            { $sort: { createdAt: 1 } }
+        ]);
+        res
+            .status(200)
+            .render('groupchat', {
+                title: `Anime.io | ${crew}`,
+                crew,
+                username: req.user.username,
+                old_message
+            });
+    }
+);
+
 ///////////////////////////////////////////////////////////
