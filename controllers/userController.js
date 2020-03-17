@@ -5,7 +5,11 @@
 
 const catchAsync = require('./../utils/catchAsync');
 
+const AppError = require('./../utils/appError');
+
 const User = require('./../models/userModel');
+
+const Message = require('./../models/message');
 
 /////////////////////////////////////////////////////////// 
 // This function will all use information
@@ -78,4 +82,69 @@ exports.usersPage = (req, res) => {
             message: "This path is undercontruction"
         });
 }
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// This function will be render provate chat
+exports.privateChat = catchAsync(
+
+    async (req, res, next) => {
+
+        /*
+         * getting roomid 
+         */
+        const roomid = req.params.roomid;
+
+        /*
+         * spliting roomid into users
+         */
+        const users = roomid.split('-');
+
+        /*
+         * Error checks
+         */
+        if (users.length != 2 || users[0] !== req.user.username || users[0] === users[1]) {
+            return next(new AppError('Page Not Found', 404));
+        }
+
+        const friend = await User.findOne({ username: users[1] });
+
+        /*
+         * Some more Error checks
+         */
+        if (!friend) {
+            return next(new AppError('Page Not Found', 404));
+        }
+
+        /*
+         * Retrieving previous messages
+         */
+        const old_message = await Message.aggregate([
+            {
+                $match: {
+                    $and: [
+                        { sender: { $in: [users[0], users[1]] } },
+                        { receiver: { $in: [users[0], users[1]] } }
+                    ]
+                }
+            },
+            {
+                $sort: {
+                    createdAt: 1
+                }
+            },
+        ]);
+
+        res
+            .status(200)
+            .render('privateChat', {
+                title: 'Anime.io | Chat',
+                old_message,
+                me: req.user.username,
+                friend: (users[0] === req.user.username ? users[1] : users[0])
+            });
+    }
+);
+
 ///////////////////////////////////////////////////////////

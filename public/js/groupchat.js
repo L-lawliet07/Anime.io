@@ -1,5 +1,5 @@
 
-const socket = io()
+const socket = io('/crew')
 
 // Elements
 const $messageForm = document.querySelector('#message-form')

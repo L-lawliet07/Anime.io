@@ -13,6 +13,11 @@ const Users = require('./../utils/users');
 module.exports = (io) => {
 
     /*
+     * using crew namespace for crew namespace
+     */
+    const nsp = io.of('/crew');
+
+    /*
      * users object will contain function and data related to group chat users
      */
     const users = new Users();
@@ -20,7 +25,7 @@ module.exports = (io) => {
     /*
      * server socket will listen for connection event
      */
-    io.on('connection', (socket) => {
+    nsp.on('connection', (socket) => {
 
         /*
          * listening for join object
@@ -32,7 +37,7 @@ module.exports = (io) => {
             //adding user data in Users entry
             users.addUser(socket.id, user.username, user.crew);
             //emitting userslist event
-            io.to(user.crew).emit('roomData', users.getUserList(user.crew));
+            nsp.to(user.crew).emit('roomData', users.getUserList(user.crew));
         });
 
         /*
@@ -40,16 +45,16 @@ module.exports = (io) => {
          */
         socket.on('createMessage', catchAsync(async (message, callback) => {
 
-            const user = await CrewMessage.create({
+            const groupMessage = await CrewMessage.create({
                 sender: message.username,
                 crew: message.crew,
                 body: message.text
             });
-            io.to(message.crew).emit('message', {
-                text: user.body,
-                crew: user.crew,
-                username: user.sender,
-                createdAt: user.createdAt.toString()
+            nsp.to(message.crew).emit('message', {
+                text: groupMessage.body,
+                crew: groupMessage.crew,
+                username: groupMessage.sender,
+                createdAt: groupMessage.createdAt.toString()
             });
             callback()
         }));
@@ -61,7 +66,7 @@ module.exports = (io) => {
             const user = users.removeUser(socket.id);
 
             if (user) {
-                io.to(user.crew).emit('roomData', users.getUserList(user.crew));
+                nsp.to(user.crew).emit('roomData', users.getUserList(user.crew));
                 console.log(`${user.username} left ${user.crew} group`);
             }
         });

@@ -31,6 +31,9 @@ router
 
 router
     .get('/users', authController.protect, userController.getAllUser);
+
+router
+    .get('/chat/:roomid', authController.protect, userController.privateChat);
 ///////////////////////////////////////////////////////////
 
 
