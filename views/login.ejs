@@ -9,6 +9,7 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <title><%= title %></title>
 </head>
 
@@ -16,31 +17,7 @@
     <!-- Page 1: This Page will contain sign up form -->
     <div class="page page-1">
         <!-- this is nav bar copied from bootstrap :) -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-
-                <a class="navbar-brand" href="/login">Anime.<span class="emphasis">io</span></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav navbar-nav ml-auto mt-2 mt-lg-0">
-
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/login">Log <span class="emphasis">In</span> <span
-                                    class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/signup">Sign <span class="emphasis">Up</span> <span
-                                    class="sr-only">(current)</span></a>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
+        <%- include('partials/loginnav.ejs') %>
         <!-- From here our form starts -->
         <div id="container">
             <div class="form-wrap">
@@ -49,12 +26,12 @@
                 <form id="login-form">
 
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" placeholder='you@example.com' / required>
+                        <!-- <label for="email">Email</label> -->
+                        <input type="email" name="email" id="email" placeholder='Email' / required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" / minlength="8"
+                        <!-- <label for="password">Password</label> -->
+                        <input type="password" name="password" id="password" placeholder="Password" / minlength="8"
                             required>
                     </div>
                     <button type="submit" id="login-btn" class="btn">Log In</button>

@@ -16,62 +16,40 @@
     <!-- Page 1: This Page will contain sign up form -->
     <div class="page page-1">
         <!-- Nav Bar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
+        <%- include('partials/loginnav.ejs') %>
 
-                <a class="navbar-brand" href="#">Anime.<span class="emphasis">io</span></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav navbar-nav ml-auto mt-2 mt-lg-0">
-
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/login">Log <span class="emphasis">In</span> <span
-                                    class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/signup">Sign <span class="emphasis">Up</span> <span
-                                    class="sr-only">(current)</span></a>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
         <div id="container">
             <div class="form-wrap">
                 <h1>Sign Up</h1>
                 <p>It's Infinite <span class="emphasis">Tsukuyomi<span></p>
                 <form id="signup-form">
                     <div class="form-group">
-                        <label for="fullname">Full Name</label>
-                        <input type="text" name="fullname" id="fullname" placeholder="Abcd Bisht" / required>
+                        <!-- <label for="fullname">Full Name</label> -->
+                        <input type="text" name="fullname" id="fullname" placeholder="Full Name" / required>
                     </div>
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" id="username" placeholder="lawliet" / required>
+                        <!-- <label for="username">Username</label> -->
+                        <input type="text" name="username" id="username" placeholder="Username" / required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" placeholder='you@example.com' / required>
+                        <!-- <label for="email">Email</label> -->
+                        <input type="email" name="email" id="email" placeholder='Email' / required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" / minlength="8"
+                        <!-- <label for="password">Password</label> -->
+                        <input type="password" name="password" id="password" placeholder="Password" / minlength="8"
                             required>
                     </div>
                     <div class="form-group">
-                        <label for="passwordConfirm">Confirm Password</label>
-                        <input type="password" name="paswordConfirm" id="passwordConfirm" placeholder="••••••••" /
-                            minlength="8" required>
+                        <!-- <label for="passwordConfirm">Confirm Password</label> -->
+                        <input type="password" name="paswordConfirm" id="passwordConfirm" placeholder="Confirm Password"
+                            / minlength="8" required>
                     </div>
                     <button type="submit" class="btn">Sign Up</button>
                 </form>
             </div>
             <footer>
-                <p>Already have an account? <a href="#">Login Here</a></p>
+                <p>Already have an account? <a href="/login">Login Here</a></p>
             </footer>
         </div>
     </div>
@@ -95,5 +73,5 @@
         crossorigin="anonymous"></script>
     <script src="./js/bundle.js"></script>
 </body>
-    
+
 </html>
