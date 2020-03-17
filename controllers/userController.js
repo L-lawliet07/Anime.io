@@ -15,15 +15,14 @@ const Message = require('./../models/message');
 // This function will all use information
 exports.getAllUser = catchAsync(
     async (req, res) => {
-        const users = await User.find();
+        const users = await User.find({ username: { $ne: req.user.username } }).select(['username']);
+        console.log(users);
         res
             .status(200)
-            .json({
-                status: 'success',
-                results: users.length,
-                data: {
-                    users
-                }
+            .render('people', {
+                title: 'Anime.io | People',
+                users,
+                username: req.user.username
             });
     }
 );

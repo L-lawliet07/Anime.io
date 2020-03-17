@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
     <style>
         * {
             box-sizing: border-box;
@@ -55,7 +54,7 @@
                         <a class="nav-link" href="/user/users">People <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="/user/friend">Friends <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Friends <span class="sr-only">(current)</span></a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -103,7 +102,7 @@
             <form action="/home/result" method="post">
                 <div class="form-group ad-30" style="margin-top:8px;">
                     <div class="input-group search-style">
-                        <input class="form-control new-search-bar" name="anime" id="search" placeholder="Search Anime"
+                        <input class="form-control new-search-bar" name="anime" id="search" placeholder="Search People"
                             type="text">
                     </div>
                 </div>
@@ -112,13 +111,13 @@
         <div class="col-md-12">
             <div class="rooms">
 
-                <% for (let crew of crews) { %>
+                <% for (let user of users) { %>
                 <div class="card" style="width: 18rem;">
-                    <img src="<%= crew.image %>" class="card-img-top" alt="...">
+                    <img src="#" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title"> <%= crew.name %> </h5>
+                        <h5 class="card-title"> <%= user.username %> </h5>
                         <!-- <p class="card-text">Goku is......</p> -->
-                        <a href="/crew/chat/<%= crew.name %>" class="btn btn-dark"> Click Here </a>
+                        <a href="/user/chat/<%= username %>-<%= user.username %>" class="btn btn-dark"> Follow </a>
                     </div>
                 </div>
                 <% } %>
@@ -136,7 +135,7 @@
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/ae068108e1.js" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./js/bundle.js"></script>
+    <script src="/js/bundle.js"></script>
 </body>
 
 </html>
