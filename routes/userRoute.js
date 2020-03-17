@@ -23,7 +23,7 @@ router.patch('/resetPassword', authController.resetPassword);
 
 
 router
-    .get('/profile', authController.protect, userController.profilePage);
+    .get('/profile/:username', authController.protect, userController.profilePage);
 
 router
     .get('/setting', authController.protect, userController.settingPage)

@@ -50,13 +50,22 @@ exports.updateMe = catchAsync(
 
 /////////////////////////////////////////////////////////// 
 // This function will render login page
-exports.profilePage = (req, res) => {
-    res
-        .status(404)
-        .json({
-            message: "This path is underconstruction"
-        });
-}
+exports.profilePage = catchAsync(
+    async (req, res, next) => {
+        const username = req.params.username;
+        const user = await User.findOne({ username }).select(['username', 'fullname']);
+        if (!user) {
+            return next(new AppError('No User Found', 401));
+        }
+        res
+            .status(200)
+            .render('profile', {
+                title: `Anime.io | ${username}`,
+                user
+            });
+    }
+);
+
 ///////////////////////////////////////////////////////////
 
 
