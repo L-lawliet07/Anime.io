@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
@@ -11,16 +10,36 @@ const User = require('./../models/userModel');
 
 const Message = require('./../models/message');
 
+const FollowModel = require('./../models/followModel');
+
 /////////////////////////////////////////////////////////// 
 // This function will all use information
 exports.getAllUser = catchAsync(
     async (req, res) => {
-        const users = await User.find({ username: { $ne: req.user.username } }).select(['username']);
-        console.log(users);
+        const followingObject = await FollowModel.find({ follower: req.user.username });
+        const following = followingObject.map(el => el.following);
+        const users = await User.find({ $and: [{ username: { $ne: req.user.username } }, { username: { $nin: following } }] }).select(['username']);
         res
             .status(200)
             .render('people', {
                 title: 'Anime.io | People',
+                users,
+                username: req.user.username
+            });
+    }
+);
+///////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////// 
+// This function will all use information
+exports.getAllFollowing = catchAsync(
+    async (req, res) => {
+        const users = await FollowModel.find({ follower: req.user.username }).select(['following']);
+        res
+            .status(200)
+            .render('following', {
+                title: 'Anime.io | Friends',
                 users,
                 username: req.user.username
             });
@@ -66,7 +85,6 @@ exports.profilePage = catchAsync(
             });
     }
 );
-
 ///////////////////////////////////////////////////////////
 
 
@@ -85,13 +103,19 @@ exports.settingPage = (req, res) => {
 
 ///////////////////////////////////////////////////////////
 // This function will render all user info
-exports.usersPage = (req, res) => {
-    res
-        .status(404)
-        .json({
-            message: "This path is undercontruction"
-        });
-}
+exports.followUser = catchAsync(
+    async (req, res) => {
+
+        await FollowModel.create({ follower: req.user.username, following: req.body.username });
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: "Followed"
+            });
+    }
+);
+
 ///////////////////////////////////////////////////////////
 
 
@@ -156,5 +180,4 @@ exports.privateChat = catchAsync(
             });
     }
 );
-
 ///////////////////////////////////////////////////////////

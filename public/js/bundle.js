@@ -340,6 +340,41 @@ var updateMe = function updateMe(fullname, status) {
 };
 
 exports.updateMe = updateMe;
+},{"./alerts.js":"alerts.js"}],"follow.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.follow = void 0;
+
+var _alerts = require("./alerts.js");
+
+var follow = function follow(username, followBtn) {
+  followBtn.setAttribute('disabled', 'disabled');
+  followBtn.innerText = 'Following';
+  var xhr = new XMLHttpRequest();
+  xhr.open('PATCH', "/user/follow", true);
+
+  xhr.onload = function () {
+    var responseObject = JSON.parse(this.responseText);
+
+    if (responseObject.status === 'success') {
+      followBtn.innerText = 'Followed';
+    } else {
+      followBtn.innerText = username;
+      followBtn.removeAttribute('disabled');
+      (0, _alerts.showAlert)('error', responseObject.message, 2);
+    }
+  };
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({
+    username: username
+  }));
+};
+
+exports.follow = follow;
 },{"./alerts.js":"alerts.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -357,12 +392,15 @@ var _resetpassword = require("./resetpassword.js");
 
 var _setting = require("./setting.js");
 
+var _follow = require("./follow.js");
+
 var loginForm = document.getElementById('login-form');
 var signupForm = document.getElementById('signup-form');
 var logoutButton = document.getElementById('logout-btn');
 var forgotForm = document.getElementById('forgot-form');
 var resetForm = document.getElementById('reset-form');
 var settingForm = document.getElementById('setting-form');
+var followBtn = document.getElementById('follow-btn');
 
 if (loginForm) {
   loginForm.addEventListener('submit', function (e) {
@@ -420,7 +458,16 @@ if (settingForm) {
     (0, _setting.updateMe)(fullname, status);
   });
 }
-},{"./alerts.js":"alerts.js","./login.js":"login.js","./signup.js":"signup.js","./logout.js":"logout.js","./forgotpassword.js":"forgotpassword.js","./resetpassword.js":"resetpassword.js","./setting.js":"setting.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+if (followBtn) {
+  followBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    console.log('Someone clicked');
+    var username = followBtn.innerText;
+    (0, _follow.follow)(username, followBtn);
+  });
+}
+},{"./alerts.js":"alerts.js","./login.js":"login.js","./signup.js":"signup.js","./logout.js":"logout.js","./forgotpassword.js":"forgotpassword.js","./resetpassword.js":"resetpassword.js","./setting.js":"setting.js","./follow.js":"follow.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

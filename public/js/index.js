@@ -5,6 +5,8 @@ import { logout } from './logout.js';
 import { forgotpassword } from './forgotpassword.js'
 import { resetpassword } from './resetpassword.js'
 import { updateMe } from './setting.js'
+import { follow } from './follow.js'
+
 
 const loginForm = document.getElementById('login-form');
 const signupForm = document.getElementById('signup-form');
@@ -12,6 +14,7 @@ const logoutButton = document.getElementById('logout-btn');
 const forgotForm = document.getElementById('forgot-form');
 const resetForm = document.getElementById('reset-form');
 const settingForm = document.getElementById('setting-form');
+const followBtn = document.getElementById('follow-btn');
 
 
 if (loginForm) {
@@ -71,4 +74,13 @@ if (settingForm) {
         const status = document.getElementById('status').value;
         updateMe(fullname, status);
     })
-} 
+}
+
+if (followBtn) {
+    followBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Someone clicked');
+        const username = followBtn.innerText;
+        follow(username, followBtn);
+    });
+}

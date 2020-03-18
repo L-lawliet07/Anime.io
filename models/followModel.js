@@ -7,17 +7,13 @@ const mongoose = require('mongoose');
 
 ///////////////////////////////////////////////////////////
 // Creating a crewMessage schema
-const messageSchema = new mongoose.Schema({
+const followSchema = new mongoose.Schema({
 
-    sender: {
+    follower: {
         type: String,
     },
-    receiver: {
+    following: {
         type: String,
-    },
-    body: {
-        type: String,
-        minlength: 1
     },
     createdAt: {
         type: Date,
@@ -29,11 +25,11 @@ const messageSchema = new mongoose.Schema({
 
 ///////////////////////////////////////////////////////////
 // Creating crew model
-const Message = mongoose.model('Message', messageSchema);
+const FollowModel = mongoose.model('FollowModel', followSchema);
 ///////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////
 // exposing crew model
-module.exports = Message;
+module.exports = FollowModel;
 ///////////////////////////////////////////////////////////

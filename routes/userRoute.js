@@ -26,8 +26,9 @@ router
     .get('/profile/:username', authController.protect, userController.profilePage);
 
 router
-    .get('/setting', authController.protect, userController.settingPage)
-    .patch('/setting', authController.protect, userController.updateMe);
+    .route('/setting')
+    .get(authController.protect, userController.settingPage)
+    .patch(authController.protect, userController.updateMe);
 
 router
     .get('/users', authController.protect, userController.getAllUser);
@@ -36,7 +37,10 @@ router
     .get('/chat/:roomid', authController.protect, userController.privateChat);
 
 router
-    .get('/friend', authController.protect, userController.getAllUser);
+    .get('/friend', authController.protect, userController.getAllFollowing);
+
+router
+    .patch('/follow', authController.protect, userController.followUser);
 ///////////////////////////////////////////////////////////
 
 
