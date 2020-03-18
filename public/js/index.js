@@ -4,13 +4,15 @@ import { signup } from './signup.js';
 import { logout } from './logout.js';
 import { forgotpassword } from './forgotpassword.js'
 import { resetpassword } from './resetpassword.js'
-
+import { updateMe } from './setting.js'
 
 const loginForm = document.getElementById('login-form');
 const signupForm = document.getElementById('signup-form');
 const logoutButton = document.getElementById('logout-btn');
 const forgotForm = document.getElementById('forgot-form');
 const resetForm = document.getElementById('reset-form');
+const settingForm = document.getElementById('setting-form');
+
 
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -61,3 +63,12 @@ if (resetForm) {
         resetpassword(password, passwordConfirm);
     });
 }
+
+if (settingForm) {
+    settingForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fullname = document.getElementById('fullname').value;
+        const status = document.getElementById('status').value;
+        updateMe(fullname, status);
+    })
+} 

@@ -308,6 +308,38 @@ var resetpassword = function resetpassword(password, passwordConfirm) {
 };
 
 exports.resetpassword = resetpassword;
+},{"./alerts.js":"alerts.js"}],"setting.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateMe = void 0;
+
+var _alerts = require("./alerts.js");
+
+var updateMe = function updateMe(fullname, status) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('PATCH', '/user/setting', true);
+
+  xhr.onload = function () {
+    var responseObject = JSON.parse(this.responseText);
+
+    if (responseObject.status === 'success') {
+      (0, _alerts.showAlert)('success', 'Updated', 2);
+    } else {
+      (0, _alerts.showAlert)('error', responseObject.message, 2);
+    }
+  };
+
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({
+    fullname: fullname,
+    status: status
+  }));
+};
+
+exports.updateMe = updateMe;
 },{"./alerts.js":"alerts.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -323,11 +355,14 @@ var _forgotpassword = require("./forgotpassword.js");
 
 var _resetpassword = require("./resetpassword.js");
 
+var _setting = require("./setting.js");
+
 var loginForm = document.getElementById('login-form');
 var signupForm = document.getElementById('signup-form');
 var logoutButton = document.getElementById('logout-btn');
 var forgotForm = document.getElementById('forgot-form');
 var resetForm = document.getElementById('reset-form');
+var settingForm = document.getElementById('setting-form');
 
 if (loginForm) {
   loginForm.addEventListener('submit', function (e) {
@@ -376,7 +411,16 @@ if (resetForm) {
     (0, _resetpassword.resetpassword)(password, passwordConfirm);
   });
 }
-},{"./alerts.js":"alerts.js","./login.js":"login.js","./signup.js":"signup.js","./logout.js":"logout.js","./forgotpassword.js":"forgotpassword.js","./resetpassword.js":"resetpassword.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+if (settingForm) {
+  settingForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var fullname = document.getElementById('fullname').value;
+    var status = document.getElementById('status').value;
+    (0, _setting.updateMe)(fullname, status);
+  });
+}
+},{"./alerts.js":"alerts.js","./login.js":"login.js","./signup.js":"signup.js","./logout.js":"logout.js","./forgotpassword.js":"forgotpassword.js","./resetpassword.js":"resetpassword.js","./setting.js":"setting.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

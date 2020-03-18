@@ -34,8 +34,8 @@ exports.getAllUser = catchAsync(
 exports.updateMe = catchAsync(
     async (req, res, next) => {
         let user = req.user;
-        if (req.body.fullname) {
-            user = await User.findByIdAndUpdate(req.user.id, { fullname: req.body.fullname }, {
+        if (req.body.fullname && req.body.status) {
+            user = await User.findByIdAndUpdate(req.user.id, { fullname: req.body.fullname, status: req.body.status }, {
                 new: true
             });
         }
@@ -74,9 +74,10 @@ exports.profilePage = catchAsync(
 // This function will render signup page
 exports.settingPage = (req, res) => {
     res
-        .status(404)
-        .json({
-            message: "This path is undercontruction"
+        .status(200)
+        .render('setting', {
+            title: 'Anime.io | Setting',
+            username: req.user.username
         });
 }
 ///////////////////////////////////////////////////////////
