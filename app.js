@@ -71,7 +71,7 @@ app.use('/', viewRoute);
 app.use('/crew', crewRoute);
 app.use('/user', userRoute);
 app.all('*', (req, res, next) => {
-    const err = new AppError(`cannot find the route ${req.originalUrl}`, 404);
+    const err = new AppError(`Page not found`, 404);
     next(err);
 });
 ///////////////////////////////////////////////////////////

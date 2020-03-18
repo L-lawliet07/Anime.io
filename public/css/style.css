@@ -10,7 +10,7 @@ body {
 }
 
 .emphasis {
-    color: #37a08e;
+    color: #37a08e !important;
 }
 
 .page {

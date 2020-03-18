@@ -51,6 +51,11 @@ const handleJWTExpiredError = () => {
 const sendProductionError = (err, res) => {
 
     if (err.isOperational) {
+        if (err.statusCode === 404) {
+            return res.render('404', {
+                title: 'Anime | 404'
+            });
+        }
         res.status(err.statusCode).json({
             status: err.status,
             message: err.message,

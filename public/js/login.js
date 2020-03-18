@@ -2,9 +2,14 @@ import { showAlert } from './alerts.js'
 
 
 export const login = (email, password) => {
+    const $login_btn = document.getElementById('login-btn');
+    $login_btn.innerText = 'Logging in..';
+    $login_btn.setAttribute('disabled', 'disabled');
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/user/login', true);
     xhr.onload = function () {
+        $login_btn.innerText = 'Log In';
+        $login_btn.removeAttribute('disabled');
         const responseObject = JSON.parse(this.responseText);
         if (responseObject.status === 'success') {
             showAlert('success', 'Logged in successfully!');

@@ -53,7 +53,7 @@ exports.updateMe = catchAsync(
 exports.profilePage = catchAsync(
     async (req, res, next) => {
         const username = req.params.username;
-        const user = await User.findOne({ username }).select(['username', 'fullname']);
+        const user = await User.findOne({ username }).select(['username', 'fullname', 'status', 'image', 'following', 'follower']);
         if (!user) {
             return next(new AppError('No User Found', 401));
         }
@@ -61,7 +61,8 @@ exports.profilePage = catchAsync(
             .status(200)
             .render('profile', {
                 title: `Anime.io | ${username}`,
-                user
+                user,
+                username
             });
     }
 );

@@ -150,10 +150,15 @@ exports.login = void 0;
 var _alerts = require("./alerts.js");
 
 var login = function login(email, password) {
+  var $login_btn = document.getElementById('login-btn');
+  $login_btn.innerText = 'Logging in..';
+  $login_btn.setAttribute('disabled', 'disabled');
   var xhr = new XMLHttpRequest();
   xhr.open('POST', '/user/login', true);
 
   xhr.onload = function () {
+    $login_btn.innerText = 'Log In';
+    $login_btn.removeAttribute('disabled');
     var responseObject = JSON.parse(this.responseText);
 
     if (responseObject.status === 'success') {
@@ -399,7 +404,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39177" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41885" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

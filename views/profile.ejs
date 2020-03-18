@@ -10,26 +10,117 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .profile-container {
+            min-height: 100vh;
+            min-width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile {
+            font-family: 'Raleway';
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(150, 115, 115, 0.2);
+            padding: 40px;
+            border-radius: 2px;
+        }
+
+        .profile__image {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+
+            /* border: solid 1px black; */
+            box-shadow: 0 0 10px rgba(150, 115, 115, 0.5);
+
+            border-radius: 50%;
+            display: block;
+            margin: 0px auto 20px auto;
+        }
+
+        .profile__username {
+            font-size: 1em;
+            padding: 5px;
+        }
+
+        .profile__name {
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 5px;
+        }
+
+        .profile__status {
+            padding: 5px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .profile__detail {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            font-size: 1em;
+            border-top: 1px #aaa solid;
+        }
+
+        .profile__detail div {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Page 1: This Page will contain sign up form -->
-    <div class="page page-1">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="/login">Anime.<span class="emphasis">io</span></a>
-            </div>
-        </nav>
+    <!-- <div class="page page-1">
+        
         <div id="container">
             <div class="form-wrap">
                 <h1><span class="emphasis"><%= user.username %></span> </h1>
                 <p> <span class="emphasis"><%= user.fullname %><span> </p>
-                <p>We could not find this page.</p>
+                    <p>We could not find this page.</p>
+                </div>
+            </div>
+        </div> -->
+
+    <%- include ('partials/homenav.ejs') %>
+    <div class="profile-container">
+        <div class="profile">
+            <img src="/images/people/<%= user.image %>" class="profile__image">
+            <div class="profile__username"><%= user.username %></div>
+            <div class="profile__name"><%= user.fullname %></div>
+            <div class="profile__status"><%= user.status %></div>
+            <div class="profile__detail">
+                <div class="follower">
+                    <a href="">
+                        <%= user.follower.length %>
+                    </a>
+                    <p>followers</p>
+                </div>
+                <div class="following">
+
+                    <a href="">
+                        <%= user.following.length %>
+                    </a>
+                    <p>following</p>
+
+                </div>
             </div>
         </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
