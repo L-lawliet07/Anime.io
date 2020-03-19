@@ -62,6 +62,7 @@ server.listen(port, () => {
 
 ///////////////////////////////////////////////////////////
 // Activating all the server sockets
+require('./socket/global')(io);
 require('./socket/groupchat')(io);
 require('./socket/privatechat')(io);
 ///////////////////////////////////////////////////////////

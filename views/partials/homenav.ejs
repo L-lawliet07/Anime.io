@@ -19,14 +19,21 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-envelope"></i>
+                    <a class="nav-link dropdown-toggle notification-btn" href="#" id="navbarDropdownMenuLink"
+                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <% if ( user.notification.length > 0 ) { %>
+                        <i id="notification-icon" style="color: red;" class="fas fa-envelope"></i>
+                        <% } else { %>
+                        <i id="notification-icon" class="fas fa-envelope"></i>
+                        <% } %>
                     </a>
+                    <% if ( user.notification.length > 0 ) { %>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Notification1</a>
-                        <a class="dropdown-item" href="#">Notification2 Out</a>
+                        <% for ( let info of user.notification ) { %>
+                        <a class="dropdown-item" href=""><%= info %></a>
+                        <%} %>
                     </div>
+                    <% } %>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -42,10 +49,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle emphasis" href="#" id="navbarDropdownMenuLink" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <%= username %>
+                        <span id="main-username"><%= user.username %></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="/user/profile/<%= username %>"><i class="far fa-user"></i>
+                        <a class="dropdown-item" href="/user/profile/<%= user.username %>"><i class="far fa-user"></i>
                             Profile</a>
                         <a class="dropdown-item" href="/user/setting"><i class="fas fa-cog"></i> Setting</a>
                         <a class="dropdown-item" id="logout-btn" href="#"><i class="fas fa-sign-out-alt"></i>

@@ -25,7 +25,7 @@ const followSchema = new mongoose.Schema({
 
 ///////////////////////////////////////////////////////////
 // Creating crew model
-const FollowModel = mongoose.model('FollowModel', followSchema);
+const FollowModel = mongoose.model('Follow', followSchema);
 ///////////////////////////////////////////////////////////
 
 

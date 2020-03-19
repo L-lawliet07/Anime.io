@@ -23,8 +23,8 @@ exports.getAllUser = catchAsync(
             .status(200)
             .render('people', {
                 title: 'Anime.io | People',
-                users,
-                username: req.user.username
+                user: req.user,
+                users
             });
     }
 );
@@ -40,8 +40,8 @@ exports.getAllFollowing = catchAsync(
             .status(200)
             .render('following', {
                 title: 'Anime.io | Friends',
-                users,
-                username: req.user.username
+                user: req.user,
+                users
             });
     }
 );
@@ -72,16 +72,16 @@ exports.updateMe = catchAsync(
 exports.profilePage = catchAsync(
     async (req, res, next) => {
         const username = req.params.username;
-        const user = await User.findOne({ username }).select(['username', 'fullname', 'status', 'image', 'following', 'follower']);
-        if (!user) {
+        const profile = await User.findOne({ username }).select(['username', 'fullname', 'status', 'image', 'following', 'follower']);
+        if (!profile) {
             return next(new AppError('No User Found', 401));
         }
         res
             .status(200)
             .render('profile', {
                 title: `Anime.io | ${username}`,
-                user,
-                username
+                profile,
+                user: req.user
             });
     }
 );
@@ -95,7 +95,7 @@ exports.settingPage = (req, res) => {
         .status(200)
         .render('setting', {
             title: 'Anime.io | Setting',
-            username: req.user.username
+            user: req.user
         });
 }
 ///////////////////////////////////////////////////////////
@@ -107,6 +107,8 @@ exports.followUser = catchAsync(
     async (req, res) => {
 
         await FollowModel.create({ follower: req.user.username, following: req.body.username });
+        console.log(req.body.username);
+        await User.updateOne({ username: req.body.username }, { $push: { notification: `${req.user.username} started following you` } });
         res
             .status(200)
             .json({
@@ -118,6 +120,18 @@ exports.followUser = catchAsync(
 
 ///////////////////////////////////////////////////////////
 
+
+exports.clearNotification = catchAsync(
+    async (req, res, next) => {
+        await User.updateOne({ _id: req.user._id }, { $set: { notification: [] } })
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: "notificatin clear"
+            });
+    }
+);
 
 ///////////////////////////////////////////////////////////
 // This function will be render provate chat
@@ -175,7 +189,7 @@ exports.privateChat = catchAsync(
             .render('privateChat', {
                 title: 'Anime.io | Chat',
                 old_message,
-                me: req.user.username,
+                user: req.user,
                 friend: (users[0] === req.user.username ? users[1] : users[0])
             });
     }

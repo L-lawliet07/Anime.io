@@ -56,6 +56,7 @@ const userSchema = new mongoose.Schema({
     passwordResetExpires: Date,
     following: [String],
     follower: [String],
+    notification: [String],
     status: {
         type: String,
         default: "I am at saiyan level 1"

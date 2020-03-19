@@ -1,4 +1,3 @@
-import { showAlert } from './alerts.js';
 import { login } from './login.js'
 import { signup } from './signup.js';
 import { logout } from './logout.js';
@@ -6,7 +5,20 @@ import { forgotpassword } from './forgotpassword.js'
 import { resetpassword } from './resetpassword.js'
 import { updateMe } from './setting.js'
 import { follow } from './follow.js'
+const io = require('socket.io-client');
 
+const main_username = document.getElementById('main-username');
+const socket = io('/');
+let me;
+if (main_username) {
+    me = main_username.textContent;
+    socket.emit('join', me);
+}
+
+
+socket.on('following-notification', (notification) => {
+    console.log(notification);
+})
 
 const loginForm = document.getElementById('login-form');
 const signupForm = document.getElementById('signup-form');
@@ -15,7 +27,7 @@ const forgotForm = document.getElementById('forgot-form');
 const resetForm = document.getElementById('reset-form');
 const settingForm = document.getElementById('setting-form');
 const followBtn = document.getElementById('follow-btn');
-
+const notificationBtn = document.querySelector('.notification-btn');
 
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -79,8 +91,19 @@ if (settingForm) {
 if (followBtn) {
     followBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('Someone clicked');
-        const username = followBtn.innerText;
-        follow(username, followBtn);
+        const username = followBtn.textContent.trim();
+        follow(me, username, followBtn, socket);
     });
+}
+
+if (notificationBtn) {
+    notificationBtn.addEventListener('click', (e) => {
+        const notificationIcon = document.getElementById('notification-icon');
+        if (notificationIcon.hasAttribute('style')) {
+            notificationIcon.removeAttribute('style')
+            const xhr = new XMLHttpRequest();
+            xhr.open('PATCH', '/user/notification', true);
+            xhr.send();
+        }
+    })
 }

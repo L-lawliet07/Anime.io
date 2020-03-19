@@ -21,7 +21,7 @@ exports.homePage = catchAsync(
             .render('./home', {
                 title: 'Anime.io | home',
                 crews,
-                username: req.user.username
+                user: req.user
             });
     }
 );
@@ -128,7 +128,7 @@ exports.chatRoom = catchAsync(
             .render('groupchat', {
                 title: `Anime.io | ${crew}`,
                 crew,
-                username: req.user.username,
+                user: req.user,
                 old_message
             });
     }

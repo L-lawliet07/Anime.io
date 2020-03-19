@@ -58,13 +58,13 @@
         </div>
         <div class="col-md-12">
             <div class="rooms">
-                <% for (let user of users) { %>
+                <% for (let people of users) { %>
                 <div class="card" style="width: 18rem;">
                     <img src="#" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title" id=""><%= user.username %> </h5>
+                        <h5 class="card-title" id=""><%= people.username %> </h5>
                         <!-- <p class="card-text">Goku is......</p> -->
-                        <a href="" class="btn btn-dark" id="follow-btn"> <%= user.username %></a>
+                        <a href="" class="btn btn-dark" id="follow-btn"> <%= people.username %></a>
                     </div>
                 </div>
                 <% } %>

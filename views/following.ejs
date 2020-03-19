@@ -58,14 +58,14 @@
         </div>
         <div class="col-md-12">
             <div class="rooms">
-                <% for (let user of users) { %>
+                <% for (let people of users) { %>
                 <div class="card" style="width: 18rem;">
                     <img src="#" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title" id=""><%= user.following %> </h5>
+                        <h5 class="card-title" id=""><%= people.following %> </h5>
                         <!-- <p class="card-text">Goku is......</p> -->
                         <a href="/user/profile/<%= user.following %>" class="btn btn-dark">Profile</a>
-                        <a href="/user/chat/<%= username %>-<%= user.following %>" class="btn btn-dark">
+                        <a href="/user/chat/<%= user.username %>-<%= people.following %>" class="btn btn-dark">
                             Message</a>
 
                     </div>

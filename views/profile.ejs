@@ -99,21 +99,21 @@
     <%- include ('partials/homenav.ejs') %>
     <div class="profile-container">
         <div class="profile">
-            <img src="/images/people/<%= user.image %>" class="profile__image">
-            <div class="profile__username"><%= user.username %></div>
-            <div class="profile__name"><%= user.fullname %></div>
-            <div class="profile__status"><%= user.status %></div>
+            <img src="/images/people/<%= profile.image %>" class="profile__image">
+            <div class="profile__username"><%= profile.username %></div>
+            <div class="profile__name"><%= profile.fullname %></div>
+            <div class="profile__status"><%= profile.status %></div>
             <div class="profile__detail">
                 <div class="follower">
                     <a href="">
-                        <%= user.follower.length %>
+                        <%= profile.follower.length %>
                     </a>
                     <p>followers</p>
                 </div>
                 <div class="following">
 
                     <a href="">
-                        <%= user.following.length %>
+                        <%= profile.following.length %>
                     </a>
                     <p>following</p>
 
