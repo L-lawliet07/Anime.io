@@ -10249,8 +10249,11 @@ if (main_username) {
   socket.emit('join', me);
 }
 
-socket.on('following-notification', function (notification) {
-  console.log(notification);
+socket.on('following-notification', function (notification) {// const notificationIcon = document.getElementById('notification-icon');
+  // const notificationContainer = document.getElementById('notification-container');
+  // notificationIcon.setAttribute('style', 'color: red;');
+  // const html = `<a class="dropdown-item" href="">${notification}</a>`;
+  // notificationContainer.insertAdjacentElement('afterbegin', html);
 });
 var loginForm = document.getElementById('login-form');
 var signupForm = document.getElementById('signup-form');
@@ -10366,7 +10369,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42117" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44569" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

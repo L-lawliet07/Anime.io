@@ -7,53 +7,381 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/groupStyle.css">
+    <!-- <link rel="stylesheet" href="/css/groupStyle.css"> -->
     <title><%= title %></title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
+        /* These property will be applied to whole html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Raleway';
+            scrollbar-width: none;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+
+        .navbar {
+            background-color: #fff !important;
+        }
+
+        /* Chat grid */
+        .chat-grid {
+            display: grid;
+            grid-template-rows: calc(100% - 70px) 70px;
+            grid-template-columns: max-content auto;
+            height: calc(100vh - 56px);
+            width: 100vw;
+            position: relative;
+        }
+
+        /* sidebar */
+        .sidebar-area {
+            position: relative;
+            box-shadow: 5px 0 15px rgba(143, 137, 137, 0.5);
+            border-radius: 0px 20px 20px 0px;
+            background-color: #222;
+            color: #fff;
+            max-width: 300px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+        }
+
+        .sidebar-area>.sidebar-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-area>.sidebar-header>img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 20px 0px 20px 0px;
+            padding: 2px;
+            border: #37a08e solid 1px;
+            transition: 1s;
+            transition-property: all;
+        }
+
+        .sidebar-area>.sidebar-header>.group-name {
+            color: #37a08e;
+            display: none;
+        }
+
+        .sidebar-area>.sidebar-header>.usercount {
+            color: #479adf;
+        }
+
+        .sidebar-area>.online-users {
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll;
+        }
+
+
+        .sidebar-area>.online-users::-webkit-scrollbar {
+            display: none;
+        }
+
+        .online-users>.online-user {
+            display: flex;
+            align-items: center;
+            min-height: 70px;
+            padding: 5px;
+            border-radius: 0px;
+            border-radius: 0px 20px 20px 0px;
+            transition: 0.6s;
+            transition-property: background-color, color;
+        }
+
+        .online-users>.online-user {
+            border-bottom: #37a08e 1px solid;
+            color: #479adf;
+        }
+
+        /* .online-users>.online-user:nth-child(odd) {
+            border-bottom: #479adf 1px solid;
+            color: #37a08e;
+        } */
+
+        .online-users>.online-user:hover:nth-child(even) {
+            color: #fff;
+            background-color: #37a08e;
+        }
+
+        .online-users>.online-user:hover:nth-child(odd) {
+            color: #fff;
+            background-color: #479adf;
+        }
+
+        .online-users>.online-user>img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+
+        .online-users>.online-user>.online-username {
+            font-weight: bold;
+            display: none;
+            padding: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* text Area */
+
+        .text-area {
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: url('https://i.ya-webdesign.com/images/anime-naruto-png-8.png') center / contain no-repeat;
+        }
+
+        .text-area::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        .text-area .message {
+            padding: 8px;
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .own-message {
+            align-items: flex-end;
+            align-self: flex-end;
+        }
+
+        .other-message {
+            align-items: flex-start;
+            align-self: flex-start;
+        }
+
+        .other-message .message-text {
+            background: #37a08e;
+            border-radius: 0px 20px 20px 20px;
+        }
+
+        .own-message .message-text {
+            background: #479adf;
+            border-radius: 20px 0px 20px 20px;
+        }
+
+        .text-area .message .message-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .text-area .message .message-text {
+            padding: 15px;
+            color: #fff;
+        }
+
+        .text-area .message .message-time {
+            font-size: 0.8rem;
+            color: #8f8f8f;
+            padding: 8px 15px;
+        }
+
+        /* send area */
+        .send-area {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-evenly;
+            padding: 15px;
+        }
+
+        .send-area>button {
+            border: 1px solid #37a08e;
+            padding: 2px 6px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .send-area>button>i {
+            color: #37a08e;
+            font-size: 40px;
+        }
+
+        .send-area>.group-message-form {
+            padding: 5px 5px 0px 5px;
+            flex-grow: 1;
+            display: block;
+        }
+
+        .send-area>.group-message-form>input {
+            border: none;
+            padding: 15px;
+            border-bottom: 1px #37a08e solid;
+            margin-left: 5px;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* sidebar view */
+        #sidebar-view {
+            display: none;
+        }
+
+        #sidebarview-label {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 20px;
+            right: -40px;
+            width: 40px;
+            height: 50px;
+
+            background-color: #222;
+            border-radius: 0px 50% 50% 0px;
+        }
+
+        #sidebarview-label>i {
+            color: #37a08e;
+            font-size: 30px;
+            transition: 1s;
+            transition-property: transform, color;
+        }
+
+        #sidebar-view:checked~.sidebar-area>#sidebarview-label>i {
+            transform: rotate(180deg);
+            color: #479adf;
+        }
+
+        #sidebar-view:checked~.sidebar-area .online-username {
+            display: unset;
+        }
+
+        #sidebar-view:checked~.sidebar-area>.sidebar-header>img {
+            width: 150px;
+            height: 150px;
+            margin: 30px 0px 30px 0px;
+        }
+
+        #sidebar-view:checked~.sidebar-area>.sidebar-header>.group-name {
+            display: unset;
+        }
+
+        #sidebar-view:checked~.sidebar-area>.online-users>.online-user {
+            min-height: 80px;
+            padding: 10px;
+        }
+
+        #sidebar-view:checked~.sidebar-area>.online-users>.online-user>img {
+            width: 60px;
+            height: 60px;
+        }
+
+
+        @media(max-width: 550px) {
+            #sidebar-view:checked~.text-area * {
+                display: none;
+            }
+
+            #sidebar-view:checked~.send-area * {
+                display: none;
+            }
+        }
+
+        @media(max-width: 420px) {
+
+            .chat-grid {
+                grid-template-columns: min-content auto;
+            }
+
+            .send-area {
+                grid-row: 2 / span 1;
+                grid-column: 1 / span 2;
+            }
+
+            .temp-area {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
     <%- include ('partials/homenav.ejs') %>
 
-    <h1 id="crewname" style="display: none;"><%= crew %></h1>
-    <h4 id="username" style="display: none;"><%= username %></h4>
-    <div class="chat">
-        <div id="sidebar" class="chat__sidebar">
+    <div class="chat-grid">
 
+        <!-- Sidebar area for online users -->
+        <input type="checkbox" id="sidebar-view">
+        <div class="sidebar-area">
+            <label id="sidebarview-label" for="sidebar-view"> <i class="fas fa-chevron-right"></i> </label>
+            <div class="sidebar-header">
+                <img src="./516246.jpg" alt="">
+                <h6 class="group-name"><%= crew %></h6>
+                <h5 class="usercount">12</h5>
+            </div>
+            <div class="online-users">
+                <!-- <div class="online-user">
+                    <img src="./one piece.jpg" alt="">
+                    <div class="online-username">
+                        Jackthemaa singh bisht
+                    </div>
+                </div> -->
+            </div>
         </div>
-        <div class="chat__main">
-            <div id="messages" class="chat__messages">
-                <% for ( let message of old_message ) {%>
-                <div class="message">
-                    <p>
-                        <span class="message__name"><%= message.sender %></span>
-                        <span class="message__meta"><%= message.createdAt %></span>
-                    </p>
-                    <p><%= message.body %></p>
+
+
+        <div class="text-area">
+
+
+            <% for ( let message of old_message ) {%>
+            <% if ( message.sender !== user.username ) { %>
+            <div class="message other-message">
+                <%} else {%>
+                <div class="message own-message">
+                    <% } %>
+                    <img class="message-image" src="./bleach.jpg" alt="">
+                    <div class="message-text">
+                        <%= message.body %>
+                    </div>
+                    <div class="message-time">
+                        12 April
+                    </div>
                 </div>
                 <% } %>
             </div>
-            <div class="compose">
-                <form id="message-form">
-                    <input name="message" placeholder="Message" required autocomplete="off">
-                    <button>Send</button>
+            <!-- Will think about this thing later -->
+            <div class="temp-area"></div>
+
+            <!-- Send area to send message -->
+            <div class="send-area">
+                <button><i class="fas fa-map-marker-alt"></i></button>
+                <form class="group-message-form">
+                    <!-- <input name="message" placeholder="Message" required autocomplete="off"> -->
+                    <input name="message" type="text" placeholder="Type your heart out." required autocomplete="off">
                 </form>
             </div>
         </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/bundle.js"></script>
-    <script src="/js/groupchat.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/bundle.js"></script>
+        <script src="/js/groupchat.js"></script>
 </body>
 
 </html>

@@ -17,8 +17,12 @@ if (main_username) {
 
 
 socket.on('following-notification', (notification) => {
-    console.log(notification);
-})
+    // const notificationIcon = document.getElementById('notification-icon');
+    // const notificationContainer = document.getElementById('notification-container');
+    // notificationIcon.setAttribute('style', 'color: red;');
+    // const html = `<a class="dropdown-item" href="">${notification}</a>`;
+    // notificationContainer.insertAdjacentElement('afterbegin', html);
+});
 
 const loginForm = document.getElementById('login-form');
 const signupForm = document.getElementById('signup-form');

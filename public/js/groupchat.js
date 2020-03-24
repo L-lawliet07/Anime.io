@@ -2,59 +2,63 @@
 const socket = io('/crew')
 
 // Elements
-const $messageForm = document.querySelector('#message-form')
+const $messageForm = document.querySelector('.group-message-form')
 const $messageFormInput = $messageForm.querySelector('input')
 const $messageFormButton = $messageForm.querySelector('button')
-const $sendLocationButton = document.querySelector('#send-location')
-const $messages = document.querySelector('#messages')
+// const $sendLocationButton = document.querySelector('#send-location')
+const $text_area = document.querySelector('.text-area')
 
 
 // Options
-const username = document.getElementById('username').innerText;
-const crew = document.getElementById('crewname').innerText;
+const username = document.getElementById('main-username').innerText;
+const crew = document.querySelector('.group-name').innerText;
 
 socket.on('message', (message) => {
+
     const html = `
-                <div class="message">
-                    <p>
-                        <span class="message__name">${message.username}</span>
-                        <span class="message__meta">${message.createdAt}</span>
-                    </p>
-                    <p>${message.text}</p>
-                </div>
-            `;
+        <div class="message ${message.username === username ? "own-message" : "other-message"}">
+            <img class="message-image" src="./bleach.jpg" alt="">
+            <div class="message-text">
+            ${message.text}
+            </div>
+            <div class="message-time">
+                12 April
+            </div>
+        </div>
+    `
     // const html = Mustache.render(messageTemplate, {
     //     username: message.username,
     //     message: message.text,
     //     createdAt: moment(message.createdAt).format('h:mm a')
     // })
-    $messages.insertAdjacentHTML('beforeend', html);
+    $text_area.insertAdjacentHTML('beforeend', html);
 });
 
 
 socket.on('roomData', (users) => {
-    let user_list = '';
+    let html = '';
     users.forEach((el) => {
-        user_list = user_list + `<li>${el}</li>`;
+
+        html = html + `
+        <div class="online-user">
+        <img src="./one piece.jpg" alt="">
+        <div class="online-username">
+            ${el}
+        </div>
+        </div>
+        `;
     });
-    const html = `
-                <h2 class="room-title">${crew}</h2>
-                <h3 class="list-title">Users</h3>
-                <ul class="users">
-                    ${user_list}
-                </ul>
-            `
-    document.querySelector('#sidebar').innerHTML = html
+    document.querySelector('.online-users').innerHTML = html
 })
 
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    $messageFormButton.setAttribute('disabled', 'disabled')
+    // $messageFormButton.setAttribute('disabled', 'disabled')
 
     const text = e.target.elements.message.value;
     socket.emit('createMessage', { text, crew, username }, () => {
-        $messageFormButton.removeAttribute('disabled')
+        // $messageFormButton.removeAttribute('disabled')
         $messageFormInput.value = ''
         $messageFormInput.focus()
     });
