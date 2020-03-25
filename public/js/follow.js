@@ -2,7 +2,6 @@ import { showAlert } from './alerts.js'
 
 export const follow = (me, person, followBtn, socket) => {
 
-    followBtn.setAttribute('disabled', 'disabled');
     followBtn.innerText = 'Following';
     const xhr = new XMLHttpRequest();
     xhr.open('PATCH', `/user/follow`, true);
@@ -15,7 +14,6 @@ export const follow = (me, person, followBtn, socket) => {
             followBtn.innerText = 'Followed';
         } else {
             followBtn.innerText = 'Follow';
-            followBtn.removeAttribute('disabled');
             showAlert('error', responseObject.message, 2);
         }
     }

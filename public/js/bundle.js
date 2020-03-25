@@ -351,7 +351,6 @@ exports.follow = void 0;
 var _alerts = require("./alerts.js");
 
 var follow = function follow(me, person, followBtn, socket) {
-  followBtn.setAttribute('disabled', 'disabled');
   followBtn.innerText = 'Following';
   var xhr = new XMLHttpRequest();
   xhr.open('PATCH', "/user/follow", true);
@@ -368,7 +367,6 @@ var follow = function follow(me, person, followBtn, socket) {
       followBtn.innerText = 'Followed';
     } else {
       followBtn.innerText = 'Follow';
-      followBtn.removeAttribute('disabled');
       (0, _alerts.showAlert)('error', responseObject.message, 2);
     }
   };
@@ -10248,11 +10246,18 @@ if (main_username) {
   socket.emit('join', me);
 }
 
-socket.on('following-notification', function (notification) {// const notificationIcon = document.getElementById('notification-icon');
-  // const notificationContainer = document.getElementById('notification-container');
-  // notificationIcon.setAttribute('style', 'color: red;');
-  // const html = `<a class="dropdown-item" href="">${notification}</a>`;
-  // notificationContainer.insertAdjacentElement('afterbegin', html);
+socket.on('following-notification', function (notification) {
+  var notificationIcon = document.getElementById('notification-icon');
+  var notificationContainer = document.getElementById('notification-container');
+  notificationIcon.setAttribute('style', 'color: red;');
+  var noNotification = document.querySelector('.no-notification');
+
+  if (noNotification) {
+    noNotification.setAttribute('style', 'display:none;');
+  }
+
+  var html = "<a class=\"dropdown-item\" href=\"\">".concat(notification, "</a>");
+  notificationContainer.insertAdjacentHTML('afterbegin', html);
 });
 var loginForm = document.getElementById('login-form');
 var signupForm = document.getElementById('signup-form');

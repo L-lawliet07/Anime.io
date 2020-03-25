@@ -17,11 +17,15 @@ if (main_username) {
 
 
 socket.on('following-notification', (notification) => {
-    // const notificationIcon = document.getElementById('notification-icon');
-    // const notificationContainer = document.getElementById('notification-container');
-    // notificationIcon.setAttribute('style', 'color: red;');
-    // const html = `<a class="dropdown-item" href="">${notification}</a>`;
-    // notificationContainer.insertAdjacentElement('afterbegin', html);
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationContainer = document.getElementById('notification-container');
+    notificationIcon.setAttribute('style', 'color: red;');
+    const noNotification = document.querySelector('.no-notification');
+    if (noNotification) {
+        noNotification.setAttribute('style', 'display:none;');
+    }
+    const html = `<a class="dropdown-item" href="">${notification}</a>`;
+    notificationContainer.insertAdjacentHTML('afterbegin', html)
 });
 
 const loginForm = document.getElementById('login-form');
