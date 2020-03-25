@@ -1,7 +1,7 @@
 import { showAlert } from './alerts.js'
 
 
-export const updateMe = (fullname, status) => {
+export const updateMe = (data) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PATCH', '/user/setting', true);
     xhr.onload = function () {
@@ -12,6 +12,5 @@ export const updateMe = (fullname, status) => {
             showAlert('error', responseObject.message, 2);
         }
     }
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify({ fullname, status }));
+    xhr.send(data);
 }

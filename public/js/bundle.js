@@ -318,7 +318,7 @@ exports.updateMe = void 0;
 
 var _alerts = require("./alerts.js");
 
-var updateMe = function updateMe(fullname, status) {
+var updateMe = function updateMe(data) {
   var xhr = new XMLHttpRequest();
   xhr.open('PATCH', '/user/setting', true);
 
@@ -332,11 +332,7 @@ var updateMe = function updateMe(fullname, status) {
     }
   };
 
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify({
-    fullname: fullname,
-    status: status
-  }));
+  xhr.send(data);
 };
 
 exports.updateMe = updateMe;
@@ -10319,9 +10315,11 @@ if (resetForm) {
 if (settingForm) {
   settingForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var fullname = document.getElementById('fullname').value;
-    var status = document.getElementById('status').value;
-    (0, _setting.updateMe)(fullname, status);
+    var form = new FormData();
+    form.append('fullname', document.getElementById('fullname').value);
+    form.append('status', document.getElementById('status').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    (0, _setting.updateMe)(form);
   });
 }
 

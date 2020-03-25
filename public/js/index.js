@@ -91,9 +91,12 @@ if (resetForm) {
 if (settingForm) {
     settingForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const fullname = document.getElementById('fullname').value;
-        const status = document.getElementById('status').value;
-        updateMe(fullname, status);
+
+        const form = new FormData();
+        form.append('fullname', document.getElementById('fullname').value);
+        form.append('status', document.getElementById('status').value);
+        form.append('photo', document.getElementById('photo').files[0]);
+        updateMe(form);
     })
 }
 

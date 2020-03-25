@@ -2,6 +2,10 @@
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
 
+const multer = require('multer');
+
+const sharp = require('sharp');
+
 const catchAsync = require('./../utils/catchAsync');
 
 const AppError = require('./../utils/appError');
@@ -11,6 +15,39 @@ const User = require('./../models/userModel');
 const Message = require('./../models/message');
 
 const FollowModel = require('./../models/followModel');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image')) {
+        cb(null, true);
+    } else {
+        cb(new AppError('Please upload image!', 400), false);
+    }
+}
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+});
+
+exports.uploadUserPhoto = upload.single('photo');
+
+exports.resizeUserPhoto = catchAsync(
+    async (req, res, next) => {
+        if (!req.file) return next();
+        req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+        await sharp(req.file.buffer)
+            .resize(500, 500)
+            .toFormat('jpeg')
+            .jpeg({ quality: 90 })
+            .toFile(`public/images/people/${req.file.filename}`);
+        next();
+    }
+);
+
+
+
 
 /////////////////////////////////////////////////////////// 
 // This function will all use information
@@ -71,14 +108,19 @@ exports.getAllFollowing = catchAsync(
 exports.updateMe = catchAsync(
     async (req, res, next) => {
         let user = req.user;
-        if (req.body.fullname && req.body.status) {
-            user = await User.findByIdAndUpdate(req.user.id, {
-                fullname: req.body.fullname,
-                status: req.body.status
-            }, {
-                new: true
-            });
+        if (!req.body.fullname) return next(new AppError('Fullname is required!', 400));
+        let updataField = {};
+        console.log(req.body);
+        updataField.fullname = req.body.fullname;
+        updataField.status = req.body.status;
+        if (req.file) {
+            updataField.image = req.file.filename;
         }
+        user = await User.findByIdAndUpdate(req.user.id, updataField, {
+            new: true,
+            runValidators: true
+        });
+
         res.status(200).json({
             status: 'success',
             user

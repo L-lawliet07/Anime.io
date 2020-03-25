@@ -28,7 +28,12 @@ router
 router
     .route('/setting')
     .get(authController.protect, userController.settingPage)
-    .patch(authController.protect, userController.updateMe);
+    .patch(
+        authController.protect,
+        userController.uploadUserPhoto,
+        userController.resizeUserPhoto,
+        userController.updateMe
+    );
 
 router
     .get('/users', authController.protect, userController.getAllUser);
