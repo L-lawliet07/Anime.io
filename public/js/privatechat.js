@@ -5,6 +5,7 @@ const $messageForm = document.querySelector('.group-message-form')
 const $messageFormInput = $messageForm.querySelector('input')
 const $messageFormButton = $messageForm.querySelector('button')
 const $text_area = document.querySelector('.text-area')
+$text_area.scrollTop = $text_area.scrollHeight;
 
 
 // Options
@@ -12,6 +13,27 @@ const me = document.getElementById('main-username').innerText;
 const friend_username = document.querySelector('.sidebar-header > .username').innerText;
 const sendKey = me + '-' + friend_username;
 const receiveKey = friend_username + '-' + me;
+
+
+const autoScroll = () => {
+    //  new message element 
+    const $newMessage = $text_area.lastElementChild
+    // height of lastMessage
+    const newMessageStyles = getComputedStyle($newMessage);
+    const newMessageMargin = parseInt(newMessageStyles.marginTop) + parseInt(newMessageStyles.marginBottom);
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
+
+    // visibleHeight
+    const visibleHeight = $text_area.offsetHeight;
+    // Height of messages container
+    const containerHeight = $text_area.scrollHeight;
+
+    // How far have I scrolled;
+    const scrollOffset = $text_area.scrollTop + visibleHeight
+    if (containerHeight - 2 * newMessageHeight <= scrollOffset) {
+        $text_area.scrollTop = $text_area.scrollHeight;
+    }
+}
 
 socket.on('message', (message) => {
     const html = `
@@ -27,6 +49,7 @@ socket.on('message', (message) => {
             `;
 
     $text_area.insertAdjacentHTML('beforeend', html);
+    autoScroll();
 });
 
 

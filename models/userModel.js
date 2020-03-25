@@ -57,6 +57,7 @@ const userSchema = new mongoose.Schema({
     following: [String],
     follower: [String],
     notification: [String],
+    unseenMessage: [String],
     status: {
         type: String,
         default: "I am at saiyan level 1"

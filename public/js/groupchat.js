@@ -7,11 +7,31 @@ const $messageFormInput = $messageForm.querySelector('input')
 const $messageFormButton = $messageForm.querySelector('button')
 // const $sendLocationButton = document.querySelector('#send-location')
 const $text_area = document.querySelector('.text-area')
-
+$text_area.scrollTop = $text_area.scrollHeight;
 
 // Options
 const username = document.getElementById('main-username').innerText;
 const crew = document.querySelector('.group-name').innerText;
+
+const autoScroll = () => {
+    //  new message element 
+    const $newMessage = $text_area.lastElementChild
+    // height of lastMessage
+    const newMessageStyles = getComputedStyle($newMessage);
+    const newMessageMargin = parseInt(newMessageStyles.marginTop) + parseInt(newMessageStyles.marginBottom);
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
+
+    // visibleHeight
+    const visibleHeight = $text_area.offsetHeight;
+    // Height of messages container
+    const containerHeight = $text_area.scrollHeight;
+
+    // How far have I scrolled;
+    const scrollOffset = $text_area.scrollTop + visibleHeight
+    if (containerHeight - 2 * newMessageHeight <= scrollOffset) {
+        $text_area.scrollTop = $text_area.scrollHeight;
+    }
+}
 
 socket.on('message', (message) => {
 
@@ -32,6 +52,7 @@ socket.on('message', (message) => {
     //     createdAt: moment(message.createdAt).format('h:mm a')
     // })
     $text_area.insertAdjacentHTML('beforeend', html);
+    autoScroll();
 });
 
 

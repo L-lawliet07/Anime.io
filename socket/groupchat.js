@@ -33,7 +33,6 @@ module.exports = (io) => {
         socket.on('join', (user) => {
             //joining thr room
             socket.join(user.crew);
-            console.log(`${user.username} joined to ${user.crew}`);
             //adding user data in Users entry
             users.addUser(socket.id, user.username, user.crew);
             //emitting userslist event
@@ -67,7 +66,6 @@ module.exports = (io) => {
 
             if (user) {
                 nsp.to(user.crew).emit('roomData', users.getUserList(user.crew));
-                console.log(`${user.username} left ${user.crew} group`);
             }
         });
     });
