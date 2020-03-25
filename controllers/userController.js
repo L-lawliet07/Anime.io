@@ -15,10 +15,19 @@ const FollowModel = require('./../models/followModel');
 /////////////////////////////////////////////////////////// 
 // This function will all use information
 exports.getAllUser = catchAsync(
+
     async (req, res) => {
         const followingObject = await FollowModel.find({ follower: req.user.username });
         const following = followingObject.map(el => el.following);
-        const users = await User.find({ $and: [{ username: { $ne: req.user.username } }, { username: { $nin: following } }] }).select(['username']);
+        const users = await User.find({
+            $and: [
+                { username: { $ne: req.user.username } },
+                { username: { $nin: following } },
+                { username: { $regex: (req.query.name ? req.query.name : ""), $options: "i" } }
+            ]
+        }
+        ).select(['username', 'image']);
+
         res
             .status(200)
             .render('people', {
@@ -35,7 +44,16 @@ exports.getAllUser = catchAsync(
 // This function will all use information
 exports.getAllFollowing = catchAsync(
     async (req, res) => {
-        const users = await FollowModel.find({ follower: req.user.username }).select(['following']);
+
+        const users = await FollowModel.find(
+            {
+                $and: [
+                    { follower: req.user.username },
+                    { following: { $regex: (req.query.name ? req.query.name : ""), $options: "i" } }
+                ]
+            }
+        ).select(['following']);
+
         res
             .status(200)
             .render('following', {
@@ -54,7 +72,10 @@ exports.updateMe = catchAsync(
     async (req, res, next) => {
         let user = req.user;
         if (req.body.fullname && req.body.status) {
-            user = await User.findByIdAndUpdate(req.user.id, { fullname: req.body.fullname, status: req.body.status }, {
+            user = await User.findByIdAndUpdate(req.user.id, {
+                fullname: req.body.fullname,
+                status: req.body.status
+            }, {
                 new: true
             });
         }
@@ -72,16 +93,22 @@ exports.updateMe = catchAsync(
 exports.profilePage = catchAsync(
     async (req, res, next) => {
         const username = req.params.username;
-        const profile = await User.findOne({ username }).select(['username', 'fullname', 'status', 'image', 'following', 'follower']);
+        const profile = await User.findOne({ username }).select(['username', 'fullname', 'status', 'image']);
         if (!profile) {
             return next(new AppError('No User Found', 401));
         }
+        const follower = await FollowModel.find({ following: username }).select(['follower']);
+        const following = await FollowModel.find({ follower: username }).select(['following']);
+        console.log(follower);
+        console.log(following);
         res
             .status(200)
             .render('profile', {
                 title: `Anime.io | ${username}`,
                 profile,
-                user: req.user
+                user: req.user,
+                follower,
+                following
             });
     }
 );
@@ -104,8 +131,18 @@ exports.settingPage = (req, res) => {
 ///////////////////////////////////////////////////////////
 // This function will render all user info
 exports.followUser = catchAsync(
-    async (req, res) => {
+    async (req, res, next) => {
 
+        const followEntry = await FollowModel.findOne({
+            $and: [
+                { follower: req.user.username },
+                { following: req.body.username }
+            ]
+        });
+
+        if (followEntry) {
+            return next(new AppError('Already a friend', 400));
+        }
         await FollowModel.create({ follower: req.user.username, following: req.body.username });
         console.log(req.body.username);
         await User.updateOne({ username: req.body.username }, { $push: { notification: `${req.user.username} started following you` } });
@@ -117,7 +154,6 @@ exports.followUser = catchAsync(
             });
     }
 );
-
 ///////////////////////////////////////////////////////////
 
 

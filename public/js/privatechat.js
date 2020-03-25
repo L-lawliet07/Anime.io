@@ -1,37 +1,32 @@
 const socket = io('/privatechat')
 
 // Elements
-const $messageForm = document.querySelector('#message-form')
+const $messageForm = document.querySelector('.group-message-form')
 const $messageFormInput = $messageForm.querySelector('input')
 const $messageFormButton = $messageForm.querySelector('button')
-const $messages = document.querySelector('#messages')
+const $text_area = document.querySelector('.text-area')
 
 
 // Options
-const me = document.getElementById('me').innerText;
-const friend_username = document.getElementById('friend').innerText;
+const me = document.getElementById('main-username').innerText;
+const friend_username = document.querySelector('.sidebar-header > .username').innerText;
 const sendKey = me + '-' + friend_username;
 const receiveKey = friend_username + '-' + me;
 
-console.log('sendKey : ', sendKey);
-console.log('receivedKey : ', receiveKey);
-
 socket.on('message', (message) => {
     const html = `
-                <div class="message">
-                    <p>
-                        <span class="message__name">${message.sender}</span>
-                        <span class="message__meta">${message.createdAt}</span>
-                    </p>
-                    <p>${message.body}</p>
-                </div>
+        <div class="message ${message.sender === me ? "own-message" : "other-message"}">
+            <img class="message-image" src="./bleach.jpg" alt="">
+            <div class="message-text">
+                ${message.body}
+            </div>
+            <div class="message-time">
+                12 April
+            </div>
+        </div>
             `;
-    // const html = Mustache.render(messageTemplate, {
-    //     username: message.username,
-    //     message: message.text,
-    //     createdAt: moment(message.createdAt).format('h:mm a')
-    // })
-    $messages.insertAdjacentHTML('beforeend', html);
+
+    $text_area.insertAdjacentHTML('beforeend', html);
 });
 
 
@@ -53,12 +48,11 @@ socket.on('message', (message) => {
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    $messageFormButton.setAttribute('disabled', 'disabled')
+    // $messageFormButton.setAttribute('disabled', 'disabled')
 
     const body = e.target.elements.message.value;
-    console.log('body : ', body);
     socket.emit('createMessage', { body, sender: me, receiver: friend_username, key: sendKey }, () => {
-        $messageFormButton.removeAttribute('disabled')
+        // $messageFormButton.removeAttribute('disabled')
         $messageFormInput.value = ''
         $messageFormInput.focus()
     });

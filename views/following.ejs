@@ -8,33 +8,86 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/style.css">
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Raleway';
+            text-decoration: none;
         }
 
-        body {
-            font-family: Raleway;
-            line-height: 1.8;
-            background-color: rgb(248, 249, 250);
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 50px;
         }
 
-        .rooms {
+        .grid__item {
+            height: 300px;
+            margin: auto;
+            padding: 3px;
+        }
+
+        .grid__item img {
+            width: 100%;
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .navbar {
+            background-color: #fff !important;
+        }
+
+        /* Decorating the profile card */
+        .profile {
+            min-width: 150px;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: center;
+
         }
 
-        .card {
-            margin: 5px;
-            flex: 1;
+        .profile__image img {
+            width: 150px;
+            height: 150px;
+            display: block;
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(150, 115, 115, 0.5);
+            border-radius: 50%;
+            margin: 0px auto 20px auto;
         }
 
-        .form-wrap {
-            margin-top: 20px;
-            margin-bottom: 30px;
+        .profile__username {
+            text-align: center;
+            padding: 5px;
+        }
+
+        .profile__btn {
+            border-top: 1px solid #b1b1b1;
+            margin-top: 5px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .profile__btn a {
+            color: rgb(0, 140, 255);
+            text-decoration: none;
+        }
+
+
+        @media(max-width:780px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width:500px) {
+            .grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
         }
     </style>
 </head>
@@ -42,36 +95,35 @@
 <body>
 
     <%- include ('partials/homenav.ejs') %>
-
     <div class="container">
-
         <div class="form-wrap">
-
-            <form action="/home/result" method="post">
+            <form action="/user/friend" method="get">
                 <div class="form-group ad-30" style="margin-top:8px;">
                     <div class="input-group search-style">
-                        <input class="form-control new-search-bar" name="anime" id="search" placeholder="Search People"
-                            type="text">
+                        <input class="form-control new-search-bar" name="name" id="search" placeholder="Search People"
+                            type="text" autocomplete="off">
                     </div>
                 </div>
             </form>
         </div>
-        <div class="col-md-12">
-            <div class="rooms">
-                <% for (let people of users) { %>
-                <div class="card" style="width: 18rem;">
-                    <img src="#" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title" id=""><%= people.following %> </h5>
-                        <!-- <p class="card-text">Goku is......</p> -->
-                        <a href="/user/profile/<%= user.following %>" class="btn btn-dark">Profile</a>
-                        <a href="/user/chat/<%= user.username %>-<%= people.following %>" class="btn btn-dark">
-                            Message</a>
 
+        <div class="grid">
+            <% for (let people of users) { %>
+            <div class="grid__item">
+                <div class="profile">
+                    <div class="profile__image">
+                        <img src="/images/people/<%= people.following %>" alt="" srcset="">
+                    </div>
+                    <div class="profile__username">
+                        <%= people.following %>
+                    </div>
+                    <div class="profile__btn">
+                        <a href="/user/chat/<%= user.username %>-<%= people.following %>">Message</a>
+                        <a href="/user/profile/<%= people.following %>">Profile</a>
                     </div>
                 </div>
-                <% } %>
             </div>
+            <% } %>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

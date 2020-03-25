@@ -355,7 +355,6 @@ var follow = function follow(me, person, followBtn, socket) {
   followBtn.innerText = 'Following';
   var xhr = new XMLHttpRequest();
   xhr.open('PATCH', "/user/follow", true);
-  console.log(person);
 
   xhr.onload = function () {
     var responseObject = JSON.parse(this.responseText);
@@ -368,7 +367,7 @@ var follow = function follow(me, person, followBtn, socket) {
       });
       followBtn.innerText = 'Followed';
     } else {
-      followBtn.innerText = person;
+      followBtn.innerText = 'Follow';
       followBtn.removeAttribute('disabled');
       (0, _alerts.showAlert)('error', responseObject.message, 2);
     }
@@ -10260,8 +10259,8 @@ var signupForm = document.getElementById('signup-form');
 var logoutButton = document.getElementById('logout-btn');
 var forgotForm = document.getElementById('forgot-form');
 var resetForm = document.getElementById('reset-form');
-var settingForm = document.getElementById('setting-form');
-var followBtn = document.getElementById('follow-btn');
+var settingForm = document.querySelector('.setting-form');
+var followBtn = document.querySelector('.follow-btn');
 var notificationBtn = document.querySelector('.notification-btn');
 
 if (loginForm) {
@@ -10324,8 +10323,11 @@ if (settingForm) {
 if (followBtn) {
   followBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    var username = followBtn.textContent.trim();
-    (0, _follow.follow)(me, username, followBtn, socket);
+    var username = followBtn.id;
+
+    if (username) {
+      (0, _follow.follow)(me, username, followBtn, socket);
+    }
   });
 }
 
@@ -10369,7 +10371,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44569" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42521" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

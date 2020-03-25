@@ -29,9 +29,10 @@ const signupForm = document.getElementById('signup-form');
 const logoutButton = document.getElementById('logout-btn');
 const forgotForm = document.getElementById('forgot-form');
 const resetForm = document.getElementById('reset-form');
-const settingForm = document.getElementById('setting-form');
-const followBtn = document.getElementById('follow-btn');
+const settingForm = document.querySelector('.setting-form');
+const followBtn = document.querySelector('.follow-btn');
 const notificationBtn = document.querySelector('.notification-btn');
+
 
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -95,8 +96,10 @@ if (settingForm) {
 if (followBtn) {
     followBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        const username = followBtn.textContent.trim();
-        follow(me, username, followBtn, socket);
+        const username = followBtn.id;
+        if (username) {
+            follow(me, username, followBtn, socket);
+        }
     });
 }
 

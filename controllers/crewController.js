@@ -15,7 +15,7 @@ const CrewMessage = require('./../models/crewMessage');
 exports.homePage = catchAsync(
     async (req, res) => {
 
-        const crews = await Crew.find(req.query);
+        const crews = await Crew.find({ "name": { "$regex": (req.query.name ? req.query.name : ""), "$options": "i" } });
         res
             .status(200)
             .render('./home', {

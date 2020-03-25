@@ -6,7 +6,6 @@ export const follow = (me, person, followBtn, socket) => {
     followBtn.innerText = 'Following';
     const xhr = new XMLHttpRequest();
     xhr.open('PATCH', `/user/follow`, true);
-    console.log(person);
     xhr.onload = function () {
         const responseObject = JSON.parse(this.responseText);
         if (responseObject.status === 'success') {
@@ -15,7 +14,7 @@ export const follow = (me, person, followBtn, socket) => {
             });
             followBtn.innerText = 'Followed';
         } else {
-            followBtn.innerText = person;
+            followBtn.innerText = 'Follow';
             followBtn.removeAttribute('disabled');
             showAlert('error', responseObject.message, 2);
         }
