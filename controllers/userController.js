@@ -154,14 +154,17 @@ exports.updateMe = catchAsync(
 exports.profilePage = catchAsync(
     async (req, res, next) => {
         const username = req.params.username;
-        const profile = await User.findOne({ username }).select(['username', 'fullname', 'status', 'image']);
+        const profile = await User.findOne({ username }).select(['username', 'fullname', 'status', 'image', '_id']);
         if (!profile) {
-            return next(new AppError('No User Found', 401));
+            return next(new AppError('No User Found', 400));
         }
-        const follower = await FollowModel.find({ following: username }).select(['follower']);
-        const following = await FollowModel.find({ follower: username }).select(['following']);
-        console.log(follower);
-        console.log(following);
+
+        const [follower, following] = await Promise.all(
+            [
+                FollowModel.find({ following: profile._id }).populate('follower').select('follower'),
+                FollowModel.find({ follower: profile._id }).populate('following').select('following')
+            ]
+        )
         res
             .status(200)
             .render('profile', {

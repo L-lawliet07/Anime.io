@@ -303,14 +303,14 @@
             <div class="grid__item">
                 <div class="info-profile">
                     <div class="info-profile__image">
-                        <img src="/images/people/<%= people.image %>" alt="" srcset="">
+                        <img src="/images/people/<%= people.follower.image %>" alt="" srcset="">
                     </div>
                     <div class="info-profile__username">
-                        <%= people.follower %>
+                        <%= people.follower.username %>
                     </div>
                     <div class="info-profile__btn">
-                        <a href="/user/chat/<%= user.username %>-<%= people.follower %>">Message</a>
-                        <a href="/user/profile/<%= people.follower %>">Profile</a>
+                        <a href="/user/chat/<%= user.username %>-<%= people.follower.username %>">Message</a>
+                        <a href="/user/profile/<%= people.follower.username %>">Profile</a>
                     </div>
                 </div>
             </div>
@@ -325,14 +325,14 @@
             <div class="grid__item">
                 <div class="info-profile">
                     <div class="info-profile__image">
-                        <img src="/images/people/<%= people.image %>" alt="" srcset="">
+                        <img src="/images/people/<%= people.following.image %>" alt="" srcset="">
                     </div>
                     <div class="info-profile__username">
-                        <%= people.following %>
+                        <%= people.following.username %>
                     </div>
                     <div class="info-profile__btn">
-                        <a href="/user/chat/<%= user.username %>-<%= people.following %>">Message</a>
-                        <a href="/user/profile/<%= people.following %>">Profile</a>
+                        <a href="/user/chat/<%= user.username %>-<%= people.following.username %>">Message</a>
+                        <a href="/user/profile/<%= people.following.username %>">Profile</a>
                     </div>
                 </div>
             </div>
