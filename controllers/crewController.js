@@ -120,9 +120,26 @@ exports.chatRoom = catchAsync(
     async (req, res) => {
         const crew = req.params.crewName
         const old_message = await CrewMessage.aggregate([
-            { $match: { crew } },
-            { $sort: { createdAt: 1 } }
+            {
+                $match: {
+                    crew
+                }
+            },
+            {
+                $sort: {
+                    createdAt: 1
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'sender',
+                    foreignField: '_id',
+                    as: 'sender'
+                }
+            }
         ]);
+
         res
             .status(200)
             .render('groupchat', {
@@ -130,6 +147,28 @@ exports.chatRoom = catchAsync(
                 crew,
                 user: req.user,
                 old_message
+            });
+    }
+);
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// This function will handle crewMessaage
+exports.crewMessage = catchAsync(
+    async (req, res) => {
+        const crew = req.body.crew;
+        const message = req.body.text;
+        // Here i have to check if crew exist or not
+        await CrewMessage.create({
+            sender: req.user.id,
+            crew,
+            body: message
+        });
+        res
+            .status(200)
+            .json({
+                status: 'success',
             });
     }
 );

@@ -51,6 +51,7 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span id="main-username"><%= user.username %></span>
                     </a>
+                    <img style="display: none;" id="main-image" src="/images/people/<%= user.image %>" alt="" srcset="">
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="/user/profile/<%= user.username %>"><i class="far fa-user"></i>
                             Profile</a>

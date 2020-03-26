@@ -183,6 +183,7 @@
         .text-area .message .message-text {
             padding: 15px;
             color: #fff;
+            min-width: 75px;
         }
 
         .text-area .message .message-time {
@@ -265,7 +266,7 @@
         #sidebar-view:checked~.sidebar-area>.sidebar-header>img {
             width: 150px;
             height: 150px;
-            margin: 30px 0px 30px 0px;
+            margin: 30px 10px 30px 10px;
         }
 
         #sidebar-view:checked~.sidebar-area>.sidebar-header>.group-name {
@@ -322,9 +323,9 @@
         <div class="sidebar-area">
             <label id="sidebarview-label" for="sidebar-view"> <i class="fas fa-chevron-right"></i> </label>
             <div class="sidebar-header">
-                <img src="./516246.jpg" alt="">
+                <img src="/images/crew/crewdp/<%= crew %>.jpg" alt="">
                 <h6 class="group-name"><%= crew %></h6>
-                <h5 class="usercount">12</h5>
+                <h5 class="usercount">0</h5>
             </div>
             <div class="online-users">
                 <!-- <div class="online-user">
@@ -341,17 +342,17 @@
 
 
             <% for ( let message of old_message ) {%>
-            <% if ( message.sender !== user.username ) { %>
+            <% if ( message.sender[0].username !== user.username ) { %>
             <div class="message other-message">
                 <%} else {%>
                 <div class="message own-message">
                     <% } %>
-                    <img class="message-image" src="./bleach.jpg" alt="">
+                    <img class="message-image" src="/images/people/<%= message.sender[0].image %>" alt="">
                     <div class="message-text">
                         <%= message.body %>
                     </div>
                     <div class="message-time">
-                        12 April
+                        <%= `${message.createdAt.toDateString()} / ${message.createdAt.getHours()}: ${message.createdAt.getMinutes()}` %>
                     </div>
                 </div>
                 <% } %>

@@ -34,16 +34,13 @@ module.exports = (io) => {
          * listening for createMessage event
          */
         socket.on('createMessage', catchAsync(async (message, callback) => {
-            const privatemessage = await Message.create({
+
+            nsp.to(message.key).emit('message', {
+                body: message.body,
                 sender: message.sender,
                 receiver: message.receiver,
-                body: message.body
-            });
-            nsp.to(message.key).emit('message', {
-                body: privatemessage.body,
-                sender: privatemessage.sender,
-                receiver: privatemessage.receiver,
-                createdAt: privatemessage.createdAt.toString()
+                createdAt: Date.now(),
+                image: message.image
             });
             callback()
         }));

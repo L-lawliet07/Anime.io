@@ -54,12 +54,20 @@ exports.resizeUserPhoto = catchAsync(
 exports.getAllUser = catchAsync(
 
     async (req, res) => {
-        const followingObject = await FollowModel.find({ follower: req.user.username });
+        const followingObject = await FollowModel.find(
+            {
+                $ne: [{
+                    follower: req.user.id
+                }]
+            }
+        );
+
         const following = followingObject.map(el => el.following);
+
         const users = await User.find({
             $and: [
                 { username: { $ne: req.user.username } },
-                { username: { $nin: following } },
+                { _id: { $nin: following } },
                 { username: { $regex: (req.query.name ? req.query.name : ""), $options: "i" } }
             ]
         }
@@ -175,19 +183,24 @@ exports.settingPage = (req, res) => {
 exports.followUser = catchAsync(
     async (req, res, next) => {
 
+        const person = await User.findOne({ username: req.body.username });
+        if (!person) {
+            return next(new AppError(`Cannot find the user ${req.boby.username}`));
+        }
         const followEntry = await FollowModel.findOne({
             $and: [
-                { follower: req.user.username },
-                { following: req.body.username }
+                { follower: req.user.id },
+                { following: person._id }
             ]
         });
 
         if (followEntry) {
             return next(new AppError('Already a friend', 400));
         }
-        await FollowModel.create({ follower: req.user.username, following: req.body.username });
-        console.log(req.body.username);
-        await User.updateOne({ username: req.body.username }, { $push: { notification: `${req.user.username} started following you` } });
+        await FollowModel.create({ follower: req.user.id, following: person._id });
+
+        await User.updateOne({ _id: person._id }, { $push: { notification: `${req.user.username} started following you` } });
+
         res
             .status(200)
             .json({
@@ -234,7 +247,7 @@ exports.privateChat = catchAsync(
             return next(new AppError('Page Not Found', 404));
         }
 
-        const friend = await User.findOne({ username: users[1] });
+        const friend = await User.findOne({ username: users[1] }).select(['username', 'fullname', 'image', 'status']);
 
         /*
          * Some more Error checks
@@ -268,7 +281,29 @@ exports.privateChat = catchAsync(
                 title: 'Anime.io | Chat',
                 old_message,
                 user: req.user,
-                friend: (users[0] === req.user.username ? users[1] : users[0])
+                friend
+            });
+    }
+);
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// This function is for private message
+exports.privateMessage = catchAsync(
+    async (req, res, next) => {
+
+        await Message.create({
+            sender: req.user.username,
+            receiver: req.body.receiver,
+            body: req.body.text
+        });
+
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: "message saved to db"
             });
     }
 );

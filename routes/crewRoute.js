@@ -18,6 +18,10 @@ router
     .post(authController.protect, authController.adminSection, crewController.createCrew);
 
 router
+    .route('/chat/message')
+    .post(authController.protect, crewController.crewMessage);
+
+router
     .route('/:id')
     .get(authController.protect, crewController.getCrew)
     .patch(authController.protect, crewController.updateCrew)

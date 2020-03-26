@@ -326,7 +326,7 @@ var updateMe = function updateMe(data) {
     var responseObject = JSON.parse(this.responseText);
 
     if (responseObject.status === 'success') {
-      (0, _alerts.showAlert)('success', 'Updated', 2);
+      location.reload(true);
     } else {
       (0, _alerts.showAlert)('error', responseObject.message, 2);
     }
@@ -10374,7 +10374,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42521" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42745" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

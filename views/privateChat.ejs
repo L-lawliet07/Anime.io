@@ -267,10 +267,10 @@
         <div class="sidebar-area">
             <label id="sidebarview-label" for="sidebar-view"> <i class="fas fa-chevron-right"></i> </label>
             <div class="sidebar-header">
-                <h6 class="username"><%= friend %></h6>
-                <img src="./516246.jpg" alt="">
-                <h4 class="fullname">AbhiKuchSochana</h4>
-                <p class="status">This is sample status just to test how mush i can</p>
+                <h6 class="username"><%= friend.username %></h6>
+                <img src="/images/people/<%= friend.image %>" alt="">
+                <h4 class="fullname"><%= friend.fullname %></h4>
+                <p class="status"><%= friend.status %></p>
             </div>
         </div>
 
@@ -279,15 +279,16 @@
             <% for ( let message of old_message ) {%>
             <% if ( message.sender !== user.username ) { %>
             <div class="message other-message">
+                <img class="message-image" src="/images/people/<%= friend.image %>" alt="">
                 <%} else {%>
                 <div class="message own-message">
+                    <img class="message-image" src="/images/people/<%= user.image %>" alt="">
                     <% } %>
-                    <img class="message-image" src="./bleach.jpg" alt="">
                     <div class="message-text">
                         <%= message.body %>
                     </div>
                     <div class="message-time">
-                        12 April
+                        <%= `${message.createdAt.toDateString()} / ${message.createdAt.getHours()}: ${message.createdAt.getMinutes()}` %>
                     </div>
                 </div>
                 <% } %>

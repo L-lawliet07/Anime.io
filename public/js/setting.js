@@ -7,7 +7,7 @@ export const updateMe = (data) => {
     xhr.onload = function () {
         const responseObject = JSON.parse(this.responseText);
         if (responseObject.status === 'success') {
-            showAlert('success', 'Updated', 2);
+            location.reload(true);
         } else {
             showAlert('error', responseObject.message, 2);
         }

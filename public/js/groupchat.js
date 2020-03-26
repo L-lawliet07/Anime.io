@@ -12,7 +12,9 @@ $text_area.scrollTop = $text_area.scrollHeight;
 // Options
 const username = document.getElementById('main-username').innerText;
 const crew = document.querySelector('.group-name').innerText;
+const image = document.getElementById('main-image').src;
 
+// This function will do auto scrolling work
 const autoScroll = () => {
     //  new message element 
     const $newMessage = $text_area.lastElementChild
@@ -35,22 +37,19 @@ const autoScroll = () => {
 
 socket.on('message', (message) => {
 
+    console.log(message.image);
+    const date = new Date(message.createdAt);
     const html = `
         <div class="message ${message.username === username ? "own-message" : "other-message"}">
-            <img class="message-image" src="./bleach.jpg" alt="">
+            <img class="message-image" src=${message.image} alt="">
             <div class="message-text">
             ${message.text}
             </div>
             <div class="message-time">
-                12 April
+                ${date.toDateString()} / ${date.getHours()}:${date.getMinutes()}
             </div>
         </div>
     `
-    // const html = Mustache.render(messageTemplate, {
-    //     username: message.username,
-    //     message: message.text,
-    //     createdAt: moment(message.createdAt).format('h:mm a')
-    // })
     $text_area.insertAdjacentHTML('beforeend', html);
     autoScroll();
 });
@@ -62,15 +61,24 @@ socket.on('roomData', (users) => {
 
         html = html + `
         <div class="online-user">
-        <img src="./one piece.jpg" alt="">
+        <img src=${el.image} alt="">
         <div class="online-username">
-            ${el}
+            ${el.username}
         </div>
         </div>
         `;
     });
     document.querySelector('.online-users').innerHTML = html
-})
+    document.querySelector('.usercount').innerText = users.length;
+});
+
+
+const sendMessage = (text, crew) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/crew/chat/message', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ text, crew }));
+}
 
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -78,26 +86,12 @@ $messageForm.addEventListener('submit', (e) => {
     // $messageFormButton.setAttribute('disabled', 'disabled')
 
     const text = e.target.elements.message.value;
-    socket.emit('createMessage', { text, crew, username }, () => {
+    socket.emit('createMessage', { text, crew, username, image }, () => {
         // $messageFormButton.removeAttribute('disabled')
-        $messageFormInput.value = ''
+        $messageFormInput.value = '';
         $messageFormInput.focus()
+        sendMessage(text, crew);
     });
 });
-socket.emit('join', { crew, username })
 
-
-// export const joinCrew = (crewName) => {
-//     const xhr = new XMLHttpRequest();
-//     xhr.open('GET', `/crew/login/${crewName}`, true);
-//     xhr.onload = function () {
-//         const responseObject = JSON.parse(this.responseText);
-//         if (responseObject.status === 'success') {
-
-//             window.location.assign('/crew');
-//         } else {
-//             console.log('there is a error in groupChat.js');
-//         }
-//     }
-//     xhr.send();
-// };
+socket.emit('join', { crew, username, image });

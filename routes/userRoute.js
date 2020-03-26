@@ -44,6 +44,9 @@ router
     .get('/chat/:roomid', authController.protect, userController.privateChat);
 
 router
+    .post('/chat/message', authController.protect, userController.privateMessage);
+
+router
     .get('/friend', authController.protect, userController.getAllFollowing);
 
 router

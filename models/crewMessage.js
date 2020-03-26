@@ -10,7 +10,8 @@ const mongoose = require('mongoose');
 const crewMessageSchema = new mongoose.Schema({
 
     sender: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     crew: {
         type: String

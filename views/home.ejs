@@ -136,6 +136,22 @@
                 grid-row: 1 / span 1;
             }
         }
+
+        .no-item-found {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-bottom: #37a08e 1px solid;
+        }
+
+        .no-item-found>img {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -154,7 +170,7 @@
                 </div>
             </form>
         </div>
-
+        <% if( crews.length > 0 ) { %>
         <div class="grid">
             <% for (let crew of crews) { %>
             <div class="grid__item">
@@ -171,6 +187,12 @@
             </div>
             <% } %>
         </div>
+        <% } else { %>
+        <div class="no-item-found">
+            <img src="/images/gif/noitem.gif" alt="">
+            <h5>No item found!</h5>
+        </div>
+        <% } %>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

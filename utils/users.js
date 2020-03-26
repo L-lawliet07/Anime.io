@@ -15,7 +15,7 @@ class Users {
     /*
      * addUser function will add user to users array
      */
-    addUser(id, username, crew) {
+    addUser(id, username, crew, image) {
 
         // Cleaning data
         username = username.trim();
@@ -39,7 +39,7 @@ class Users {
             }
         }
 
-        const user = { id, username, crew };
+        const user = { id, username, crew, image };
         this.users.push(user);
         return user;
     }
@@ -72,7 +72,7 @@ class Users {
         const users = this.users.filter((user) => user.crew === crew);
 
         const userArray = users.map((user) => {
-            return user.username;
+            return { username: user.username, image: user.image };
         });
 
         return userArray;

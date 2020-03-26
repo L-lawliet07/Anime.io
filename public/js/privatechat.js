@@ -13,7 +13,7 @@ const me = document.getElementById('main-username').innerText;
 const friend_username = document.querySelector('.sidebar-header > .username').innerText;
 const sendKey = me + '-' + friend_username;
 const receiveKey = friend_username + '-' + me;
-
+const image = document.getElementById('main-image').src;
 
 const autoScroll = () => {
     //  new message element 
@@ -36,17 +36,18 @@ const autoScroll = () => {
 }
 
 socket.on('message', (message) => {
+    const date = new Date(message.createdAt);
     const html = `
         <div class="message ${message.sender === me ? "own-message" : "other-message"}">
-            <img class="message-image" src="./bleach.jpg" alt="">
+            <img class="message-image" src=${message.image} alt="">
             <div class="message-text">
                 ${message.body}
             </div>
             <div class="message-time">
-                12 April
+            ${date.toDateString()} / ${date.getHours()}:${date.getMinutes()}
+
             </div>
-        </div>
-            `;
+        </div>`;
 
     $text_area.insertAdjacentHTML('beforeend', html);
     autoScroll();
@@ -68,16 +69,27 @@ socket.on('message', (message) => {
 //     document.querySelector('#sidebar').innerHTML = html
 // })
 
+const sendMessage = (text, receiver) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/user/chat/message', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ text, receiver }));
+}
+
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // $messageFormButton.setAttribute('disabled', 'disabled')
-
     const body = e.target.elements.message.value;
-    socket.emit('createMessage', { body, sender: me, receiver: friend_username, key: sendKey }, () => {
-        // $messageFormButton.removeAttribute('disabled')
+    socket.emit('createMessage', {
+        body,
+        sender: me,
+        receiver: friend_username,
+        key: sendKey,
+        image
+    }, () => {
         $messageFormInput.value = ''
         $messageFormInput.focus()
+        sendMessage(body, friend_username);
     });
 });
 socket.emit('join', { room1: sendKey, room2: receiveKey })

@@ -34,7 +34,7 @@ module.exports = (io) => {
             //joining thr room
             socket.join(user.crew);
             //adding user data in Users entry
-            users.addUser(socket.id, user.username, user.crew);
+            users.addUser(socket.id, user.username, user.crew, user.image);
             //emitting userslist event
             nsp.to(user.crew).emit('roomData', users.getUserList(user.crew));
         });
@@ -44,16 +44,12 @@ module.exports = (io) => {
          */
         socket.on('createMessage', catchAsync(async (message, callback) => {
 
-            const groupMessage = await CrewMessage.create({
-                sender: message.username,
-                crew: message.crew,
-                body: message.text
-            });
             nsp.to(message.crew).emit('message', {
-                text: groupMessage.body,
-                crew: groupMessage.crew,
-                username: groupMessage.sender,
-                createdAt: groupMessage.createdAt.toString()
+                text: message.text,
+                crew: message.crew,
+                username: message.username,
+                image: message.image,
+                createdAt: Date.now()
             });
             callback()
         }));
