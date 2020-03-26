@@ -129,14 +129,14 @@
             <div class="grid__item">
                 <div class="profile">
                     <div class="profile__image">
-                        <img src="/images/people/<%= people.following %>" alt="" srcset="">
+                        <img src="/images/people/<%= people.following[0].image %>" alt="" srcset="">
                     </div>
                     <div class="profile__username">
-                        <%= people.following %>
+                        <%= people.following[0].username %>
                     </div>
                     <div class="profile__btn">
-                        <a href="/user/chat/<%= user.username %>-<%= people.following %>">Message</a>
-                        <a href="/user/profile/<%= people.following %>">Profile</a>
+                        <a href="/user/chat/<%= user.username %>-<%= people.following[0].username %>">Message</a>
+                        <a href="/user/profile/<%= people.following[0].username %>">Profile</a>
                     </div>
                 </div>
             </div>

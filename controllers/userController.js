@@ -56,14 +56,11 @@ exports.getAllUser = catchAsync(
     async (req, res) => {
         const followingObject = await FollowModel.find(
             {
-                $ne: [{
-                    follower: req.user.id
-                }]
+                follower: req.user._id
             }
         );
 
         const following = followingObject.map(el => el.following);
-
         const users = await User.find({
             $and: [
                 { username: { $ne: req.user.username } },
@@ -90,14 +87,28 @@ exports.getAllUser = catchAsync(
 exports.getAllFollowing = catchAsync(
     async (req, res) => {
 
-        const users = await FollowModel.find(
+        const follower = req.user._id;
+        const users = await FollowModel.aggregate([
             {
-                $and: [
-                    { follower: req.user.username },
-                    { following: { $regex: (req.query.name ? req.query.name : ""), $options: "i" } }
-                ]
+                $match: { follower }
             }
-        ).select(['following']);
+            ,
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'following',
+                    foreignField: '_id',
+                    as: 'following'
+                }
+            },
+            {
+                $match: {
+                    "following.username": {
+                        $regex: (req.query.name ? req.query.name : ""), $options: "i"
+                    }
+                }
+            }
+        ]);
 
         res
             .status(200)
