@@ -29,7 +29,7 @@ class Users {
         }
         // Check for existing user
         const existingUser = this.users.find((user) => {
-            return user.crew === crew && crew.username === username;
+            return user.crew === crew && user.username === username;
         });
 
         // Validate username

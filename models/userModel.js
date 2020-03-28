@@ -17,11 +17,14 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Please tell us your name'],
-        unique: true
+        unique: true,
+        validate: [validator.isAlphanumeric, 'Only alphanumeric characters are allowed in username'],
+        maxlength: [15, 'Username max allowed length is 15']
     },
     fullname: {
         type: String,
-        required: [true, 'Please tell us your fullname']
+        required: [true, 'Please tell us your fullname'],
+        maxlength: [25, 'Fullname max allowed length is 25']
     },
     email: {
         type: String,

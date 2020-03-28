@@ -15,6 +15,8 @@ const sendKey = me + '-' + friend_username;
 const receiveKey = friend_username + '-' + me;
 const image = document.getElementById('main-image').src;
 
+let offline = true;
+
 const autoScroll = () => {
     //  new message element 
     const $newMessage = $text_area.lastElementChild
@@ -54,20 +56,23 @@ socket.on('message', (message) => {
 });
 
 
-// socket.on('roomData', (users) => {
-//     let user_list = '';
-//     users.forEach((el) => {
-//         user_list = user_list + `<li>${el}</li>`;
-//     });
-//     const html = `
-//                 <h2 class="room-title">${crew}</h2>
-//                 <h3 class="list-title">Users</h3>
-//                 <ul class="users">
-//                     ${user_list}
-//                 </ul>
-//             `
-//     document.querySelector('#sidebar').innerHTML = html
-// })
+socket.on('roomData', (status) => {
+    const indicator = document.querySelector('.sidebar-header > img');
+    if (status === 'online') {
+        offline = false;
+        indicator.setAttribute('style', 'border : #37a08e 1px solid;');
+    } else {
+        offline = true;
+        indicator.removeAttribute('style');
+    }
+});
+
+const sendMessageNotification = (sender, receiver) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PATCH', '/user/chat/message/notification');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ receiver }));
+}
 
 const sendMessage = (text, receiver) => {
     const xhr = new XMLHttpRequest();
@@ -87,9 +92,13 @@ $messageForm.addEventListener('submit', (e) => {
         key: sendKey,
         image
     }, () => {
-        $messageFormInput.value = ''
-        $messageFormInput.focus()
+        $messageFormInput.value = '';
+        $messageFormInput.focus();
         sendMessage(body, friend_username);
     });
+
+    if (offline) {
+        sendMessageNotification(me, friend_username);
+    }
 });
-socket.emit('join', { room1: sendKey, room2: receiveKey })
+socket.emit('join', { username: me, image, sendKey, receiveKey });

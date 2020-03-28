@@ -26,7 +26,7 @@ module.exports = (io) => {
         });
 
         /*
-         * listening for createMessage event
+         * listening for following event for notification
          */
         socket.on('following', catchAsync(async (message, callback) => {
 
@@ -34,6 +34,17 @@ module.exports = (io) => {
             nsp.to(message.room).emit('following-notification', notification);
             callback()
         }));
+
+        /*
+         * listening for unseen message event for notification
+         */
+        // socket.on('unseen', catchAsync(async (message, callback) => {
+
+        //     const notification = `${message.username} started following you`;
+        //     nsp.to(message.room).emit('following-notification', notification);
+        //     callback()
+        // }));
+
     });
 }
 ///////////////////////////////////////////////////////////

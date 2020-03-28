@@ -213,7 +213,7 @@ exports.followUser = catchAsync(
         }
         await FollowModel.create({ follower: req.user.id, following: person._id });
 
-        await User.updateOne({ _id: person._id }, { $push: { notification: `${req.user.username} started following you` } });
+        await User.updateOne({ _id: person._id }, { $push: { notification: req.user.username } });
 
         res
             .status(200)
@@ -318,6 +318,31 @@ exports.privateMessage = catchAsync(
             .json({
                 status: 'success',
                 message: "message saved to db"
+            });
+    }
+);
+///////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////
+// This function will store the private message notification
+exports.privateMessageNotificaton = catchAsync(
+
+
+    async (req, res) => {
+
+        const person = await User.findOne({ username: req.body.receiver });
+        if (!person) {
+            return next(new AppError(`Cannot find the user ${req.boby.receiver}`, 400));
+        }
+
+        await User.updateOne({ _id: person._id }, { $push: { unseenMessage: req.user.username } });
+
+
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: "Message notification saved"
             });
     }
 );

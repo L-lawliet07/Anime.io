@@ -51,7 +51,7 @@ module.exports = (io) => {
                 image: message.image,
                 createdAt: Date.now()
             });
-            callback()
+            callback();
         }));
 
         /*

@@ -47,6 +47,9 @@ router
     .post('/chat/message', authController.protect, userController.privateMessage);
 
 router
+    .patch('/chat/message/notification', authController.protect, userController.privateMessageNotificaton);
+
+router
     .get('/friend', authController.protect, userController.getAllFollowing);
 
 router

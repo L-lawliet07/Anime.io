@@ -37,7 +37,6 @@ const autoScroll = () => {
 
 socket.on('message', (message) => {
 
-    console.log(message.image);
     const date = new Date(message.createdAt);
     const html = `
         <div class="message ${message.username === username ? "own-message" : "other-message"}">

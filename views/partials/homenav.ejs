@@ -40,7 +40,7 @@
                         <% if ( user.notification.length > 0 ) { %>
                         <% for ( let info of user.notification ) { %>
                         <a class="dropdown-item" href=""><%= info %></a>
-                        <%} %>
+                        <% } %>
                         <% } else { %>
                         <a class="no-notification dropdown-item" href="">No new notification</a>
                         <% } %>
@@ -49,9 +49,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle emphasis" href="#" id="navbarDropdownMenuLink" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img style="width: 20px;" id="main-image" src="/images/people/<%= user.image %>" alt=""
+                            srcset="">
                         <span id="main-username"><%= user.username %></span>
                     </a>
-                    <img style="display: none;" id="main-image" src="/images/people/<%= user.image %>" alt="" srcset="">
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="/user/profile/<%= user.username %>"><i class="far fa-user"></i>
                             Profile</a>

@@ -309,7 +309,9 @@
                         <%= people.follower.username %>
                     </div>
                     <div class="info-profile__btn">
+                        <% if ( user.username != people.follower.username ) { %>
                         <a href="/user/chat/<%= user.username %>-<%= people.follower.username %>">Message</a>
+                        <% } %>
                         <a href="/user/profile/<%= people.follower.username %>">Profile</a>
                     </div>
                 </div>
@@ -331,7 +333,9 @@
                         <%= people.following.username %>
                     </div>
                     <div class="info-profile__btn">
+                        <% if ( user.username != people.following.username ) { %>
                         <a href="/user/chat/<%= user.username %>-<%= people.following.username %>">Message</a>
+                        <% } %>
                         <a href="/user/profile/<%= people.following.username %>">Profile</a>
                     </div>
                 </div>

@@ -6,6 +6,8 @@ const Message = require('./../models/message');
 
 const catchAsync = require('./../utils/catchAsync');
 
+const Users = require('./../utils/users');
+
 ///////////////////////////////////////////////////////////
 // This function will provide socket functionaity for server
 module.exports = (io) => {
@@ -16,6 +18,12 @@ module.exports = (io) => {
      */
     const nsp = io.of('/privatechat');
 
+
+    /*
+     * users object will contain function and data related to  chat users
+     */
+    const users = new Users();
+
     /*
      * server socket will listen for connection event
      */
@@ -25,9 +33,16 @@ module.exports = (io) => {
          * listening for join object
          */
         socket.on('join', (pr) => {
-            //joining thr room
-            socket.join(pr.room1);
-            socket.join(pr.room2);
+            //joining the room
+            socket.join(pr.sendKey);
+            socket.join(pr.receiveKey);
+            // Adding new user to the users list
+            users.addUser(socket.id, pr.username, pr.sendKey, pr.image);
+            const friend = users.getUserList(pr.receiveKey);
+            // If friend exist than only both are online
+            if (friend.length > 0) {
+                nsp.to(pr.sendKey).emit('roomData', "online");
+            }
         });
 
         /*
@@ -42,20 +57,19 @@ module.exports = (io) => {
                 createdAt: Date.now(),
                 image: message.image
             });
-            callback()
+            callback();
         }));
 
         /*
          * listening for user disconnect event
          */
-        // socket.on('disconnect', () => {
-        //     const user = users.removeUser(socket.id);
+        socket.on('disconnect', () => {
 
-        //     if (user) {
-        //         nsp.to(user.crew).emit('roomData', users.getUserList(user.crew));
-        //         console.log(`${user.username} left ${user.crew} group`);
-        //     }
-        // });
+            const user = users.removeUser(socket.id);
+            if (user) {
+                nsp.to(user.crew).emit('roomData', "offline");
+            }
+        });
     });
 }
 ///////////////////////////////////////////////////////////
