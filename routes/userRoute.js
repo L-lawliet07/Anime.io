@@ -15,13 +15,20 @@ const authController = require('../controllers/authController');
 // router for home routes
 const router = express.Router();
 
+/*
+ * These are all unprotected routes anyone can access them
+ */
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword', authController.resetPassword);
+/*********************************************************/
 
 
+/*
+ * These are all protected routes only authorized user can access them
+ */
 router
     .get('/profile/:username', authController.protect, userController.profilePage);
 
@@ -58,6 +65,8 @@ router
 
 router
     .patch('/follow', authController.protect, userController.followUser);
+/*********************************************************/
+
 ///////////////////////////////////////////////////////////
 
 

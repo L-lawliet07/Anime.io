@@ -37,6 +37,7 @@ const autoScroll = () => {
     }
 }
 
+
 socket.on('message', (message) => {
     const date = new Date(message.createdAt);
     const html = `
@@ -58,21 +59,38 @@ socket.on('message', (message) => {
 
 socket.on('roomData', (status) => {
     const indicator = document.querySelector('.sidebar-header > img');
+    const online_status = document.querySelector('.sidebar-header>.online-status');
     if (status === 'online') {
         offline = false;
-        indicator.setAttribute('style', 'border : #37a08e 1px solid;');
+        indicator.setAttribute('style', 'border : #37a08e 2px solid;');
+        online_status.innerText = 'online';
+        online_status.setAttribute('style', 'color : #37a08e;');
     } else {
         offline = true;
         indicator.removeAttribute('style');
+        online_status.innerText = 'offline';
+        online_status.removeAttribute('style');
     }
 });
+
 
 const sendMessageNotification = (receiver) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PATCH', '/user/chat/message/notification');
     xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function () {
+        const responseObject = JSON.parse(this.responseText);
+        if (responseObject.status === 'success') {
+            // here i will emit a global unseen event with receiver name as room id and sender name as username
+            console.log('sending unseen event');
+            io('/').emit('unseen', { room: friend_username, username: me }, () => {
+                // here we will do some acnowledgement
+            });
+        };
+    }
     xhr.send(JSON.stringify({ receiver }));
 }
+
 
 const sendMessage = (text, receiver) => {
     const xhr = new XMLHttpRequest();
@@ -80,6 +98,7 @@ const sendMessage = (text, receiver) => {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({ text, receiver }));
 }
+
 
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -95,10 +114,13 @@ $messageForm.addEventListener('submit', (e) => {
         $messageFormInput.value = '';
         $messageFormInput.focus();
         sendMessage(body, friend_username);
+        // What we can also do is just to send one post request for message and update both things
+        if (offline) {
+            sendMessageNotification(friend_username);
+        }
     });
 
-    if (offline) {
-        sendMessageNotification(friend_username);
-    }
 });
+
+
 socket.emit('join', { username: me, image, sendKey, receiveKey });

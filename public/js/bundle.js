@@ -10256,16 +10256,16 @@ socket.on('following-notification', function (user) {
   notificationContainer.insertAdjacentHTML('afterbegin', html);
 });
 socket.on('unseenmessage-notification', function (user) {
-  var notificationIcon = document.getElementById('notification-icon');
-  var notificationContainer = document.getElementById('notification-container');
-  notificationIcon.setAttribute('style', 'color: red;');
-  var noNotification = document.querySelector('.no-notification');
+  var unseenmessageIcon = document.getElementById('unseenmessage-icon');
+  var notificationContainer = document.getElementById('unseenmessage-container');
+  unseenmessageIcon.setAttribute('style', 'color: red;');
+  var noNotification = document.querySelector('.no-unseenMessage');
 
   if (noNotification) {
     noNotification.setAttribute('style', 'display:none;');
   }
 
-  var html = "<a class=\"dropdown-item\" href=\"/user/profile/".concat(user, "\">").concat(user, " started following you.</a>");
+  var html = "<a class=\"dropdown-item\" href=\"/user/chat/".concat(me, "-").concat(user, "\">").concat(user, " send you a message.</a>");
   notificationContainer.insertAdjacentHTML('afterbegin', html);
 });
 var loginForm = document.getElementById('login-form');
@@ -10401,7 +10401,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35207" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37803" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

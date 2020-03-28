@@ -29,14 +29,14 @@ socket.on('following-notification', (user) => {
 });
 
 socket.on('unseenmessage-notification', (user) => {
-    const notificationIcon = document.getElementById('notification-icon');
-    const notificationContainer = document.getElementById('notification-container');
-    notificationIcon.setAttribute('style', 'color: red;');
-    const noNotification = document.querySelector('.no-notification');
+    const unseenmessageIcon = document.getElementById('unseenmessage-icon');
+    const notificationContainer = document.getElementById('unseenmessage-container');
+    unseenmessageIcon.setAttribute('style', 'color: red;');
+    const noNotification = document.querySelector('.no-unseenMessage');
     if (noNotification) {
         noNotification.setAttribute('style', 'display:none;');
     }
-    const html = `<a class="dropdown-item" href="/user/profile/${user}">${user} started following you.</a>`;
+    const html = `<a class="dropdown-item" href="/user/chat/${me}-${user}">${user} send you a message.</a>`;
     notificationContainer.insertAdjacentHTML('afterbegin', html)
 });
 

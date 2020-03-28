@@ -28,7 +28,7 @@
                         <% } %>
                         <i class=""></i>
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <div id="unseenmessage-container" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <% if ( user.unseenMessage.length > 0 ) { %>
                         <% for ( let info of ( new Set(user.unseenMessage)) ) { %>
                         <a class="dropdown-item" href="/user/chat/<%= user.username %>-<%= info %>"><%= info %> send you
