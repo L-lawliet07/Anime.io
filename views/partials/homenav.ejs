@@ -19,12 +19,25 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-envelope"></i>
+                    <a class="nav-link dropdown-toggle unseenmessage-btn" href="#" id="navbarDropdownMenuLink"
+                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <% if ( user.unseenMessage.length > 0 ) { %>
+                        <i id="unseenmessage-icon" style="color: red;" class="fas fa-envelope"></i>
+                        <% } else { %>
+                        <i id="unseenmessage-icon" class="fas fa-envelope"></i>
+                        <% } %>
+                        <i class=""></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="">No new notification</a>
+                        <% if ( user.unseenMessage.length > 0 ) { %>
+                        <% for ( let info of ( new Set(user.unseenMessage)) ) { %>
+                        <a class="dropdown-item" href="/user/chat/<%= user.username %>-<%= info %>"><%= info %> send you
+                            a
+                            message.</a>
+                        <% } %>
+                        <% } else { %>
+                        <a class="no-unseenMessage dropdown-item" href="">No new notification</a>
+                        <% } %>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -38,8 +51,8 @@
                     </a>
                     <div id="notification-container" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <% if ( user.notification.length > 0 ) { %>
-                        <% for ( let info of user.notification ) { %>
-                        <a class="dropdown-item" href=""><%= info %></a>
+                        <% for ( let info of ( new Set(user.notification)) ) { %>
+                        <a class="dropdown-item" href="/user/profile/<%= info %>"><%= info %> started following you</a>
                         <% } %>
                         <% } else { %>
                         <a class="no-notification dropdown-item" href="">No new notification</a>

@@ -226,6 +226,8 @@ exports.followUser = catchAsync(
 ///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// This function will clear all the notification stored in db 
 exports.clearNotification = catchAsync(
     async (req, res, next) => {
         await User.updateOne({ _id: req.user._id }, { $set: { notification: [] } })
@@ -237,6 +239,22 @@ exports.clearNotification = catchAsync(
             });
     }
 );
+///////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////
+// This function will clear all the notification stored in db 
+exports.clearUnseenMessage = catchAsync(
+    async (req, res, next) => {
+        await User.updateOne({ _id: req.user._id }, { $set: { unseenMessage: [] } })
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: "unseen message notificatin clear"
+            });
+    }
+);
+///////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////
 // This function will be render provate chat
@@ -330,13 +348,20 @@ exports.privateMessageNotificaton = catchAsync(
 
     async (req, res) => {
 
-        const person = await User.findOne({ username: req.body.receiver });
+        const person = await User.findOneAndUpdate(
+            {
+                username: req.body.receiver
+            },
+            {
+                $push: {
+                    unseenMessage: req.user.username
+                }
+            }
+        );
+
         if (!person) {
             return next(new AppError(`Cannot find the user ${req.boby.receiver}`, 400));
         }
-
-        await User.updateOne({ _id: person._id }, { $push: { unseenMessage: req.user.username } });
-
 
         res
             .status(200)

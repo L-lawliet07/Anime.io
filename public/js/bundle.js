@@ -10242,7 +10242,7 @@ if (main_username) {
   socket.emit('join', me);
 }
 
-socket.on('following-notification', function (notification) {
+socket.on('following-notification', function (user) {
   var notificationIcon = document.getElementById('notification-icon');
   var notificationContainer = document.getElementById('notification-container');
   notificationIcon.setAttribute('style', 'color: red;');
@@ -10252,7 +10252,20 @@ socket.on('following-notification', function (notification) {
     noNotification.setAttribute('style', 'display:none;');
   }
 
-  var html = "<a class=\"dropdown-item\" href=\"\">".concat(notification, "</a>");
+  var html = "<a class=\"dropdown-item\" href=\"/user/profile/".concat(user, "\">").concat(user, " started following you.</a>");
+  notificationContainer.insertAdjacentHTML('afterbegin', html);
+});
+socket.on('unseenmessage-notification', function (user) {
+  var notificationIcon = document.getElementById('notification-icon');
+  var notificationContainer = document.getElementById('notification-container');
+  notificationIcon.setAttribute('style', 'color: red;');
+  var noNotification = document.querySelector('.no-notification');
+
+  if (noNotification) {
+    noNotification.setAttribute('style', 'display:none;');
+  }
+
+  var html = "<a class=\"dropdown-item\" href=\"/user/profile/".concat(user, "\">").concat(user, " started following you.</a>");
   notificationContainer.insertAdjacentHTML('afterbegin', html);
 });
 var loginForm = document.getElementById('login-form');
@@ -10263,6 +10276,7 @@ var resetForm = document.getElementById('reset-form');
 var settingForm = document.querySelector('.setting-form');
 var followBtn = document.querySelector('.follow-btn');
 var notificationBtn = document.querySelector('.notification-btn');
+var unseenmessageBtn = document.querySelector('.unseenmessage-btn');
 
 if (loginForm) {
   loginForm.addEventListener('submit', function (e) {
@@ -10341,7 +10355,20 @@ if (notificationBtn) {
     if (notificationIcon.hasAttribute('style')) {
       notificationIcon.removeAttribute('style');
       var xhr = new XMLHttpRequest();
-      xhr.open('PATCH', '/user/notification', true);
+      xhr.open('PATCH', '/user/clearnotification', true);
+      xhr.send();
+    }
+  });
+}
+
+if (unseenmessageBtn) {
+  unseenmessageBtn.addEventListener('click', function (e) {
+    var unseenmessageIcon = document.getElementById('unseenmessage-icon');
+
+    if (unseenmessageIcon.hasAttribute('style')) {
+      unseenmessageIcon.removeAttribute('style');
+      var xhr = new XMLHttpRequest();
+      xhr.open('PATCH', '/user/clearunseeenmessage', true);
       xhr.send();
     }
   });

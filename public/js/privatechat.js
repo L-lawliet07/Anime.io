@@ -67,7 +67,7 @@ socket.on('roomData', (status) => {
     }
 });
 
-const sendMessageNotification = (sender, receiver) => {
+const sendMessageNotification = (receiver) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PATCH', '/user/chat/message/notification');
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -98,7 +98,7 @@ $messageForm.addEventListener('submit', (e) => {
     });
 
     if (offline) {
-        sendMessageNotification(me, friend_username);
+        sendMessageNotification(friend_username);
     }
 });
 socket.emit('join', { username: me, image, sendKey, receiveKey });

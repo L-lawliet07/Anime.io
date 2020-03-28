@@ -39,7 +39,11 @@ router
     .get('/users', authController.protect, userController.getAllUser);
 
 router
-    .patch('/notification', authController.protect, userController.clearNotification);
+    .patch('/clearnotification', authController.protect, userController.clearNotification);
+
+router
+    .patch('/clearunseeenmessage', authController.protect, userController.clearUnseenMessage);
+
 router
     .get('/chat/:roomid', authController.protect, userController.privateChat);
 

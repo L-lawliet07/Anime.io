@@ -57,8 +57,6 @@ const userSchema = new mongoose.Schema({
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
-    following: [String],
-    follower: [String],
     notification: [String],
     unseenMessage: [String],
     status: {

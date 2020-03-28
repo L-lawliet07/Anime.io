@@ -16,7 +16,7 @@ if (main_username) {
 }
 
 
-socket.on('following-notification', (notification) => {
+socket.on('following-notification', (user) => {
     const notificationIcon = document.getElementById('notification-icon');
     const notificationContainer = document.getElementById('notification-container');
     notificationIcon.setAttribute('style', 'color: red;');
@@ -24,7 +24,19 @@ socket.on('following-notification', (notification) => {
     if (noNotification) {
         noNotification.setAttribute('style', 'display:none;');
     }
-    const html = `<a class="dropdown-item" href="">${notification}</a>`;
+    const html = `<a class="dropdown-item" href="/user/profile/${user}">${user} started following you.</a>`;
+    notificationContainer.insertAdjacentHTML('afterbegin', html)
+});
+
+socket.on('unseenmessage-notification', (user) => {
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationContainer = document.getElementById('notification-container');
+    notificationIcon.setAttribute('style', 'color: red;');
+    const noNotification = document.querySelector('.no-notification');
+    if (noNotification) {
+        noNotification.setAttribute('style', 'display:none;');
+    }
+    const html = `<a class="dropdown-item" href="/user/profile/${user}">${user} started following you.</a>`;
     notificationContainer.insertAdjacentHTML('afterbegin', html)
 });
 
@@ -36,7 +48,7 @@ const resetForm = document.getElementById('reset-form');
 const settingForm = document.querySelector('.setting-form');
 const followBtn = document.querySelector('.follow-btn');
 const notificationBtn = document.querySelector('.notification-btn');
-
+const unseenmessageBtn = document.querySelector('.unseenmessage-btn');
 
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -116,8 +128,20 @@ if (notificationBtn) {
         if (notificationIcon.hasAttribute('style')) {
             notificationIcon.removeAttribute('style')
             const xhr = new XMLHttpRequest();
-            xhr.open('PATCH', '/user/notification', true);
+            xhr.open('PATCH', '/user/clearnotification', true);
             xhr.send();
         }
     })
+}
+
+if (unseenmessageBtn) {
+    unseenmessageBtn.addEventListener('click', (e) => {
+        const unseenmessageIcon = document.getElementById('unseenmessage-icon');
+        if (unseenmessageIcon.hasAttribute('style')) {
+            unseenmessageIcon.removeAttribute('style');
+            const xhr = new XMLHttpRequest();
+            xhr.open('PATCH', '/user/clearunseeenmessage', true);
+            xhr.send();
+        }
+    });
 }

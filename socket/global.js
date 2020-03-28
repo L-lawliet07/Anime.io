@@ -30,8 +30,7 @@ module.exports = (io) => {
          */
         socket.on('following', catchAsync(async (message, callback) => {
 
-            const notification = `${message.username} started following you`;
-            nsp.to(message.room).emit('following-notification', notification);
+            nsp.to(message.room).emit('following-notification', message.username);
             callback()
         }));
 
