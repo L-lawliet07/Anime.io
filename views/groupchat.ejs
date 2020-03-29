@@ -323,7 +323,7 @@
         <div class="sidebar-area">
             <label id="sidebarview-label" for="sidebar-view"> <i class="fas fa-chevron-right"></i> </label>
             <div class="sidebar-header">
-                <img src="/images/crew/crewdp/<%= crew %>.jpg" alt="">
+                <img src="/images/crew/crewdp/<%= crew %>.gif" alt="">
                 <h6 class="group-name"><%= crew %></h6>
                 <h5 class="usercount">0</h5>
             </div>
@@ -341,7 +341,7 @@
         <div class="text-area">
 
 
-            <% for ( let message of old_message ) {%>
+            <% for ( let message of old_message ) { %>
             <% if ( message.sender[0].username !== user.username ) { %>
             <div class="message other-message">
                 <%} else {%>

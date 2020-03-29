@@ -15,7 +15,7 @@ const router = express.Router();
 router
     .route('/')
     .get(authController.protect, crewController.homePage)
-    .post(authController.protect, authController.adminSection, crewController.createCrew);
+    .post(authController.protect, crewController.createCrew);
 
 router
     .route('/chat/message')

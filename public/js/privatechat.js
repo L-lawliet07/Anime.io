@@ -7,6 +7,7 @@ const $messageFormButton = $messageForm.querySelector('button')
 const $text_area = document.querySelector('.text-area')
 $text_area.scrollTop = $text_area.scrollHeight;
 
+const messageBox = document.getElementById('private-typingbox');
 
 // Options
 const me = document.getElementById('main-username').innerText;
@@ -57,9 +58,9 @@ socket.on('message', (message) => {
 });
 
 
+const indicator = document.querySelector('.sidebar-header > img');
+const online_status = document.querySelector('.sidebar-header>.online-status');
 socket.on('roomData', (status) => {
-    const indicator = document.querySelector('.sidebar-header > img');
-    const online_status = document.querySelector('.sidebar-header>.online-status');
     if (status === 'online') {
         offline = false;
         indicator.setAttribute('style', 'border : #37a08e 2px solid;');
@@ -122,5 +123,21 @@ $messageForm.addEventListener('submit', (e) => {
 
 });
 
+messageBox.addEventListener('keypress', () => {
+    socket.emit('typing', { receiver: friend_username, room: sendKey });
+});
+
+let typing = false;
+socket.on('userTyping', (user) => {
+    if (user === me && !typing) {
+        const style_attr = indicator.getAttribute('style');
+        indicator.setAttribute('style', 'border : #479adf 4px solid; transition-property:none;');
+        typing = true;
+        setTimeout(() => {
+            indicator.setAttribute('style', style_attr);
+            typing = false;
+        }, 100);
+    }
+});
 
 socket.emit('join', { username: me, image, sendKey, receiveKey });

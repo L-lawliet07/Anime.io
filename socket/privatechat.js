@@ -50,18 +50,29 @@ module.exports = (io) => {
         /*
          * listening for createMessage event
          */
-        socket.on('createMessage', catchAsync(async (message, callback) => {
+        socket.on('createMessage', (message, callback) => {
+
 
             // emitting message event 
-            nsp.to(message.key).emit('message', {
-                body: message.body,
-                sender: message.sender,
-                receiver: message.receiver,
-                createdAt: Date.now(),
-                image: message.image
-            });
-            callback();
-        }));
+            if (message.body) {
+                nsp.to(message.key).emit('message', {
+                    body: message.body,
+                    sender: message.sender,
+                    receiver: message.receiver,
+                    createdAt: Date.now(),
+                    image: message.image
+                });
+                callback();
+            }
+        });
+
+
+        /*
+         * listening for createMessage event
+         */
+        socket.on('typing', (data) => {
+            socket.broadcast.to(data.room).emit('userTyping', data.receiver);
+        });
 
         /*
          * listening for user disconnect event
