@@ -9,61 +9,293 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/style.css">
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
+        /* Global Style */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Raleway';
+            text-decoration: none;
+            line-height: 1.8;
+        }
+
+        :root {
+            --primary-light: #49c1a2;
+            --primary-dark: #37a08e;
+        }
+
+        /* Utilities */
+        .emphasis {
+            color: var(--primary-light) !important;
+        }
+
+        .em-background {
+            background-color: var(--primary-light) !important;
+            border-radius: 5px;
+            padding: 0px 5px;
+            transition: 0.5s;
+            transition-property: background-color;
+        }
+
+        .em-background:hover {
+            background-color: var(--primary-dark) !important;
+        }
+
+        .em-background>a {
+            color: #fff !important;
+            transition: 0.5s;
+            transition-property: color;
+        }
+
+        .em-background:hover>a {
+            color: #333 !important;
+        }
+
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* For Nav bar  */
+        .navbar {
+            background-color: #fff !important;
+            border-bottom: var(--primary-light) 1px solid;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand__logo {
+            margin-right: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* For login-container */
+        .login-container {
+            display: flex;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .login-container>.left-login {
+            border-right: var(--primary-light) solid 1px;
+            flex-grow: 1;
+        }
+
+        .login-container>.login-area {
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .left-login {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            background: url('https://easydraweverything.com/wp-content/uploads/2019/07/L-Lawliet-Chibi-step_00.png') center / contain no-repeat;
+        }
+
+        .left-login::after {
+            content: '';
+            position: absolute;
+            display: block;
+            background: var(--primary-dark);
+            opacity: 0.9;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scale(2) translateX(-75%) translateY(-75%) rotate(-28deg);
+            transition: transform 2s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .left-login:hover:after {
+            transform: scale(2) translateX(0) translateY(0) rotate(-28deg);
+
+            transition: transform 2s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        /* Login area */
+        .login-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+
+        .form-container {
+            min-width: 430px;
+            margin: 0px auto;
+            padding: 20px;
+        }
+
+        .form-wrap {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .form-wrap>.form-heading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+
+        .form-heading .main-logo {
+            padding: 2px;
+            display: block;
+            margin-right: 10px;
+            margin-bottom: 0.5rem;
+            width: 60px;
+            height: 60px;
+        }
+
+        .logo-animation:hover {
+            transform: rotate(360deg) scale(1.3);
+            transition: 1s;
+            transition-property: transform;
+        }
+
+        .form-wrap h1,
+        .form-wrap p {
+            text-align: center;
+        }
+
+        .form-wrap .form-group {
+            margin-top: 15px;
+        }
+
+        .form-wrap .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: #ddd 1px solid;
+            border-radius: 5px;
+        }
+
+        .form-wrap button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: #49c1a2;
+            color: white;
+            cursor: pointer;
+            border: #ddd 1px solid;
+            border-radius: 4px;
+            font-size: medium;
+        }
+
+        .form-wrap button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .form-wrap .bottom-text {
+            font-size: smaller;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .bottom-text>a {
+            color: #333;
+        }
+
+        footer {
+            margin-top: 10px;
+            text-align: center;
+            color: #494949;
+        }
+
+        footer a {
+            color: var(--primary-light);
+        }
+
+        @media(max-width: 450px) {
+            .form-container {
+                min-width: 350px;
+            }
+
+            .login-container>.left-login {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Page 1: This Page will contain sign up form -->
-    <div class="page page-1">
-        <!-- Nav Bar -->
-        <%- include('partials/loginnav.ejs') %>
 
-        <div id="container">
-            <div class="form-wrap">
-                <h1>Sign Up</h1>
-                <p>It's Infinite <span class="emphasis">Tsukuyomi<span></p>
-                <form id="signup-form">
-                    <div class="form-group">
-                        <!-- <label for="fullname">Full Name</label> -->
-                        <input type="text" name="fullname" id="fullname" placeholder="Full Name" / required
-                            maxlength="25">
-                    </div>
-                    <div class="form-group">
-                        <!-- <label for="username">Username</label> -->
-                        <input type="text" name="username" id="username" placeholder="Username" / required
-                            maxlength="15">
-                    </div>
-                    <div class="form-group">
-                        <!-- <label for="email">Email</label> -->
-                        <input type="email" name="email" id="email" placeholder='Email' / required>
-                    </div>
-                    <div class="form-group">
-                        <!-- <label for="password">Password</label> -->
-                        <input type="password" name="password" id="password" placeholder="Password" / minlength="8"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <!-- <label for="passwordConfirm">Confirm Password</label> -->
-                        <input type="password" name="paswordConfirm" id="passwordConfirm" placeholder="Confirm Password"
-                            / minlength="8" required>
-                    </div>
-                    <button type="submit" class="btn">Sign Up</button>
-                </form>
+    <!-- main-container that will cover the whole screen -->
+    <div class="main-container">
+        <!-- Nav Bar -->
+        <div class="container">
+            <%- include('partials/loginnav.ejs') %>
+        </div>
+        <div class="login-container">
+            <div class="left-login">
+                <div class="grid__item-text">
+                    <h5></h5>
+                </div>
             </div>
-            <footer>
-                <p>Already have an account? <a href="/login">Login Here</a></p>
-            </footer>
+            <div class="login-area">
+                <div class="form-container">
+                    <div class="form-wrap">
+                        <div class="form-heading">
+                            <img class="main-logo logo-animation" src="/images/logo.png" alt="" srcset="">
+                            <h1>Sign Up</h1>
+                        </div>
+                        <p>It's Infinite <span class="emphasis">Tsukuyomi<span></p>
+                        <form id="signup-form">
+                            <div class="form-group">
+                                <!-- <label for="fullname">Full Name</label> -->
+                                <input type="text" name="fullname" id="fullname" placeholder="Full Name" / required
+                                    maxlength="25">
+                            </div>
+                            <div class="form-group">
+                                <!-- <label for="username">Username</label> -->
+                                <input type="text" name="username" id="username" placeholder="Username" / required
+                                    maxlength="15">
+                            </div>
+                            <div class="form-group">
+                                <!-- <label for="email">Email</label> -->
+                                <input type="email" name="email" id="email" placeholder='Email' / required>
+                            </div>
+                            <div class="form-group">
+                                <!-- <label for="password">Password</label> -->
+                                <input type="password" name="password" id="password" placeholder="Password" /
+                                    minlength="8" required>
+                            </div>
+                            <div class="form-group">
+                                <!-- <label for="passwordConfirm">Confirm Password</label> -->
+                                <input type="password" name="paswordConfirm" id="passwordConfirm"
+                                    placeholder="Confirm Password" / minlength="8" required>
+                            </div>
+                            <button type="submit" class="btn">Sign Up</button>
+                        </form>
+                    </div>
+                    <footer>
+                        <p>Already have an account? <a href="/login">Login Here</a></p>
+                    </footer>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Page 2 : This will contain the chatting gif -->
-    <div class="page page-2">
-
-    </div>
-    <!-- Page 3 : This page will contain information about the creator  -->
-    <div class="page page-3">
-
-    </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
