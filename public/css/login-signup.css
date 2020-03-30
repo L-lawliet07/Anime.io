@@ -1,0 +1,165 @@
+/*************************************************/
+/*************@author : Mandeep Bisht*************/
+/*************************************************/
+
+/**********************************************************
+ * This css file contain styles for logIn and signup page * 
+ **********************************************************/
+
+ 
+/*************Global style for login form*************/
+*{
+    line-height: 1.8;
+}
+/*************************************************/
+
+
+/*************Login Container*************/
+.login-container {
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+}
+/*************************************************/
+
+
+/*************Left Login*************/
+.login-container>.left-login {
+    border-right: var(--primary-light) solid 1px;
+    flex-grow: 1;
+    background: url('https://easydraweverything.com/wp-content/uploads/2019/07/L-Lawliet-Chibi-step_00.png') center / contain no-repeat;
+}
+
+.login-container>.login-area {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+/*************************************************/
+
+
+/*************Login Area*************/
+.login-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+/*************************************************/
+
+
+/*************Form Container*************/
+.form-container {
+    min-width: 430px;
+    margin: 0px auto;
+    padding: 20px;
+}
+/*************************************************/
+
+
+/*************Form Wrap will wrap the form container*************/
+.form-wrap {
+    background: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    color: #333;
+}
+
+.form-wrap h1,
+.form-wrap p {
+    text-align: center;
+}
+/*************************************************/
+
+
+/*************Form Heading*************/
+.form-wrap>.form-heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.form-heading .main-logo {
+    padding: 2px;
+    display: block;
+    margin-right: 10px;
+    margin-bottom: 0.5rem;
+    width: 60px;
+    height: 60px;
+}
+/*************************************************/
+
+
+
+.form-wrap .form-group {
+    margin-top: 15px;
+}
+
+.form-wrap .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: #ddd 1px solid;
+    border-radius: 5px;
+}
+
+.form-wrap button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background: #49c1a2;
+    color: white;
+    cursor: pointer;
+    border: #ddd 1px solid;
+    border-radius: 4px;
+    font-size: medium;
+}
+
+.form-wrap button:hover {
+    background-color: var(--primary-dark);
+}
+
+
+/*************Bottom text*************/
+.form-wrap .bottom-text {
+    font-size: smaller;
+    margin-top: 20px;
+    text-align: right;
+}
+
+.bottom-text>a {
+    color: #333;
+}
+/*************************************************/
+
+
+/*************footer that is outside the form-wrap*************/
+footer {
+    margin-top: 10px;
+    text-align: center;
+    color: #494949;
+}
+
+footer a {
+    color: var(--primary-light);
+}
+footer a:hover {
+    color: #333;
+}
+/*************************************************/
+
+
+/*************Media Query *************/
+@media(max-width: 450px) {
+    .form-container {
+        min-width: 350px;
+    }
+
+    .login-container>.left-login {
+        display: none;
+    }
+}
+/*************************************************/

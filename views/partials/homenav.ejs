@@ -3,7 +3,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
 
-        <a class="navbar-brand" href="/">Anime.<span class="emphasis">io</span></a>
+        <div class="brand">
+            <img class="brand__logo logoAnimation" src="/images/logo.png" alt="">
+            <a class="navbar-brand brand__name" href="/">
+                Anime.<span class="emphasis">io</span>
+            </a>
+        </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,7 +16,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav navbar-nav ml-auto mt-2 mt-lg-0">
 
-                <li class="nav-item active">
+                <li class="em-background nav-item active">
                     <a class="nav-link" href="/user/users">People <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
@@ -62,8 +67,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle emphasis" href="#" id="navbarDropdownMenuLink" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img style="width: 20px;" id="main-image" src="/images/people/<%= user.image %>" alt=""
-                            srcset="">
+                        <img width="30px" height="30px" style="border-radius: 5px;" id="main-image"
+                            src="/images/people/<%= user.image %>" alt="" srcset="">
                         <span id="main-username"><%= user.username %></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">

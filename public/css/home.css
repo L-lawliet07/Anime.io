@@ -1,0 +1,90 @@
+/*************************************************/
+/*************@author : Mandeep Bisht*************/
+/*************************************************/
+
+/**********************************************************
+ * This css file contain styles for home page * 
+ **********************************************************/
+
+
+/*************For Anvhor tags*************/
+a {
+    color: white;
+}
+
+a:hover {
+    color: #999;
+}
+/********************************************************/
+
+
+/*************Search Bar*************/
+.form-wrap {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+/********************************************************/
+
+
+/*************Grid contains all the images*************/
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    box-shadow: 5px -5px 15px rgba(143, 137, 137, 0.5);
+}
+/********************************************************/
+
+
+/*************Grid Item*************/
+.grid__item {
+    height: 200px;
+}
+
+
+.grid__item .grid__item-image {
+    width: 100%;
+    height: 100%;
+}
+
+.grid__item:hover .grid__item-image {
+    transform: scale(1.1);
+    transition: transform 1s;
+}
+
+.grid__item .grid__item-image img {
+    width: 100%;
+    height: 100%;
+    /* border-radius: 3px; */
+}
+
+.grid__item:first-child {
+    height: 400px;
+    grid-column: 1 / span 2;
+    grid-row: 1 / span 2;
+}
+/********************************************************/
+
+
+/*************Media Query *************/
+@media(max-width:780px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:500px) {
+    .form-wrap {
+        margin-bottom: 20px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .grid__item:first-child {
+        height: 200px;
+        grid-column: 1 / span 1;
+        grid-row: 1 / span 1;
+    }
+}
+/*************************************************/

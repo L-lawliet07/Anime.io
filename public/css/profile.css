@@ -1,0 +1,137 @@
+/*************************************************/
+/*************@author : Mandeep Bisht*************/
+/*************************************************/
+
+/**********************************************************
+ * This css file contain styles related to profile page * 
+ **********************************************************/
+
+
+/*************Display container that will contain profile info*************/
+
+.display-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/********************************************************/
+
+
+/*************Display*************/
+.display {
+    text-align: center;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    border-radius: 10px;
+    margin-top: 50px;
+}
+
+.display__image {
+
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+
+.display__image .display__image-text>a {
+    color: white;
+}
+
+.display__image .display__image-wrap {
+    width: 100%;
+    height: 100%;
+}
+
+.display__image .display__image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    box-shadow: 5px -5px 15px rgba(143, 137, 137, 0.5);
+    border-radius: 5px;
+    display: block;
+}
+
+.display__username {
+    font-size: 1em;
+    padding: 5px;
+}
+
+.display__name {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.display__status {
+    padding: 5px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.display__btn {
+    border-top: 1px solid #b1b1b1;
+    margin-top: 5px;
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.display__btn a {
+    color: rgb(0, 140, 255);
+    text-decoration: none;
+}
+/********************************************************/
+
+
+/*************Follower and Following grid*************/
+.follower-grid,
+.following-grid {
+    display: none;
+}
+
+#follower:checked~.follower-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* margin-top: 50px; */
+}
+
+#following:checked~.following-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* margin-top: 50px; */
+}
+
+.follower-grid .grid__item,
+.following-grid .grid__item {
+    height: 300px;
+    margin: auto;
+    padding: 3px;
+}
+
+/********************************************************/
+
+
+/*************Media Query*************/
+@media(max-width:780px) {
+
+    #follower:checked~.follower-grid,
+    #following:checked~.following-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:500px) {
+
+    #follower:checked~.follower-grid,
+    #following:checked~.following-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+/********************************************************/
+

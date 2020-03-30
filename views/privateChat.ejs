@@ -6,314 +6,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
-
-        /* These property will be applied to whole html */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Raleway';
-            scrollbar-width: none;
-            -ms-overflow-style: -ms-autohiding-scrollbar;
-        }
-
-        .navbar {
-            background-color: #fff !important;
-        }
-
-        /* Chat grid */
-        .chat-grid {
-            display: grid;
-            grid-template-rows: calc(100% - 70px) 70px;
-            grid-template-columns: max-content auto;
-            height: calc(100vh - 56px);
-            width: 100vw;
-            position: relative;
-        }
-
-        /* sidebar */
-        .sidebar-area {
-            position: relative;
-            box-shadow: 5px 0 15px rgba(143, 137, 137, 0.5);
-            border-radius: 0px 20px 20px 0px;
-            background-color: #222;
-            color: #fff;
-            max-width: 300px;
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: start;
-        }
-
-        .sidebar-area>.sidebar-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 5px;
-            overflow-y: scroll;
-        }
-
-        .sidebar-header::-webkit-scrollbar {
-            display: none;
-        }
-
-        .sidebar-area>.sidebar-header>.username {
-            color: #479adf;
-            font-size: 20px;
-            display: none;
-            padding: 10px;
-        }
-
-        .sidebar-area>.sidebar-header>img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin: 5px 0px 20px 0px;
-            transition: 1s;
-            transition-property: all;
-            padding: 2px;
-            border: #DC143C 2px solid;
-        }
-
-        .sidebar-area>.sidebar-header>.online-status {
-            text-align: center;
-            font-size: 15px;
-            color: #DC143C;
-            display: none;
-        }
-
-        .sidebar-area>.sidebar-header>.fullname {
-            display: none;
-            color: #37a08e;
-        }
-
-        .sidebar-area>.sidebar-header>.status {
-            text-align: center;
-            font-size: 15px;
-            display: none;
-        }
-
-        /* text Area */
-
-        .text-area {
-            overflow-y: scroll;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            background: url('https://i.ya-webdesign.com/images/anime-naruto-png-8.png') center / contain no-repeat;
-        }
-
-        .text-area::-webkit-scrollbar {
-            display: none;
-        }
-
-
-        .text-area .message {
-            padding: 8px;
-            width: 80%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .own-message {
-            align-items: flex-end;
-            align-self: flex-end;
-        }
-
-        .other-message {
-            align-items: flex-start;
-            align-self: flex-start;
-        }
-
-        .other-message .message-text {
-            background: #37a08e;
-            border-radius: 0px 20px 20px 20px;
-        }
-
-        .own-message .message-text {
-            background: #479adf;
-            border-radius: 20px 0px 20px 20px;
-        }
-
-        .text-area .message .message-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 50% 50% 0 0;
-        }
-
-        .text-area .message .message-text {
-            padding: 15px;
-            color: #fff;
-        }
-
-        .text-area .message .message-time {
-            font-size: 0.8rem;
-            color: #8f8f8f;
-            padding: 8px 15px;
-        }
-
-        /* send area */
-        .send-area {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-evenly;
-            padding: 15px;
-        }
-
-        .send-area>button {
-            border: 1px solid #37a08e;
-            padding: 2px 6px;
-            border-radius: 5px;
-            background-color: #fff;
-        }
-
-        .send-area>button>i {
-            color: #37a08e;
-            font-size: 40px;
-        }
-
-        .send-area>.group-message-form {
-            padding: 5px 5px 0px 5px;
-            flex-grow: 1;
-            display: block;
-        }
-
-        .send-area>.group-message-form>input {
-            border: none;
-            padding: 15px;
-            border-bottom: 1px #37a08e solid;
-            margin-left: 5px;
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* sidebar view */
-        #sidebar-view {
-            display: none;
-        }
-
-        #sidebarview-label {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            top: 20px;
-            right: -40px;
-            width: 40px;
-            height: 50px;
-
-            background-color: #222;
-            border-radius: 0px 50% 50% 0px;
-        }
-
-        #sidebarview-label>i {
-            color: #37a08e;
-            font-size: 30px;
-            transition: 1s;
-            transition-property: transform, color;
-        }
-
-        #sidebar-view:checked~.sidebar-area>#sidebarview-label>i {
-            transform: rotate(180deg);
-            color: #479adf;
-        }
-
-        #sidebar-view:checked~.sidebar-area>.sidebar-header>img {
-            width: 150px;
-            height: 150px;
-            margin: 10px 20px 30px 20px;
-        }
-
-        #sidebar-view:checked~.sidebar-area>.sidebar-header>* {
-            display: unset;
-        }
-
-
-
-        @media(max-width: 550px) {
-            #sidebar-view:checked~.text-area * {
-                display: none;
-            }
-
-            #sidebar-view:checked~.send-area * {
-                display: none;
-            }
-        }
-
-        @media(max-width: 420px) {
-
-            .chat-grid {
-                grid-template-columns: min-content auto;
-            }
-
-            .send-area {
-                grid-row: 2 / span 1;
-                grid-column: 1 / span 2;
-            }
-
-            .temp-area {
-                display: none;
-            }
-        }
-    </style>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/chat.css">
 </head>
 
 <body>
 
 
-    <%- include ('partials/homenav.ejs') %>
-    <!-- Grid for chat box -->
-    <div class="chat-grid">
-
-        <!-- Sidebar area for online users -->
-        <input type="checkbox" id="sidebar-view">
-        <div class="sidebar-area">
-            <label id="sidebarview-label" for="sidebar-view"> <i class="fas fa-chevron-right"></i> </label>
-            <div class="sidebar-header">
-                <h6 class="username"><%= friend.username %></h6>
-                <h6 class="online-status">offline</h6>
-                <img src="/images/people/<%= friend.image %>" alt="">
-                <h4 class="fullname"><%= friend.fullname %></h4>
-                <p class="status"><%= friend.status %></p>
-            </div>
+    <div class="main-container">
+        <div class="container">
+            <%- include ('partials/homenav.ejs') %>
         </div>
 
+        <div class="chat-grid">
 
-        <div class="text-area">
-            <% for ( let message of old_message ) { %>
-            <% if ( message.sender !== user.username ) { %>
-            <div class="message other-message">
-                <img class="message-image" src="/images/people/<%= friend.image %>" alt="">
-                <%} else {%>
-                <div class="message own-message">
-                    <img class="message-image" src="/images/people/<%= user.image %>" alt="">
-                    <% } %>
-                    <div class="message-text">
-                        <%= message.body %>
-                    </div>
-                    <div class="message-time">
-                        <%= `${message.createdAt.toDateString()} / ${message.createdAt.getHours()}: ${message.createdAt.getMinutes()}` %>
-                    </div>
+            <!-- Sidebar area for online users -->
+            <input type="checkbox" id="sidebar-view">
+            <div class="privatesidebar-area">
+                <label id="sidebarview-label" for="sidebar-view"> <i class="fas fa-chevron-right"></i> </label>
+                <div class="sidebar-header">
+                    <h6 class="username"><%= friend.username %></h6>
+                    <h6 class="online-status">offline</h6>
+                    <img src="/images/people/<%= friend.image %>" alt="">
+                    <h4 class="fullname"><%= friend.fullname %></h4>
+                    <p class="status"><%= friend.status %></p>
                 </div>
-                <% } %>
-            </div>
-            <!-- Will think about this thing later -->
-            <div class="temp-area">
-
             </div>
 
-            <!-- Send area to send message -->
-            <div class="send-area">
-                <button><i class="fas fa-map-marker-alt"></i></button>
-                <form class="group-message-form">
-                    <input id="private-typingbox" name="message" type="text" placeholder="Type your heart out."
-                        autocomplete="off">
-                </form>
+
+            <div class="text-area">
+                <% for ( let message of old_message ) { %>
+                <% if ( message.sender !== user.username ) { %>
+                <div class="message other-message">
+                    <img class="message-image" src="/images/people/<%= friend.image %>" alt="">
+                    <%} else {%>
+                    <div class="message own-message">
+                        <img class="message-image" src="/images/people/<%= user.image %>" alt="">
+                        <% } %>
+                        <div class="message-text">
+                            <%= message.body %>
+                        </div>
+                        <div class="message-time">
+                            <%= `${message.createdAt.toDateString()} / ${message.createdAt.getHours()}: ${message.createdAt.getMinutes()}` %>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+                <!-- Will think about this thing later -->
+                <div class="temp-area">
+
+                </div>
+
+                <!-- Send area to send message -->
+                <div class="send-area">
+                    <button><i class="fas fa-map-marker-alt"></i></button>
+                    <form class="group-message-form">
+                        <input id="private-typingbox" name="message" type="text" placeholder="Type your heart out."
+                            autocomplete="off">
+                    </form>
+                </div>
             </div>
         </div>
+
+
+        <script>
+            const $chatGrid = document.querySelector('.chat-grid');
+            const $navBar = document.querySelector('.container > .navbar');
+            const navHeight = getComputedStyle($navBar).height;
+            $chatGrid.setAttribute('style', `height: calc(100vh - ${navHeight})`);
+        </script>
 
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
             integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -325,7 +87,6 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
         <!-- This is font-awesome cdn -->
-        <script src="https://kit.fontawesome.com/ae068108e1.js" crossorigin="anonymous"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/js/bundle.js"></script>
         <script src="/js/privatechat.js"></script>

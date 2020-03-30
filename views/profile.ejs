@@ -8,351 +8,118 @@
     <title><%=title%></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/style.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            text-decoration: none;
-            font-family: 'Raleway';
-        }
-
-
-
-        .navbar {
-            background-color: #fff !important;
-        }
-
-        .profile-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .profile {
-            text-align: center;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            /* box-shadow: 0 0 10px rgba(150, 115, 115, 0.2); */
-            padding: 40px;
-            border-radius: 10px;
-            margin: 50px;
-        }
-
-        .profile__image {
-
-            width: 300px;
-            height: 300px;
-            overflow: hidden;
-            position: relative;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .profile__image::after {
-            content: '';
-            position: absolute;
-            display: block;
-            background: #37a08e;
-            opacity: 0.9;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform: scale(2) translateX(-75%) translateY(-75%) rotate(-28deg);
-            transition: transform 2s cubic-bezier(0.2, 1, 0.3, 1);
-        }
-
-        .profile__image:hover:after {
-            transform: scale(2) translateX(0) translateY(0) rotate(-28deg);
-
-            transition: transform 2s cubic-bezier(0.2, 1, 0.3, 1);
-        }
-
-        .profile__image .profile__image-text {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            opacity: 0;
-            z-index: 1;
-            color: #fff;
-            transform: translateY(-20%);
-            transition: opacity 500ms cubic-bezier(0.2, 1, 0.3, 1), transform 500ms cubic-bezier(0.2, 1, 0.3, 1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .profile__image .profile__image-text>a {
-            color: white;
-        }
-
-        .profile__image:hover .profile__image-text {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .profile__image .profile__image-wrap {
-            width: 100%;
-            height: 100%;
-        }
-
-        .profile__image .profile__image-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            box-shadow: 0 0 10px rgba(150, 115, 115, 0.5);
-            display: block;
-        }
-
-        /* .profile__image>.image-area>img {
-            width: 250px;
-            height: 250px;
-            object-fit: cover;
-
-            box-shadow: 0 0 10px rgba(150, 115, 115, 0.5);
-
-            border-radius: 10px;
-            display: block;
-            margin: 0px auto 20px auto;
-        } */
-
-        .profile__username {
-            font-size: 1em;
-            padding: 5px;
-        }
-
-        .profile__name {
-            font-size: 1.2em;
-            font-weight: bold;
-            padding: 5px;
-        }
-
-        .profile__status {
-            padding: 5px;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-        }
-
-        .profile__btn {
-            border-top: 1px solid #b1b1b1;
-            margin-top: 5px;
-            padding: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .profile__btn a {
-            color: rgb(0, 140, 255);
-            text-decoration: none;
-        }
-
-        .follower-grid,
-        .following-grid {
-            display: none;
-        }
-
-        #follower:checked~.follower-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            margin-top: 50px;
-        }
-
-        #following:checked~.following-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            margin-top: 50px;
-        }
-
-        .follower-grid .grid__item,
-        .following-grid .grid__item {
-            height: 300px;
-            margin: auto;
-            padding: 3px;
-        }
-
-        /* Decorating the profile card */
-        .follower-grid .info-profile,
-        .following-grid .info-profile {
-            min-width: 150px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .follower-grid .info-profile .info-profile__image img,
-        .following-grid .info-profile .info-profile__image img {
-            width: 150px;
-            height: 150px;
-            display: block;
-            object-fit: cover;
-            box-shadow: 0 0 10px rgba(150, 115, 115, 0.5);
-            border-radius: 50%;
-            margin: 0px auto 20px auto;
-        }
-
-        .follower-grid .info-profile .info-profile__username,
-        .following-grid .info-profile .info-profile__username {
-            text-align: center;
-            padding: 5px;
-        }
-
-        .follower-grid .info-profile .info-profile__btn,
-        .following-grid .info-profile .info-profile__btn {
-            border-top: 1px solid #b1b1b1;
-            margin-top: 5px;
-            padding: 10px;
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-        }
-
-        .follower-grid .info-profile .info-profile__btn a,
-        .following-grid .info-profile .info-profile__btn a {
-            color: rgb(0, 140, 255);
-            text-decoration: none;
-        }
-
-
-        @media(max-width:780px) {
-
-            #follower:checked~.follower-grid,
-            #following:checked .following-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media(max-width:500px) {
-
-            #follower:checked~.follower-grid,
-            #following:checked .following-grid {
-                grid-template-columns: repeat(1, 1fr);
-            }
-        }
-    </style>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/people-friend.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
 
 <body>
 
-    <!-- <div class="page page-1">
-        
-        <div id="container">
-            <div class="form-wrap">
-                <h1><span class="emphasis"><%= user.username %></span> </h1>
-                <p> <span class="emphasis"><%= user.fullname %><span> </p>
-                    <p>We could not find this page.</p>
+    <div class="container">
+        <%- include ('partials/homenav.ejs') %>
+    </div>
+
+    <div class="display-container">
+
+        <div class="display">
+            <% if ( profile.username !== user.username ) { %>
+            <div class="display__image globalAnimation">
+                <% } else { %>
+                <div class="display__image">
+                    <% } %>
+                    <div class="display__image-wrap">
+                        <img src="/images/people/<%= profile.image %>" alt="">
+                    </div>
+                    <% if ( profile.username !== user.username ) { %>
+                    <div class="display__image-text globalAnimation__text">
+                        <a href="/user/chat/<%= user.username %>-<%= profile.username %>">Message</a>
+                    </div>
+                    <% } %>
+                </div>
+                <div class="display__username">
+                    <%= profile.username %>
+                </div>
+                <div class="display__fullname">
+                    <%= profile.fullname %>
+                </div>
+                <div class="display__status">
+                    <%= profile.status %>
+                </div>
+                <div class="display__btn">
+                    <div>
+                        <h6><%= follower.length %></h6>
+                        <label style="cursor: pointer;" class="emphasis" for="follower">
+                            follower
+                        </label>
+                    </div>
+                    <div>
+                        <h6><%= following.length %></h6>
+                        <label style="cursor: pointer;" class="emphasis" for="following">
+                            following
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div> -->
+        </div>
+        <div class="container">
+            <input style="display: none;" type="radio" id="follower" name="info">
+            <div class="follower-grid grid">
 
-    <%- include ('partials/homenav.ejs') %>
-
-    <div class="profile-container">
-
-        <div class="profile">
-            <div class="profile__image">
-                <div class="profile__image-wrap">
-                    <img src="/images/people/<%= profile.image %>" alt="">
-                </div>
-                <% if ( profile.username !== user.username ) { %>
-                <div class="profile__image-text">
-                    <a href="/user/chat/<%= user.username %>-<%= profile.username %>">Message</a>
+                <% for (let people of follower) { %>
+                <div class="grid__item">
+                    <div class="profile">
+                        <div class="profile__image">
+                            <img src="/images/people/<%= people.follower.image %>" alt="" srcset="">
+                        </div>
+                        <div class="profile__username">
+                            <%= people.follower.username %>
+                        </div>
+                        <div class="profile__btn">
+                            <% if ( user.username != people.follower.username ) { %>
+                            <a href="/user/chat/<%= user.username %>-<%= people.follower.username %>">Message</a>
+                            <% } %>
+                            <a href="/user/profile/<%= people.follower.username %>">Profile</a>
+                        </div>
+                    </div>
                 </div>
                 <% } %>
             </div>
-            <div class="profile__username">
-                <%= profile.username %>
-            </div>
-            <div class="profile__fullname">
-                <%= profile.fullname %>
-            </div>
-            <div class="profile__status">
-                <%= profile.status %>
-            </div>
-            <div class="profile__btn">
-                <div>
-                    <h6><%= follower.length %></h6>
-                    <label for="follower">
-                        follower
-                    </label>
+
+            <input style="display: none;" type="radio" id="following" name="info">
+
+            <div class="following-grid grid">
+
+                <% for (let people of following) { %>
+                <div class="grid__item">
+                    <div class="profile">
+                        <div class="profile__image">
+                            <img src="/images/people/<%= people.following.image %>" alt="" srcset="">
+                        </div>
+                        <div class="profile__username">
+                            <%= people.following.username %>
+                        </div>
+                        <div class="profile__btn">
+                            <% if ( user.username != people.following.username ) { %>
+                            <a href="/user/chat/<%= user.username %>-<%= people.following.username %>">Message</a>
+                            <% } %>
+                            <a href="/user/profile/<%= people.following.username %>">Profile</a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h6><%= following.length %></h6>
-                    <label for="following">
-                        following
-                    </label>
-                </div>
+                <% } %>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <input style="display: none;" type="radio" id="follower" name="info">
-        <div class="follower-grid">
-
-            <% for (let people of follower) { %>
-            <div class="grid__item">
-                <div class="info-profile">
-                    <div class="info-profile__image">
-                        <img src="/images/people/<%= people.follower.image %>" alt="" srcset="">
-                    </div>
-                    <div class="info-profile__username">
-                        <%= people.follower.username %>
-                    </div>
-                    <div class="info-profile__btn">
-                        <% if ( user.username != people.follower.username ) { %>
-                        <a href="/user/chat/<%= user.username %>-<%= people.follower.username %>">Message</a>
-                        <% } %>
-                        <a href="/user/profile/<%= people.follower.username %>">Profile</a>
-                    </div>
-                </div>
-            </div>
-            <% } %>
-        </div>
-
-        <input style="display: none;" type="radio" id="following" name="info">
-
-        <div class="following-grid">
-
-            <% for (let people of following) { %>
-            <div class="grid__item">
-                <div class="info-profile">
-                    <div class="info-profile__image">
-                        <img src="/images/people/<%= people.following.image %>" alt="" srcset="">
-                    </div>
-                    <div class="info-profile__username">
-                        <%= people.following.username %>
-                    </div>
-                    <div class="info-profile__btn">
-                        <% if ( user.username != people.following.username ) { %>
-                        <a href="/user/chat/<%= user.username %>-<%= people.following.username %>">Message</a>
-                        <% } %>
-                        <a href="/user/profile/<%= people.following.username %>">Profile</a>
-                    </div>
-                </div>
-            </div>
-            <% } %>
-        </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/ae068108e1.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
 </body>
 
 </html>

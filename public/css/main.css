@@ -1,0 +1,202 @@
+/*************************************************/
+/*************@author : Mandeep Bisht*************/
+/*************************************************/
+
+/**********************************************************
+ * This css file contain styles which are utilities or common to most of the pages * 
+ **********************************************************/
+
+/* Importing raleway font */
+ @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+/*******************************************************/
+
+
+/*************Global Styles*************/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway';
+    text-decoration: none;
+    scrollbar-width: none;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+/* Defining variables */
+:root {
+    --primary-light: #49c1a2;
+    --primary-dark: #37a08e;
+    --secondary-light: #479adf;
+}
+
+a {
+    text-decoration: none !important;
+}
+/********************************************************/
+
+
+/*************Utilities*************/
+.emphasis {
+    color: var(--primary-dark) !important;
+}
+
+
+.em-background {
+    background-color: var(--primary-light) !important;
+    border-radius: 5px;
+    padding: 0px 5px;
+    transition: 0.5s;
+    transition-property: background-color;
+}
+
+
+.em-background:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+
+.em-background>a {
+    color: #fff !important;
+    transition: 0.5s;
+    transition-property: color;
+}
+
+
+.em-background:hover>a {
+    color: #333 !important;
+}
+
+/* Alerts */
+.alert {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    width: 100%;
+    color: rgb(248, 249, 250);
+}
+
+.alert-error {
+    background-color: #eb4d4b;
+}
+
+.alert-success {
+    background-color: #37a08e;
+}
+/********************************************************/
+
+
+/*************Navbar Styles*************/
+.navbar {
+    background-color: #fff !important;
+    border-bottom: var(--primary-light) 1px solid;
+}
+
+.navbar .container {
+    padding: 0px;
+}
+
+/* Brand name and logo utility */
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand__logo {
+    margin-right: 5px;
+    width: 40px;
+    height: 40px;
+}
+/********************************************************/
+
+
+/*************Animations*************/
+.globalAnimation {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.globalAnimation::after {
+    content: '';
+    position: absolute;
+    display: block;
+    background: var(--primary-dark);
+    opacity: 0.9;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(2) translateX(-75%) translateY(-75%) rotate(-28deg);
+    transition: transform 2s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.globalAnimation:hover:after {
+    transform: scale(2) translateX(0) translateY(0) rotate(-28deg);
+    transition: transform 2s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.globalAnimation .globalAnimation__text {
+    position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            opacity: 0;
+            z-index: 1;
+            color: #fff;
+            transform: translateY(-20%);
+            transition: opacity 2s cubic-bezier(0.2, 1, 0.3, 1), transform 2s cubic-bezier(0.2, 1, 0.3, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+}
+
+.globalAnimation:hover .globalAnimation__text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.logoAnimation:hover {
+    transform: rotate(360deg) scale(1.3);
+    transition: 1s;
+    transition-property: transform;
+}
+/********************************************************/
+
+
+
+
+/* This container will cover the whole screen and it will be outer most container */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+/********************************************************/
+
+
+/*************No Item found Styles*************/
+.no-item-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-bottom: var(--primary-dark) 1px solid;
+}
+
+.no-item-found>img {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+/********************************************************/

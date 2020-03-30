@@ -1,0 +1,116 @@
+/*************************************************/
+/*************@author : Mandeep Bisht*************/
+/*************************************************/
+
+/**********************************************************
+ * This css file contain styles related to setting page* 
+ **********************************************************/
+
+
+
+/*************Setting Container*************/
+.setting-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/********************************************************/
+
+/*************Setting Form*************/
+.setting-form {
+    max-width: 100%;
+    padding: 40px;
+    border-radius: 10px;
+    margin: 50px;
+}
+/********************************************************/
+
+
+/*************Setting Items*************/
+.setting__username {
+    font-size: 1em;
+}
+
+.setting__image {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+
+
+.setting__image .setting__image-wrap {
+    width: 100%;
+    height: 100%;
+}
+
+.setting__image .setting__image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(150, 115, 115, 0.5);
+    display: block;
+}
+/********************************************************/
+
+
+/*************Input Container for input elements *************/
+.input-container {
+    display: flex;
+    font-size: 1.2em;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.input-container>input,
+.setting__update>button {
+    width: 300px;
+    padding: 5px;
+}
+
+.input-container>input {
+    border: none;
+    border: 1px solid #d1d1d1;
+    border-radius: 2px;
+}
+/********************************************************/
+
+/*************Update  *************/
+.setting__update {
+    border-top: 1px solid var(--primary-dark);
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+.setting__update>button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+    background-color: var(--primary-light);
+    transition: 0.5s;
+    transition-property: color background-color;
+}
+
+.setting__update>button:hover {
+    background-color: var(--primary-dark);
+    color: black;
+}
+/********************************************************/
+
+
+/*************Media Query *************/
+@media(max-width:350px) {
+
+    .input-container>input,
+    .setting__update>button {
+        width: 250px;
+    }
+
+    .setting__image {
+        width: 250px;
+        height: 250px;
+    }
+}
+/********************************************************/
