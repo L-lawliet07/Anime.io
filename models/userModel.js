@@ -94,9 +94,6 @@ userSchema.pre('save', function (next) {
 ///////////////////////////////////////////////////////////
 
 
-
-
-
 ///////////////////////////////////////////////////////////
 // user method that will be available in all the instances
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {

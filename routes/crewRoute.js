@@ -9,7 +9,7 @@ const crewController = require('./../controllers/crewController');
 const authController = require('./../controllers/authController');
 
 ///////////////////////////////////////////////////////////
-// routes for view routes
+// routes for crew routes
 const router = express.Router();
 
 router

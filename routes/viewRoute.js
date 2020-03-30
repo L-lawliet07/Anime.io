@@ -4,9 +4,6 @@
 
 const express = require('express');
 
-/*
-    viewController to controller view Routes
-*/
 const viewController = require('../controllers/viewController');
 
 const authController = require('./../controllers/authController');

@@ -18,8 +18,7 @@ const crewSchema = new mongoose.Schema({
     image: {
         type: String,
         default: 'default.png'
-    },
-    members: [String]
+    }
 });
 ///////////////////////////////////////////////////////////
 

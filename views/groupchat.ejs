@@ -2,24 +2,36 @@
 <html lang="en">
 
 <head>
+
+    <!-- Meta data -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Title  -->
+    <title><%= title %></title>
+
+    <!-- Bootstrap dependencie -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Links for css and favicon -->
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/chat.css">
-    <title><%= title %></title>
 </head>
 
 <body>
 
-
+    <!-- main container will cover whole screen -->
     <div class="main-container">
+
+        <!-- This container will contain navbar -->
         <div class="container">
             <%- include ('partials/homenav.ejs') %>
         </div>
 
+        <!-- chat grid will divide the screen into grids -->
         <div class="chat-grid">
 
             <!-- Sidebar area for online users -->
@@ -41,10 +53,9 @@
                 </div>
             </div>
 
-
+            <!-- Text area for messages -->
             <div class="text-area">
-
-
+                <!-- loading old messages -->
                 <% for ( let message of old_message ) { %>
                 <% if ( message.sender[0].username !== user.username ) { %>
                 <div class="message other-message">
@@ -61,6 +72,7 @@
                     </div>
                     <% } %>
                 </div>
+
                 <!-- Will think about this thing later -->
                 <div class="temp-area"></div>
 
@@ -76,6 +88,7 @@
             </div>
         </div>
 
+        <!-- This is a small script to set grid height -->
         <script>
             const $chatGrid = document.querySelector('.chat-grid');
             const $navBar = document.querySelector('.container > .navbar');
@@ -83,6 +96,7 @@
             $chatGrid.setAttribute('style', `height: calc(100vh - ${navHeight})`);
         </script>
 
+        <!-- These script are bootstrap dependencies -->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
             integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
             crossorigin="anonymous"></script>
@@ -92,9 +106,11 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
         <script src="/socket.io/socket.io.js"></script>
+        <!-- user js -->
         <script src="/js/bundle.js"></script>
+        <!-- js related to group chat -->
         <script src="/js/groupchat.js"></script>
 </body>
 

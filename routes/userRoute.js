@@ -4,15 +4,12 @@
 
 const express = require('express');
 
-/*
- * userController to control user Routes
- */
 const userController = require('../controllers/userController');
 
 const authController = require('../controllers/authController');
 
 ///////////////////////////////////////////////////////////
-// router for home routes
+// router for user routes
 const router = express.Router();
 
 /*

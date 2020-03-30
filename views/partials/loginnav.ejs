@@ -1,25 +1,35 @@
+<!-- This is the script for font awesome -->
 <script src="https://kit.fontawesome.com/ae068108e1.js" crossorigin="anonymous"></script>
 
+<!-- Outer most container for navbar ( here iam using bootstrap navbar )-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
 
+        <!-- Brand name and logo -->
         <div class="brand">
             <img class="brand__logo logoAnimation" src="/images/logo.png" alt="">
             <a class="navbar-brand brand__name" href="/">
                 Anime.<span class="emphasis">io</span>
             </a>
         </div>
+
+        <!-- Toggle button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- container for nav element -->
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav navbar-nav ml-auto mt-2 mt-lg-0">
 
+                <!-- Login option -->
                 <li class="nav-item active">
                     <a class="nav-link" href="/login">Log <span class="emphasis">In</span> <span
                             class="sr-only">(current)</span></a>
                 </li>
+
+                <!-- Signup option -->
                 <li class="nav-item active">
                     <a class="nav-link" href="/signup">Sign <span class="emphasis">Up</span> <span
                             class="sr-only">(current)</span></a>

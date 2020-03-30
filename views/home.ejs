@@ -2,22 +2,34 @@
 <html lang="en">
 
 <head>
+
+    <!-- Meta data -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Title  -->
+    <title><%= title %></title>
+
+    <!-- Bootstrap dependencies-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Links for css and favicon -->
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/home.css">
-    <title><%= title %></title>
 
 </head>
 
 <body>
 
+    <!-- This container will contain navbar -->
     <div class="container">
         <%- include ('partials/homenav.ejs') %>
     </div>
+
+    <!-- This container will contain search bar and will crew  -->
     <div class="container">
         <div class="form-wrap">
 
@@ -30,6 +42,7 @@
                 </div>
             </form>
         </div>
+        <!-- This grid will show crew -->
         <% if( crews.length > 0 ) { %>
         <div class="grid">
             <% for (let crew of crews) { %>
@@ -48,6 +61,7 @@
             </div>
             <% } %>
         </div>
+        <!-- if not item found -->
         <% } else { %>
         <div class="no-item-found">
             <img src="/images/gif/noitem.gif" alt="">
@@ -55,6 +69,8 @@
         </div>
         <% } %>
     </div>
+
+    <!-- These script are bootstrap dependencies -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -64,8 +80,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+
+    <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./js/bundle.js"></script>
+
+    <!-- user js -->
+    <script src="/js/bundle.js"></script>
 </body>
 
 </html>
