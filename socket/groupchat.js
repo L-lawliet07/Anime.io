@@ -2,14 +2,12 @@
 // @author : Mandeep Bisht
 ///////////////////////////////////////////////////////////
 
-const CrewMessage = require('./../models/crewMessage');
-
 const catchAsync = require('./../utils/catchAsync');
 
 const Users = require('./../utils/users');
 
 ///////////////////////////////////////////////////////////
-// This function will provide socket functionaity for server
+// This function will provide socket functionaity for groupChat room
 module.exports = (io) => {
 
     /*
@@ -59,7 +57,7 @@ module.exports = (io) => {
          */
         socket.on('disconnect', () => {
             const user = users.removeUser(socket.id);
-
+            // Checking if user exists
             if (user) {
                 nsp.to(user.crew).emit('roomData', users.getUserList(user.crew));
             }
