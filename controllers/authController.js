@@ -66,7 +66,7 @@ const createSendToken = (user, statusCode, res) => {
 
 
 ///////////////////////////////////////////////////////////
-// signup
+// signup function to create new user
 exports.signup = catchAsync(
 
     async (req, res, next) => {
@@ -85,7 +85,7 @@ exports.signup = catchAsync(
 
 
 ///////////////////////////////////////////////////////////
-// login
+// login controller to log the user in
 exports.login = catchAsync(
 
     async (req, res, next) => {
@@ -101,7 +101,12 @@ exports.login = catchAsync(
         /*
          * Check if user exists and password is correct
          */
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne(
+            {
+                email
+            }
+        ).select('+password');
+
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new AppError('Invalid email or password', 401));
         }
@@ -116,7 +121,7 @@ exports.login = catchAsync(
 
 
 ///////////////////////////////////////////////////////////
-// logOut
+// logOut function to log user out
 exports.logout = (req, res, next) => {
 
     /*
@@ -153,6 +158,8 @@ exports.protect = catchAsync(
         else if (req.cookies.jwt) {
             token = req.cookies.jwt;
         }
+
+        // If no token exist that means user is not logged in
         if (!token)
             return next(new AppError('Please login first', 401));
 
@@ -220,7 +227,7 @@ exports.forgotPassword = catchAsync(
          */
         const user = await User.findOne({ email });
         if (!user) {
-            return next(new AppError('Email is not yet registered', 400));
+            return next(new AppError('Email is not yet registered!', 400));
         }
 
         /*
@@ -232,8 +239,10 @@ exports.forgotPassword = catchAsync(
         /*
          * send this token to the user 
          */
+
         // creating the reset url
         const resetURL = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
+
         // creating message text
         const message = `Click here to recover password ${resetURL}`;
 

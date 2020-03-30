@@ -125,6 +125,10 @@
     padding: 10px;
     letter-spacing: 1px;
 }
+
+.online-users>.online-user>.online-username > a {
+    color:white;
+}
 /********************************************************/
 
 

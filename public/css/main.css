@@ -77,6 +77,8 @@ a {
     margin: auto;
     width: 100%;
     color: rgb(248, 249, 250);
+    border-radius: 0px;
+    border: none;
 }
 
 .alert-error {

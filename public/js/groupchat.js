@@ -62,7 +62,7 @@ socket.on('roomData', (users) => {
         <div class="online-user">
         <img src=${el.image} alt="">
         <div class="online-username">
-            ${el.username}
+        <a href="/user/profile/${el.username}" target="_blank">${el.username}</a>
         </div>
         </div>
         `;

@@ -50,6 +50,7 @@ const handleJWTExpiredError = () => {
 // This function will send production error 
 const sendProductionError = (err, res) => {
 
+    /* **** If it is operational error **** */
     if (err.isOperational) {
         if (err.statusCode === 404) {
             return res.render('404', {
@@ -135,6 +136,7 @@ module.exports = (err, req, res, next) => {
             error = handleJWTExpiredError();
         }
 
+        // Now send production error
         sendProductionError(error, res);
     }
 };

@@ -5,6 +5,10 @@
 ///////////////////////////////////////////////////////////
 // This function will render login page
 exports.loginPage = function (req, res) {
+
+    /*
+     * Sending response back
+     */
     res
         .status(200)
         .render('./login', {
@@ -17,6 +21,10 @@ exports.loginPage = function (req, res) {
 ///////////////////////////////////////////////////////////
 // This function will render signup page
 exports.signupPage = function (req, res) {
+
+    /*
+     * Sending response back
+     */
     res
         .status(200)
         .render('./signup', {
@@ -29,6 +37,10 @@ exports.signupPage = function (req, res) {
 ///////////////////////////////////////////////////////////
 // This function will render signup page
 exports.forgotPasswordPage = function (req, res) {
+
+    /*
+     * Sending response back
+     */
     res
         .status(200)
         .render('./forgotpassword', {
