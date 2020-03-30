@@ -155,7 +155,7 @@
 }
 
 .privatesidebar-area>.sidebar-header>.username {
-    color: #479adf;
+    color: var(--secondary-light);
     font-size: 20px;
     display: none;
     padding: 10px;
@@ -181,7 +181,7 @@
 
 .privatesidebar-area>.sidebar-header>.fullname {
     display: none;
-    color: #37a08e;
+    color: var(--primary-dark);
 }
 
 .privatesidebar-area>.sidebar-header>.status {
@@ -192,7 +192,7 @@
 
 #sidebar-view:checked~.privatesidebar-area>#sidebarview-label>i {
     transform: rotate(180deg);
-    color: #479adf;
+    color: var(--secondary-light);
 }
 
 #sidebar-view:checked~.privatesidebar-area>.sidebar-header>img {
