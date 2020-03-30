@@ -1,5 +1,11 @@
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+
 import { showAlert } from './alerts.js'
 
+///////////////////////////////////////////////////////////
+// resetPassword function will make a patch request to the server to reset password
 export const resetpassword = (password, passwordConfirm) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PATCH', '/user/resetpassword', true);
@@ -17,3 +23,4 @@ export const resetpassword = (password, passwordConfirm) => {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({ password, passwordConfirm }));
 }
+///////////////////////////////////////////////////////////

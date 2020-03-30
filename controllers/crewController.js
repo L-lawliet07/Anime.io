@@ -170,9 +170,19 @@ exports.getCrew = catchAsync(
 ///////////////////////////////////////////////////////////
 // This function will render crewChatRoom page
 exports.chatRoom = catchAsync(
-    async (req, res) => {
+    async (req, res, next) => {
 
-        const crew = req.params.crewName
+        const crewName = req.params.crewName
+
+        /*
+         * Checking if the crew exist or not
+         */
+
+        const crew = await Crew.findOne({ name: crewName });
+
+        if (!crew) {
+            return next(new AppError('Page Not Found', 404));
+        }
 
         /*
          * getting old message for particular crew sorted in ascending order
@@ -180,7 +190,7 @@ exports.chatRoom = catchAsync(
         const old_message = await CrewMessage.aggregate([
             {
                 $match: {
-                    crew
+                    crew: crew.name
                 }
             },
             {
@@ -204,7 +214,7 @@ exports.chatRoom = catchAsync(
         res
             .status(200)
             .render('groupchat', {
-                title: `Anime.io | ${crew}`,
+                title: `Anime.io | ${crew.name}`,
                 crew,
                 user: req.user,
                 old_message

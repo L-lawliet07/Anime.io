@@ -26,7 +26,7 @@ const handleValidationErrorDB = (err) => {
 
     const errors = Object.values(err.errors).map(el => el.message);
 
-    return new AppError(`Invalid input data.${errors.join(',')}`, 400);
+    return new AppError(errors[0], 400);
 }
 ///////////////////////////////////////////////////////////
 
@@ -63,10 +63,9 @@ const sendProductionError = (err, res) => {
         });
     } else {
         console.error('ERROR : ', err);
-        res.status(500).json({
-            status: 'error',
-            message: 'Something went wrong'
-        })
+        return res.render('500', {
+            title: 'Anime | 500'
+        });
     }
 }
 ///////////////////////////////////////////////////////////

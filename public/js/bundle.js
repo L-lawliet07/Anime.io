@@ -149,6 +149,11 @@ exports.login = void 0;
 
 var _alerts = require("./alerts.js");
 
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// login function will make xhr post request to the server
 var login = function login(email, password) {
   var $login_btn = document.getElementById('login-btn');
   $login_btn.innerText = 'Logging in..';
@@ -176,7 +181,8 @@ var login = function login(email, password) {
     email: email,
     password: password
   }));
-};
+}; ///////////////////////////////////////////////////////////
+
 
 exports.login = login;
 },{"./alerts.js":"alerts.js"}],"signup.js":[function(require,module,exports) {
@@ -189,6 +195,11 @@ exports.signup = void 0;
 
 var _alerts = require("./alerts.js");
 
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// signup function will make a post request to the server to create a new user 
 var signup = function signup(fullname, username, email, password, passwordConfirm) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', '/user/signup', true);
@@ -214,7 +225,8 @@ var signup = function signup(fullname, username, email, password, passwordConfir
     password: password,
     passwordConfirm: passwordConfirm
   }));
-};
+}; ///////////////////////////////////////////////////////////
+
 
 exports.signup = signup;
 },{"./alerts.js":"alerts.js"}],"logout.js":[function(require,module,exports) {
@@ -227,6 +239,11 @@ exports.logout = void 0;
 
 var _alerts = require("./alerts.js");
 
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// logout function will logout the user 
 var logout = function logout() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/user/logout', true);
@@ -242,7 +259,8 @@ var logout = function logout() {
   };
 
   xhr.send();
-};
+}; ///////////////////////////////////////////////////////////
+
 
 exports.logout = logout;
 },{"./alerts.js":"alerts.js"}],"forgotpassword.js":[function(require,module,exports) {
@@ -255,22 +273,29 @@ exports.forgotpassword = void 0;
 
 var _alerts = require("./alerts.js");
 
-var forgotpassword = function forgotpassword(email, forgotBtn) {
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// forgotpassword function will send reset email the server
+var forgotpassword = function forgotpassword(email, $forgotBtn) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', '/user/forgotPassword', true);
 
   xhr.onload = function () {
-    forgotBtn.removeAttribute('disabled');
-    forgotBtn.innerText = 'Send Token';
+    $forgotBtn.removeAttribute('disabled');
+    $forgotBtn.innerText = 'Send Token';
     var responseObject = JSON.parse(this.responseText);
     (0, _alerts.showAlert)(responseObject.status, responseObject.message, 2);
-  };
+  }; // setting up content type
+
 
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify({
     email: email
   }));
-};
+}; ///////////////////////////////////////////////////////////
+
 
 exports.forgotpassword = forgotpassword;
 },{"./alerts.js":"alerts.js"}],"resetpassword.js":[function(require,module,exports) {
@@ -283,6 +308,11 @@ exports.resetpassword = void 0;
 
 var _alerts = require("./alerts.js");
 
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// resetPassword function will make a patch request to the server to reset password
 var resetpassword = function resetpassword(password, passwordConfirm) {
   var xhr = new XMLHttpRequest();
   xhr.open('PATCH', '/user/resetpassword', true);
@@ -305,7 +335,8 @@ var resetpassword = function resetpassword(password, passwordConfirm) {
     password: password,
     passwordConfirm: passwordConfirm
   }));
-};
+}; ///////////////////////////////////////////////////////////
+
 
 exports.resetpassword = resetpassword;
 },{"./alerts.js":"alerts.js"}],"setting.js":[function(require,module,exports) {
@@ -318,6 +349,11 @@ exports.updateMe = void 0;
 
 var _alerts = require("./alerts.js");
 
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// Update me function will make a path request to update the user data
 var updateMe = function updateMe(data) {
   var xhr = new XMLHttpRequest();
   xhr.open('PATCH', '/user/setting', true);
@@ -333,7 +369,8 @@ var updateMe = function updateMe(data) {
   };
 
   xhr.send(data);
-};
+}; ///////////////////////////////////////////////////////////
+
 
 exports.updateMe = updateMe;
 },{"./alerts.js":"alerts.js"}],"follow.js":[function(require,module,exports) {
@@ -346,8 +383,14 @@ exports.follow = void 0;
 
 var _alerts = require("./alerts.js");
 
-var follow = function follow(me, person, followBtn, socket) {
-  followBtn.innerText = 'Following';
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// follow function will be called to send follow request
+var follow = function follow(me, person, $followBtn, socket) {
+  $followBtn.innerText = 'Following'; // instantiating xhr object
+
   var xhr = new XMLHttpRequest();
   xhr.open('PATCH', "/user/follow", true);
 
@@ -360,18 +403,20 @@ var follow = function follow(me, person, followBtn, socket) {
         username: me
       }, function () {// here we will do some kind of confirmation
       });
-      followBtn.innerText = 'Followed';
+      $followBtn.innerText = 'Followed';
     } else {
-      followBtn.innerText = 'Follow';
+      $followBtn.innerText = 'Follow';
       (0, _alerts.showAlert)('error', responseObject.message, 2);
     }
-  };
+  }; // setting content type
+
 
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify({
     username: person
   }));
-};
+}; ///////////////////////////////////////////////////////////
+
 
 exports.follow = follow;
 },{"./alerts.js":"alerts.js"}],"../../node_modules/parseuri/index.js":[function(require,module,exports) {
@@ -10401,7 +10446,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42347" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43875" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

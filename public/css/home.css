@@ -62,6 +62,20 @@ a:hover {
     grid-column: 1 / span 2;
     grid-row: 1 / span 2;
 }
+
+.crew-heading {
+    color: rgba(255, 255, 255, 0);
+    transition: 1s;
+    transition-property: all;
+}
+
+
+.crew-enter:hover ~ .crew-heading {
+    color: black;
+    transition: 1s;
+    transform: scale(1.4);
+    transition-property: color, transform;
+} 
 /********************************************************/
 
 

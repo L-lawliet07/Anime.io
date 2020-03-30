@@ -1,0 +1,25 @@
+.error-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.error-wrap {
+    margin-top: 50px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.error-code {
+    font-size: 60px;
+    margin: 5px;
+}
+
+.error-message {
+    padding: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+}
