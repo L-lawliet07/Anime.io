@@ -4,9 +4,11 @@
   "description": "This is underconstruction",
   "main": "app.js",
   "scripts": {
+    "start": "node server.js",
     "start:dev": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "build:js": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "L-lawliet07",
   "license": "ISC",
