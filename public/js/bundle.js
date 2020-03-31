@@ -10319,7 +10319,7 @@ var logoutButton = document.getElementById('logout-btn');
 var forgotForm = document.getElementById('forgot-form');
 var resetForm = document.getElementById('reset-form');
 var settingForm = document.querySelector('.setting-form');
-var followBtn = document.querySelector('.follow-btn');
+var followBtn = document.querySelectorAll('.follow-btn');
 var notificationBtn = document.querySelector('.notification-btn');
 var unseenmessageBtn = document.querySelector('.unseenmessage-btn');
 
@@ -10382,14 +10382,16 @@ if (settingForm) {
   });
 }
 
-if (followBtn) {
-  followBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    var username = followBtn.id;
+if (followBtn.length > 0) {
+  followBtn.forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      var username = el.id;
 
-    if (username) {
-      (0, _follow.follow)(me, username, followBtn, socket);
-    }
+      if (username) {
+        (0, _follow.follow)(me, username, el, socket);
+      }
+    });
   });
 }
 
@@ -10446,7 +10448,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39041" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37119" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

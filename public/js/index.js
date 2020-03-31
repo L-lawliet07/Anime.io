@@ -46,7 +46,7 @@ const logoutButton = document.getElementById('logout-btn');
 const forgotForm = document.getElementById('forgot-form');
 const resetForm = document.getElementById('reset-form');
 const settingForm = document.querySelector('.setting-form');
-const followBtn = document.querySelector('.follow-btn');
+const followBtn = document.querySelectorAll('.follow-btn');
 const notificationBtn = document.querySelector('.notification-btn');
 const unseenmessageBtn = document.querySelector('.unseenmessage-btn');
 
@@ -112,13 +112,16 @@ if (settingForm) {
     })
 }
 
-if (followBtn) {
-    followBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const username = followBtn.id;
-        if (username) {
-            follow(me, username, followBtn, socket);
-        }
+if (followBtn.length > 0) {
+
+    followBtn.forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            const username = el.id;
+            if (username) {
+                follow(me, username, el, socket);
+            }
+        });
     });
 }
 
