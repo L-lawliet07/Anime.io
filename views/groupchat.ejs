@@ -64,7 +64,16 @@
                         <% } %>
                         <img class="message-image" src="/images/people/<%= message.sender[0].image %>" alt="">
                         <div class="message-text">
+                            <!-- Checking if it is attack messsage -->
+                            <% if ( message.body === "<{*attack*}>" ) { %>
+                            <img style="max-width:100%" src="/images/gif/attack.gif" alt="">
+                            <!-- Checking for defence message -->
+                            <% } else if ( message.body === "<{*defence*}>" ) { %>
+                            <img style="max-width:100%" src="/images/gif/defence.gif" alt="">
+                            <!-- Checking for normal message -->
+                            <% } else { %>
                             <%= message.body %>
+                            <% } %>
                         </div>
                         <div class="message-time">
                             <%= `${message.createdAt.toDateString()} / ${message.createdAt.getHours()}: ${message.createdAt.getMinutes()}` %>
@@ -75,10 +84,10 @@
 
                 <!-- Will think about this thing later -->
                 <div class="temp-area"></div>
-
                 <!-- Send area to send message -->
                 <div class="send-area">
-                    <button><i class="fas fa-map-marker-alt"></i></button>
+                    <button class="attack"><i class="fas fa-bomb"></i></button>
+                    <button class="defence"><i class="fas fa-shield-alt"></i></i></button>
                     <form class="group-message-form">
                         <!-- <input name="message" placeholder="Message" required autocomplete="off"> -->
                         <input name="message" type="text" placeholder="Type your heart out." required

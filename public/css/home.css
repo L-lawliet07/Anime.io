@@ -7,13 +7,63 @@
  **********************************************************/
 
 
-/*************For Anvhor tags*************/
+/*************For Anchor tags*************/
 a {
     color: white;
 }
 
 a:hover {
     color: #999;
+}
+/********************************************************/
+
+/*************For Gifs*************/
+.gif-container img {
+    width: 400px;
+    height: 400px;
+}
+
+.right-bottom-gif {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
+}
+
+
+.left-bottom-gif {
+    position: fixed;
+    bottom: 0px;
+    transform: scaleX(-1);
+    left: 0px;
+    z-index: -1;
+}
+
+@media(max-width: 1700px) {
+    .gif-container img {
+        width: 300px;
+        max-height: 300px;
+    }
+}
+
+@media(max-width: 1600px) {
+    .gif-container img {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media(max-width: 1400px) {
+    .gif-container img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media(max-width: 640px) {
+    .gif-container img {
+        display: none;
+    }
 }
 /********************************************************/
 

@@ -1,23 +1,38 @@
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+
 const socket = io('/privatechat')
 
-// Elements
-const $messageForm = document.querySelector('.group-message-form')
-const $messageFormInput = $messageForm.querySelector('input')
-const $messageFormButton = $messageForm.querySelector('button')
-const $text_area = document.querySelector('.text-area')
+///////////////////////////////////////////////////////////
+// elements
+const $messageForm = document.querySelector('.group-message-form');
+const $messageFormInput = $messageForm.querySelector('input');
+const $text_area = document.querySelector('.text-area');
+const $messageBox = document.getElementById('private-typingbox');
+const $indicator = document.querySelector('.sidebar-header > img');
+const $online_status = document.querySelector('.sidebar-header>.online-status');
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// Initially pointing to the last message 
 $text_area.scrollTop = $text_area.scrollHeight;
+///////////////////////////////////////////////////////////
 
-const messageBox = document.getElementById('private-typingbox');
 
-// Options
+///////////////////////////////////////////////////////////
+// information about the user, friend and room
 const me = document.getElementById('main-username').innerText;
 const friend_username = document.querySelector('.sidebar-header > .username').innerText;
 const sendKey = me + '-' + friend_username;
 const receiveKey = friend_username + '-' + me;
 const image = document.getElementById('main-image').src;
+///////////////////////////////////////////////////////////
 
-let offline = true;
 
+///////////////////////////////////////////////////////////
+// This function will autoscroll whenever there is a new message
 const autoScroll = () => {
     //  new message element 
     const $newMessage = $text_area.lastElementChild
@@ -28,6 +43,7 @@ const autoScroll = () => {
 
     // visibleHeight
     const visibleHeight = $text_area.offsetHeight;
+
     // Height of messages container
     const containerHeight = $text_area.scrollHeight;
 
@@ -37,9 +53,13 @@ const autoScroll = () => {
         $text_area.scrollTop = $text_area.scrollHeight;
     }
 }
+///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// message event will listen for new messages 
 socket.on('message', (message) => {
+
     const date = new Date(message.createdAt);
     const html = `
         <div class="message ${message.sender === me ? "own-message" : "other-message"}">
@@ -53,28 +73,36 @@ socket.on('message', (message) => {
             </div>
         </div>`;
 
+    // inserting new message at the end
     $text_area.insertAdjacentHTML('beforeend', html);
+
+    // Scrolling after inserting each message
     autoScroll();
 });
+///////////////////////////////////////////////////////////
 
 
-const indicator = document.querySelector('.sidebar-header > img');
-const online_status = document.querySelector('.sidebar-header>.online-status');
+let offline = true;
+///////////////////////////////////////////////////////////
+// roomDate eventListner will accept the status of other user
 socket.on('roomData', (status) => {
     if (status === 'online') {
         offline = false;
-        indicator.setAttribute('style', 'border : #37a08e 2px solid;');
-        online_status.innerText = 'online';
-        online_status.setAttribute('style', 'color : #37a08e;');
+        $indicator.setAttribute('style', 'border : #37a08e 2px solid;');
+        $online_status.innerText = 'online';
+        $online_status.setAttribute('style', 'color : #37a08e;');
     } else {
         offline = true;
-        indicator.removeAttribute('style');
-        online_status.innerText = 'offline';
-        online_status.removeAttribute('style');
+        $indicator.removeAttribute('style');
+        $online_status.innerText = 'offline';
+        $online_status.removeAttribute('style');
     }
 });
+///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// Function to send offline user notification about message
 const sendMessageNotification = (receiver) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PATCH', '/user/chat/message/notification');
@@ -82,8 +110,6 @@ const sendMessageNotification = (receiver) => {
     xhr.onload = function () {
         const responseObject = JSON.parse(this.responseText);
         if (responseObject.status === 'success') {
-            // here i will emit a global unseen event with receiver name as room id and sender name as username
-            console.log('sending unseen event');
             io('/').emit('unseen', { room: friend_username, username: me }, () => {
                 // here we will do some acnowledgement
             });
@@ -91,16 +117,22 @@ const sendMessageNotification = (receiver) => {
     }
     xhr.send(JSON.stringify({ receiver }));
 }
+///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// sendMessage function will make a xhr request to save the message to the db
 const sendMessage = (text, receiver) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/user/chat/message', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({ text, receiver }));
 }
+///////////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////////
+// listening for submit event to send message
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -122,22 +154,35 @@ $messageForm.addEventListener('submit', (e) => {
     });
 
 });
+///////////////////////////////////////////////////////////
 
-messageBox.addEventListener('keypress', () => {
+
+///////////////////////////////////////////////////////////
+// listening for keypress event to emit typing event
+$messageBox.addEventListener('keypress', () => {
     socket.emit('typing', { receiver: friend_username, room: sendKey });
 });
+///////////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////////
+// listening for userTyping event 
 let typing = false;
 socket.on('userTyping', (user) => {
     if (user === me && !typing) {
-        const style_attr = indicator.getAttribute('style');
-        indicator.setAttribute('style', 'border : #479adf 4px solid; transition-property:none;');
+        const style_attr = $indicator.getAttribute('style');
+        $indicator.setAttribute('style', 'border : #479adf 4px solid; transition-property:none;');
         typing = true;
         setTimeout(() => {
-            indicator.setAttribute('style', style_attr);
+            $indicator.setAttribute('style', style_attr);
             typing = false;
         }, 100);
     }
 });
+///////////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////////
+// emitting join event so that user can connect to particular room/crew
 socket.emit('join', { username: me, image, sendKey, receiveKey });
+///////////////////////////////////////////////////////////

@@ -218,7 +218,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    background: url('https://i.ya-webdesign.com/images/anime-naruto-png-8.png') center / contain no-repeat;
+    background: url('https://media3.giphy.com/media/GYVbZK87fHtsc/source.gif') center / contain no-repeat;
 }
 
 .text-area::-webkit-scrollbar {
@@ -289,7 +289,7 @@
 }
 
 .send-area>button>i {
-    color: var(--primary-dark);
+    color: #222;
     font-size: 40px;
 }
 
@@ -335,6 +335,10 @@
     font-size: 30px;
     transition: 1s;
     transition-property: transform, color;
+}
+
+#sidebar-view:checked~.sidebar-area {
+    max-width: 300px;
 }
 
 #sidebar-view:checked~.sidebar-area>#sidebarview-label>i {
@@ -388,6 +392,10 @@
     .send-area {
         grid-row: 2 / span 1;
         grid-column: 1 / span 2;
+    }
+
+    .send-area > button{
+        display: none;
     }
 
     .temp-area {

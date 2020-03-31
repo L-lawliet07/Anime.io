@@ -19,45 +19,20 @@
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/home.css">
-
-    <style>
-        .law-sidegif {
-            position: fixed;
-            right: 0px;
-            bottom: 0px;
-            z-index: -1;
-        }
-
-        .sanji-sidegif {
-            position: fixed;
-            bottom: 0px;
-            transform: scaleX(-1);
-            left: 0px;
-            z-index: -1;
-        }
-
-        .aot-sidegif {
-            position: fixed;
-            top: 0px;
-            left: 0px;
-        }
-    </style>
 </head>
 
 <body>
 
     <!-- this is for gifs -->
-    <div class="law-sidegif">
-        <img src="https://i.pinimg.com/originals/72/12/af/7212af931d5960155ccbd240a6dcb2c8.gif" alt="">
+    <div class="gif-container">
+        <div class="right-bottom-gif">
+            <img src="/images/gif/bottom-right.gif" alt="">
+        </div>
+        <div class="left-bottom-gif">
+            <img src="/images/gif/bottom-left.gif" alt="">
+        </div>
     </div>
-    <div class="sanji-sidegif">
-        <img width="450px" height="530px"
-            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/fa826175-9aa5-497f-84f4-f36befd6194d/d9bwyes-69e45003-520c-4ad4-a289-ea399dce49d4.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2ZhODI2MTc1LTlhYTUtNDk3Zi04NGY0LWYzNmJlZmQ2MTk0ZFwvZDlid3llcy02OWU0NTAwMy01MjBjLTRhZDQtYTI4OS1lYTM5OWRjZTQ5ZDQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.esj6tN93CdZUyeNnIhHpzt7ScshLlsvDdCxjttgLn6Q"
-            alt="">
-    </div>
-    <div class="aot-sidegif">
-        <img src="https://media3.giphy.com/media/3ohc0YpD0LR5wRyz1S/giphy.gif" alt="">
-    </div>
+
     <!-- This container will contain navbar -->
     <div class="container">
         <%- include ('partials/homenav.ejs') %>
