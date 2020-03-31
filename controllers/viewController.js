@@ -66,7 +66,7 @@ exports.resetPasswordPage = function (req, res) {
     };
 
     res.cookie('resetToken', req.params.token, cookie_option);
-    // if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
+    if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
 
     res
         .status(200)

@@ -46,7 +46,7 @@ const createSendToken = (user, statusCode, res) => {
     /*
      * setting secure cookie option only in production
      */
-    // if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
+    if (process.env.NODE_ENV == 'production') cookie_option.secure = true;
     //setting cookie
     res.cookie('jwt', token, cookie_option);
     //not sending passsword to the user
