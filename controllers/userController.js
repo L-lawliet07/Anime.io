@@ -260,7 +260,7 @@ exports.profilePage = catchAsync(
 
 
 ///////////////////////////////////////////////////////////
-// This function will render signup page
+// This function will render setting page
 exports.settingPage = (req, res) => {
 
     /*

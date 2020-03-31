@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Please tell us your name'],
-        unique: true,
+        unique: [true, 'Username already in user'],
         validate: [validator.isAlphanumeric, 'Only alphanumeric characters are allowed in username'],
         maxlength: [15, 'Username max allowed length is 15']
     },

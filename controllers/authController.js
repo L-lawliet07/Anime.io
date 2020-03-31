@@ -74,6 +74,7 @@ exports.signup = catchAsync(
         /*
          * create user
          */
+        await User.init(); // just copied this line from internet should learn more about it
         const user = await User.create(req.body);
         /*
          * signing token and sending back the 201 response with jwt token
