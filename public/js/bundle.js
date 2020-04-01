@@ -419,7 +419,356 @@ var follow = function follow(me, person, $followBtn, socket) {
 
 
 exports.follow = follow;
-},{"./alerts.js":"alerts.js"}],"../../node_modules/parseuri/index.js":[function(require,module,exports) {
+},{"./alerts.js":"alerts.js"}],"privatechat.js":[function(require,module,exports) {
+var global = arguments[3];
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.privateChat = void 0;
+
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+var privateChat = function privateChat(io, global) {
+  ///////////////////////////////////////////////////////////
+  // socket object for private chat
+  var socket = io('/privatechat'); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // elements
+
+  var $messageForm = document.querySelector('.group-message-form');
+  var $messageFormInput = $messageForm.querySelector('input');
+  var $text_area = document.querySelector('.text-area');
+  var $messageBox = document.getElementById('private-typingbox');
+  var $indicator = document.querySelector('.sidebar-header > img');
+  var $online_status = document.querySelector('.sidebar-header>.online-status'); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // Initially pointing to the last message 
+
+  $text_area.scrollTop = $text_area.scrollHeight; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // information about the user, friend and room
+
+  var me = document.getElementById('main-username').innerText;
+  var friend_username = document.querySelector('.sidebar-header > .username').innerText;
+  var sendKey = me + '-' + friend_username;
+  var receiveKey = friend_username + '-' + me;
+  var image = document.getElementById('main-image').src; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // This function will autoscroll whenever there is a new message
+
+  var autoScroll = function autoScroll() {
+    //  new message element 
+    var $newMessage = $text_area.lastElementChild; // height of lastMessage
+
+    var newMessageStyles = getComputedStyle($newMessage);
+    var newMessageMargin = parseInt(newMessageStyles.marginTop) + parseInt(newMessageStyles.marginBottom);
+    var newMessageHeight = $newMessage.offsetHeight + newMessageMargin; // visibleHeight
+
+    var visibleHeight = $text_area.offsetHeight; // Height of messages container
+
+    var containerHeight = $text_area.scrollHeight; // How far have I scrolled;
+
+    var scrollOffset = $text_area.scrollTop + visibleHeight;
+
+    if (containerHeight - 2 * newMessageHeight <= scrollOffset) {
+      $text_area.scrollTop = $text_area.scrollHeight;
+    }
+  }; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // message event will listen for new messages 
+
+
+  socket.on('message', function (message) {
+    var date = new Date(message.createdAt);
+    var html = "\n            <div class=\"message ".concat(message.sender === me ? "own-message" : "other-message", "\">\n                <img class=\"message-image\" src=").concat(message.image, " alt=\"\">\n                <div class=\"message-text\">\n                    ").concat(message.body, "\n                </div>\n                <div class=\"message-time\">\n                ").concat(date.toDateString(), " / ").concat(date.getHours(), ":").concat(date.getMinutes(), "\n    \n                </div>\n            </div>"); // inserting new message at the end
+
+    $text_area.insertAdjacentHTML('beforeend', html); // Scrolling after inserting each message
+
+    autoScroll();
+  }); ///////////////////////////////////////////////////////////
+
+  var offline = true; ///////////////////////////////////////////////////////////
+  // roomDate eventListner will accept the status of other user
+
+  socket.on('roomData', function (status) {
+    if (status === 'online') {
+      offline = false;
+      $indicator.setAttribute('style', 'border : #37a08e 2px solid;');
+      $online_status.innerText = 'online';
+      $online_status.setAttribute('style', 'color : #37a08e;');
+    } else {
+      offline = true;
+      $indicator.removeAttribute('style');
+      $online_status.innerText = 'offline';
+      $online_status.removeAttribute('style');
+    }
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // Function to send offline user notification about message
+
+  var sendMessageNotification = function sendMessageNotification(receiver) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('PATCH', '/user/chat/message/notification');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function () {
+      var responseObject = JSON.parse(this.responseText);
+
+      if (responseObject.status === 'success') {
+        global.emit('unseen', {
+          room: friend_username,
+          username: me
+        }, function () {// here we will do some acnowledgement
+        });
+      }
+
+      ;
+    };
+
+    xhr.send(JSON.stringify({
+      receiver: receiver
+    }));
+  }; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // sendMessage function will make a xhr request to save the message to the db
+
+
+  var sendMessage = function sendMessage(text, receiver) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/user/chat/message', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+      text: text,
+      receiver: receiver
+    }));
+  }; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // listening for submit event to send message
+
+
+  $messageForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var body = e.target.elements.message.value;
+    socket.emit('createMessage', {
+      body: body,
+      sender: me,
+      receiver: friend_username,
+      key: sendKey,
+      image: image
+    }, function () {
+      $messageFormInput.value = '';
+      $messageFormInput.focus();
+      sendMessage(body, friend_username); // What we can also do is just to send one post request for message and update both things
+
+      if (offline) {
+        sendMessageNotification(friend_username);
+      }
+    });
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // listening for keypress event to emit typing event
+
+  $messageBox.addEventListener('keypress', function () {
+    socket.emit('typing', {
+      receiver: friend_username,
+      room: sendKey
+    });
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // listening for userTyping event 
+
+  var typing = false;
+  socket.on('userTyping', function (user) {
+    if (user === me && !typing) {
+      var style_attr = $indicator.getAttribute('style');
+      $indicator.setAttribute('style', 'border : #479adf 4px solid; transition-property:none;');
+      typing = true;
+      setTimeout(function () {
+        $indicator.setAttribute('style', style_attr);
+        typing = false;
+      }, 100);
+    }
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // emitting join event so that user can connect to particular room/crew
+
+  socket.emit('join', {
+    username: me,
+    image: image,
+    sendKey: sendKey,
+    receiveKey: receiveKey
+  }); ///////////////////////////////////////////////////////////
+};
+
+exports.privateChat = privateChat;
+},{}],"groupchat.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.groupChat = void 0;
+
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+var groupChat = function groupChat(io) {
+  var socket = io('/crew'); ///////////////////////////////////////////////////////////
+  // elements
+
+  var $messageForm = document.querySelector('.group-message-form');
+  var $messageFormInput = $messageForm.querySelector('input');
+  var $text_area = document.querySelector('.text-area');
+  var $attack = document.querySelector('.attack');
+  var $defence = document.querySelector('.defence'); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // Initially pointing to the last message 
+
+  $text_area.scrollTop = $text_area.scrollHeight; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // information about the user and crew
+
+  var username = document.getElementById('main-username').innerText;
+  var crew = document.querySelector('.group-name').innerText;
+  var image = document.getElementById('main-image').src; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // This function will autoscroll whenever there is a new message
+
+  var autoScroll = function autoScroll() {
+    //  new message element 
+    var $newMessage = $text_area.lastElementChild; // height of lastMessage
+
+    var newMessageStyles = getComputedStyle($newMessage);
+    var newMessageMargin = parseInt(newMessageStyles.marginTop) + parseInt(newMessageStyles.marginBottom);
+    var newMessageHeight = $newMessage.offsetHeight + newMessageMargin; // visibleHeight
+
+    var visibleHeight = $text_area.offsetHeight; // Height of messages container
+
+    var containerHeight = $text_area.scrollHeight; // How far have I scrolled;
+
+    var scrollOffset = $text_area.scrollTop + visibleHeight;
+
+    if (containerHeight - 2 * newMessageHeight <= scrollOffset) {
+      $text_area.scrollTop = $text_area.scrollHeight;
+    }
+  }; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // message event will listen for new messages 
+
+
+  socket.on('message', function (message) {
+    var date = new Date(message.createdAt);
+    var content = '';
+
+    if (message.text === '<{*attack*}>') {
+      content = '<img style="max-width:100%" src="/images/gif/attack.gif" alt="">';
+    } else if (message.text === '<{*defence*}>') {
+      content = '<img style="max-width:100%" src="/images/gif/defence.gif" alt="">';
+    } else {
+      content = message.text;
+    }
+
+    var html = "\n            <div class=\"message ".concat(message.username === username ? "own-message" : "other-message", "\">\n                <img class=\"message-image\" src=").concat(message.image, " alt=\"\">\n                <div class=\"message-text\">\n                ").concat(content, "\n                </div>\n                <div class=\"message-time\">\n                    ").concat(date.toDateString(), " / ").concat(date.getHours(), ":").concat(date.getMinutes(), "\n                </div>\n            </div>\n        "); // inserting new message at the end
+
+    $text_area.insertAdjacentHTML('beforeend', html); // Scrolling after inserting each message
+
+    autoScroll();
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // roomDate eventListner will accept roomList that contain currently active users
+
+  socket.on('roomData', function (users) {
+    var html = '';
+    users.forEach(function (el) {
+      html = html + "\n            <div class=\"online-user\">\n            <img src=".concat(el.image, " alt=\"\">\n            <div class=\"online-username\">\n            <a href=\"/user/profile/").concat(el.username, "\" target=\"_blank\">").concat(el.username, "</a>\n            </div>\n            </div>\n            ");
+    }); // Inserting the html
+
+    document.querySelector('.online-users').innerHTML = html; // updating the user count
+
+    document.querySelector('.usercount').innerText = users.length;
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // sendMessage function will make a xhr request to save the message to the db
+
+  var sendMessage = function sendMessage(text, crew) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/crew/chat/message', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+      text: text,
+      crew: crew
+    }));
+  }; ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // listening for submit event to send message
+
+
+  $messageForm.addEventListener('submit', function (e) {
+    e.preventDefault(); // text contain the message user want to send
+
+    var text = e.target.elements.message.value; // emitting createMessage event to send message to the server
+
+    socket.emit('createMessage', {
+      text: text,
+      crew: crew,
+      username: username,
+      image: image
+    }, function () {
+      $messageFormInput.value = '';
+      $messageFormInput.focus();
+      sendMessage(text, crew);
+    });
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // listening for attack click event
+
+  $attack.addEventListener('click', function (e) {
+    var text = "<{*attack*}>";
+    $attack.setAttribute('disabled', 'disabled');
+    $attack.innerHTML = '<i class="far fa-circle"></i>';
+    socket.emit('createMessage', {
+      text: text,
+      crew: crew,
+      username: username,
+      image: image
+    }, function () {
+      $attack.innerHTML = '<i class="fas fa-bomb"></i>';
+      $attack.removeAttribute('disabled');
+    });
+    sendMessage(text, crew);
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // listening for defence click event
+
+  $defence.addEventListener('click', function (e) {
+    var text = "<{*defence*}>";
+    $defence.setAttribute('disabled', 'disabled');
+    socket.emit('createMessage', {
+      text: text,
+      crew: crew,
+      username: username,
+      image: image
+    }, function () {
+      $defence.innerHTML = '<i class="fas fa-shield-alt"></i>';
+      $defence.removeAttribute('disabled');
+    });
+    sendMessage(text, crew);
+  }); ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // emitting join event so that user can connect to particular room/crew
+
+  socket.emit('join', {
+    crew: crew,
+    username: username,
+    image: image
+  }); ///////////////////////////////////////////////////////////
+};
+
+exports.groupChat = groupChat;
+},{}],"../../node_modules/parseuri/index.js":[function(require,module,exports) {
 /**
  * Parses an URI
  *
@@ -10260,6 +10609,7 @@ exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
 },{"./url":"../../node_modules/socket.io-client/lib/url.js","socket.io-parser":"../../node_modules/socket.io-client/node_modules/socket.io-parser/index.js","./manager":"../../node_modules/socket.io-client/lib/manager.js","debug":"../../node_modules/socket.io-client/node_modules/debug/src/browser.js","./socket":"../../node_modules/socket.io-client/lib/socket.js"}],"index.js":[function(require,module,exports) {
+
 "use strict";
 
 var _login = require("./login.js");
@@ -10276,64 +10626,118 @@ var _setting = require("./setting.js");
 
 var _follow = require("./follow.js");
 
-var io = require('socket.io-client');
+var _privatechat = require("./privatechat.js");
 
-var main_username = document.getElementById('main-username');
-var socket = io('/');
+var _groupchat = require("./groupchat.js");
+
+///////////////////////////////////////////////////////////
+// @author : Mandeep Bisht
+///////////////////////////////////////////////////////////
+var io = require('socket.io-client'); ///////////////////////////////////////////////////////////
+// Elements
+
+/* main_username element will contain username of the client */
+
+
+var $main_username = document.getElementById('main-username');
+var $loginForm = document.getElementById('login-form');
+var $signupForm = document.getElementById('signup-form');
+var $logoutButton = document.getElementById('logout-btn');
+var $forgotForm = document.getElementById('forgot-form');
+var $resetForm = document.getElementById('reset-form');
+var $settingForm = document.querySelector('.setting-form');
+var $followBtn = document.querySelectorAll('.follow-btn');
+var $notificationBtn = document.querySelector('.notification-btn');
+var $unseenmessageBtn = document.querySelector('.unseenmessage-btn');
+var $groupChat = document.getElementById('groupChat');
+var $privateChat = document.getElementById('privateChat'); ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// connecting to root namesoace for global events
+
+var global; ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// Extracting username
+
 var me;
 
-if (main_username) {
-  me = main_username.textContent;
-  socket.emit('join', me);
-}
+if ($main_username) {
+  /*
+   * connecting to root namespace for global connection 
+   */
+  global = io('/');
+  me = $main_username.textContent;
+  /*
+   * setting up  global connection 
+   */
 
-socket.on('following-notification', function (user) {
-  var notificationIcon = document.getElementById('notification-icon');
-  var notificationContainer = document.getElementById('notification-container');
-  notificationIcon.setAttribute('style', 'color: red;');
-  var noNotification = document.querySelector('.no-notification');
+  global.emit('join', me);
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// listening for global socket events
 
-  if (noNotification) {
-    noNotification.setAttribute('style', 'display:none;');
-  }
 
-  var html = "<a class=\"dropdown-item\" href=\"/user/profile/".concat(user, "\">").concat(user, " started following you.</a>");
-  notificationContainer.insertAdjacentHTML('afterbegin', html);
-});
-socket.on('unseenmessage-notification', function (user) {
-  var unseenmessageIcon = document.getElementById('unseenmessage-icon');
-  var notificationContainer = document.getElementById('unseenmessage-container');
-  unseenmessageIcon.setAttribute('style', 'color: red;');
-  var noNotification = document.querySelector('.no-unseenMessage');
+if (global) {
+  /*
+   * listening to following-notification event that will be emitted when somebody follows the user 
+   */
+  global.on('following-notification', function (user) {
+    var notificationIcon = document.getElementById('notification-icon');
+    var notificationContainer = document.getElementById('notification-container');
+    /* setting the color of the icon to red */
 
-  if (noNotification) {
-    noNotification.setAttribute('style', 'display:none;');
-  }
+    notificationIcon.setAttribute('style', 'color: red;');
+    var noNotification = document.querySelector('.no-notification');
+    /* If there is no previous notification hide the no notification element */
 
-  var html = "<a class=\"dropdown-item\" href=\"/user/chat/".concat(me, "-").concat(user, "\">").concat(user, " send you a message.</a>");
-  notificationContainer.insertAdjacentHTML('afterbegin', html);
-});
-var loginForm = document.getElementById('login-form');
-var signupForm = document.getElementById('signup-form');
-var logoutButton = document.getElementById('logout-btn');
-var forgotForm = document.getElementById('forgot-form');
-var resetForm = document.getElementById('reset-form');
-var settingForm = document.querySelector('.setting-form');
-var followBtn = document.querySelectorAll('.follow-btn');
-var notificationBtn = document.querySelector('.notification-btn');
-var unseenmessageBtn = document.querySelector('.unseenmessage-btn');
+    if (noNotification) {
+      noNotification.setAttribute('style', 'display:none;');
+    }
 
-if (loginForm) {
-  loginForm.addEventListener('submit', function (e) {
-    e.preventDefault();
+    var html = "<a class=\"dropdown-item\" href=\"/user/profile/".concat(user, "\">").concat(user, " started following you.</a>"); // inserting the notification
+
+    notificationContainer.insertAdjacentHTML('afterbegin', html);
+  });
+  /*
+   * listening to unseenmessage-notification event that will be emitted when user is offline from particular room and sombody sent a message 
+   */
+
+  global.on('unseenmessage-notification', function (user) {
+    var unseenmessageIcon = document.getElementById('unseenmessage-icon');
+    var notificationContainer = document.getElementById('unseenmessage-container');
+    /* setting the color of the icon to red */
+
+    unseenmessageIcon.setAttribute('style', 'color: red;');
+    var noNotification = document.querySelector('.no-unseenMessage');
+    /* If there is no previous notification hide the no notification element */
+
+    if (noNotification) {
+      noNotification.setAttribute('style', 'display:none;');
+    }
+
+    var html = "<a class=\"dropdown-item\" href=\"/user/chat/".concat(me, "-").concat(user, "\">").concat(user, " send you a message.</a>"); // inserting unseen message notification
+
+    notificationContainer.insertAdjacentHTML('afterbegin', html);
+  });
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $loginform element exists
+
+
+if ($loginForm) {
+  $loginForm.addEventListener('submit', function (e) {
+    e.preventDefault(); // email and password provided by the user
+
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
     (0, _login.login)(email, password);
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// is signup form element exists
 
-if (signupForm) {
-  signupForm.addEventListener('submit', function (e) {
+
+if ($signupForm) {
+  $signupForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var fullname = document.getElementById('fullname').value;
     var username = document.getElementById('username').value;
@@ -10342,17 +10746,23 @@ if (signupForm) {
     var passwordConfirm = document.getElementById('passwordConfirm').value;
     (0, _signup.signup)(fullname, username, email, password, passwordConfirm);
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//  if logoutBtn element exists
 
-if (logoutButton) {
-  logoutButton.addEventListener('click', function (e) {
+
+if ($logoutButton) {
+  $logoutButton.addEventListener('click', function (e) {
     e.preventDefault();
     (0, _logout.logout)();
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//  if $forgotForm element exists
 
-if (forgotForm) {
-  forgotForm.addEventListener('submit', function (e) {
+
+if ($forgotForm) {
+  $forgotForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var forgotBtn = document.getElementById('forgot-btn');
     forgotBtn.setAttribute('disabled', 'disabled');
@@ -10360,57 +10770,75 @@ if (forgotForm) {
     var email = document.getElementById('email').value;
     (0, _forgotpassword.forgotpassword)(email, forgotBtn);
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $resetForm element exists
 
-if (resetForm) {
-  resetForm.addEventListener('submit', function (e) {
+
+if ($resetForm) {
+  $resetForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var password = document.getElementById('password').value;
     var passwordConfirm = document.getElementById('passwordConfirm').value;
     (0, _resetpassword.resetpassword)(password, passwordConfirm);
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $settingForm element exists
 
-if (settingForm) {
-  settingForm.addEventListener('submit', function (e) {
-    e.preventDefault();
+
+if ($settingForm) {
+  $settingForm.addEventListener('submit', function (e) {
+    e.preventDefault(); // FormData interface provides a way to easily construct a set of key/value pairs representing form fields 
+
     var form = new FormData();
     form.append('fullname', document.getElementById('fullname').value);
     form.append('status', document.getElementById('status').value);
     form.append('photo', document.getElementById('photo').files[0]);
     (0, _setting.updateMe)(form);
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $followBtn element exists
 
-if (followBtn.length > 0) {
-  followBtn.forEach(function (el) {
+
+if ($followBtn.length > 0) {
+  // iterating over all the $followBtn present in he page and adding event listner
+  $followBtn.forEach(function (el) {
     el.addEventListener('click', function (e) {
       e.preventDefault();
       var username = el.id;
 
       if (username) {
-        (0, _follow.follow)(me, username, el, socket);
+        (0, _follow.follow)(me, username, el, global);
       }
     });
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $notificationBtn element exists
 
-if (notificationBtn) {
-  notificationBtn.addEventListener('click', function (e) {
-    var notificationIcon = document.getElementById('notification-icon');
+
+if ($notificationBtn) {
+  $notificationBtn.addEventListener('click', function (e) {
+    var notificationIcon = document.getElementById('notification-icon'); // checking if any notification exist by checking the icon color
 
     if (notificationIcon.hasAttribute('style')) {
       notificationIcon.removeAttribute('style');
-      var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest(); // making a xhr request to clear notification from db 
+
       xhr.open('PATCH', '/user/clearnotification', true);
       xhr.send();
     }
   });
-}
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $unseenmessageBtn element exists
 
-if (unseenmessageBtn) {
-  unseenmessageBtn.addEventListener('click', function (e) {
-    var unseenmessageIcon = document.getElementById('unseenmessage-icon');
+
+if ($unseenmessageBtn) {
+  $unseenmessageBtn.addEventListener('click', function (e) {
+    var unseenmessageIcon = document.getElementById('unseenmessage-icon'); // checking if any unseen message notification 
 
     if (unseenmessageIcon.hasAttribute('style')) {
       unseenmessageIcon.removeAttribute('style');
@@ -10419,8 +10847,22 @@ if (unseenmessageBtn) {
       xhr.send();
     }
   });
-}
-},{"./login.js":"login.js","./signup.js":"signup.js","./logout.js":"logout.js","./forgotpassword.js":"forgotpassword.js","./resetpassword.js":"resetpassword.js","./setting.js":"setting.js","./follow.js":"follow.js","socket.io-client":"../../node_modules/socket.io-client/lib/index.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $groupChat element exists
+
+
+if ($groupChat) {
+  (0, _groupchat.groupChat)(io);
+} ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// if $privateChat element exists
+
+
+if ($privateChat) {
+  (0, _privatechat.privateChat)(io, global);
+} ///////////////////////////////////////////////////////////
+},{"./login.js":"login.js","./signup.js":"signup.js","./logout.js":"logout.js","./forgotpassword.js":"forgotpassword.js","./resetpassword.js":"resetpassword.js","./setting.js":"setting.js","./follow.js":"follow.js","./privatechat.js":"privatechat.js","./groupchat.js":"groupchat.js","socket.io-client":"../../node_modules/socket.io-client/lib/index.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -10448,7 +10890,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37119" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43979" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
