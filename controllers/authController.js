@@ -161,8 +161,10 @@ exports.protect = catchAsync(
         }
 
         // If no token exist that means user is not logged in
-        if (!token)
-            return next(new AppError('Please login first', 401));
+        if (!token) {
+            return res.redirect('/');
+            // return next(new AppError('Please login first', 401));
+        }
 
         /*
          * Validating the token
@@ -174,14 +176,16 @@ exports.protect = catchAsync(
          */
         const user = await User.findById(decoded.id);
         if (!user) {
-            return next(new AppError('User no longer exist', 401));
+            return res.redirect('/');
+            // return next(new AppError('User no longer exist', 401));
         }
 
         /*
          * if user change password after the jwt was issued
          */
         if (user.changedPasswordAfter(decoded.iat)) {
-            return next(new AppError('Password Changed! Please login again', 401));
+            return res.redirect('/');
+            // return next(new AppError('Password Changed! Please login again', 401));
         }
 
         //Attaching user info to request object
