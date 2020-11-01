@@ -110,7 +110,7 @@
     width: 100%;
     padding: 10px;
     margin-top: 20px;
-    background: #49c1a2;
+    background: var(--primary-light);
     color: white;
     cursor: pointer;
     border: #ddd 1px solid;

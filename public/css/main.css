@@ -86,7 +86,7 @@ a {
 }
 
 .alert-success {
-    background-color: #37a08e;
+    background-color: var(--primary-dark);
 }
 /********************************************************/
 
