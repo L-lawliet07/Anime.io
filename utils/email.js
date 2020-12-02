@@ -12,11 +12,11 @@ const sendEmail = async (options) => {
      * create a transporter
      */
     const transport = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
         auth: {
-            user: "67f218add4ce57",
-            pass: "de22b79ce59823"
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
         }
     });
 
